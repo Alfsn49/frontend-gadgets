@@ -1,0 +1,28 @@
+    <form class="max-w-sm mx-auto" action="" [formGroup]="register" (ngSubmit)="onSubmit()">
+        <div class="mb-5">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+            <input type="text" formControlName="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+        </div>
+        <div class="mb-5">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
+            <input type="text" formControlName="lastname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Apellido">
+        </div>
+        <div class="mb-5">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo Electronico</label>
+            <input type="email" formControlName="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Correo Electrónico">
+        </div>
+        <div class="mb-5">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+            <input type="password" formControlName="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Contraseña">
+        </div>
+        <div class="mb-5">
+            <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar contraseña</label>
+            <input type="password" formControlName="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"    placeholder="Confirmar contraseña">
+            <div *ngIf="register.get('confirmPassword')?.invalid && (register.get('confirmPassword')?.dirty)">No coincide</div>
+            
+        </div>
+        
+        <button type="submit">Enviar</button>
+       
+        
+    </form>
