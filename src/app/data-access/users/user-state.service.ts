@@ -1,12 +1,21 @@
-import { inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { signalSlice } from 'ngxtension/signal-slice';
-import { catchError, map, of, startWith, Subject, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, startWith, Subject, switchMap } from 'rxjs';
 
 interface State{
   users:any | null;
   status: 'loading' | 'success' | 'error';
 }
+interface StateAddress{
+  address:any | null;
+  status: 'loading' | 'success' | 'error';
+}
+interface StateCreateAddress{
+  address:any | null;
+  status: 'loading' | 'success' | 'error';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +26,16 @@ export class UserStateService {
     users:[],
     status: 'loading' as const
   }
+  private initialStateAddress: StateAddress={
+    address:[],
+    status: 'loading' as const
+  }
+  private initialStateCreateAddress: StateCreateAddress={
+    address:[],
+    status: 'loading' as const
+  }
+
+  private refreshTrigger = new Subject<void>();
 
   loadUsers(){
     let state = signalSlice({
@@ -31,5 +50,24 @@ export class UserStateService {
       ]
     })
     return state;
+  }
+  
+  getAddress(){
+    let state = signalSlice({
+      initialState: this.initialStateAddress,
+      sources:[
+        this.userService.getaddress().pipe(
+          map((address)=>({
+            address,
+            status: 'success' as const
+          }))
+        )
+      ]
+    })
+    return state;
+  }
+  
+  refreshAddress() {
+    this.refreshTrigger.next(); // Dispara el Subject para actualizar la dirección
   }
 }

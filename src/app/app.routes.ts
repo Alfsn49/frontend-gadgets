@@ -38,5 +38,8 @@ export const routes: Routes = [
     {
       path: 'profile',
       loadComponent:()=> import('./components/client/profile/profile.component').then(m=>m.ProfileComponent)
+    },{
+      path: 'address',
+      loadComponent:()=> import('./components/client/address/address.component').then(m=>m.AddressComponent)
     }
 ];

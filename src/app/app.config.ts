@@ -6,6 +6,7 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { refreshInterceptor } from './interceptors/refresh.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([refreshInterceptor])
     ),
     provideAnimations(),
-    provideToastr(),
+    provideToastr(), provideAnimationsAsync(),
   ],
 };
