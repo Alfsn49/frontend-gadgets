@@ -8,4 +8,5 @@ import { environment } from '../../../environments/environment';
 export class HttpService {
   http = inject(HttpClient);
   api= environment.api;
+  
 }

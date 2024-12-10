@@ -34,6 +34,12 @@ export class AuthService extends HttpService{
     return localStorage.getItem('token') || '';
   }
 
+  uploadImage(file:File){
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ imageUrl: string }>(this.api +'cloudinary/upload', formData);
+  }
+
   profile(){
     const token = this.getToken();  
     const data= this.decodeToken.decodeToken(token);

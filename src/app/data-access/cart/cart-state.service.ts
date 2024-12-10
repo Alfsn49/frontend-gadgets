@@ -4,6 +4,7 @@ import { StorageService } from '../storage/storage.service';
 import { CartService } from './cart.service';
 import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
 import { ProductItemCart } from '../../Dto/Product.dto';
+import { AuthService } from '../auth/auth.service';
 
 interface State {
   products: ProductItemCart[];
@@ -14,23 +15,37 @@ interface State {
   providedIn: 'root',
 })
 export class CartStateService {
-  constructor() {}
+  constructor() {
+    if(this.authService.isLoggedIn){
+
+    }else{
+      
+    }
+  }
 
   private _storageService = inject(StorageService);
   private cartService = inject(CartService);
-
+  private authService= inject(AuthService);
+  
   private initialState: State = {
     products: [],
     loaded: false,
   };
-
+  private loadCartProducts(): Observable<State> {
+    if(this.authService.isLoggedIn){
+      return this.cartService.getCart().pipe(map((response) => ({ products: response.products, loaded: true })));
+      
+    }else{
+      return of ({ products: [], loaded: false })
+    }
+  }
   loadProducts$ = this.cartService
     .getCart()
     .pipe(map((response) => ({ products: response.products, loaded: true })));
 
   state = signalSlice({
     initialState: this.initialState,
-    sources: [this.loadProducts$],
+    sources: [this.loadCartProducts()],
     selectors:(state)=>({
       count:()=>
         state().products.reduce((acc:any,product:any)=>acc+product.quantity,0),
