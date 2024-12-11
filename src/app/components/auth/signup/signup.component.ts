@@ -56,8 +56,9 @@ export class SignupComponent implements OnInit {
      this.authService.getRoles().subscribe((data:Rol)=>{
       console.log(data)
       this.rol = data;
-      console.log(this.rol)
-      this.register.patchValue({ rolID: this.rol.id });
+      console.log(this.rol.id)
+      this.register.patchValue({ rolId: this.rol.id });
+      
     })
   
   }
@@ -140,7 +141,7 @@ export class SignupComponent implements OnInit {
           timeOut: 3000,
           positionClass: 'toast-top-right',
         });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       } catch (error) {
         this.toastr.error('Error al registrar al usuario', 'Error', {
           timeOut: 3000,
