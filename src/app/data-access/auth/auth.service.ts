@@ -26,7 +26,7 @@ export class AuthService extends HttpService{
     
   }
 
-  signup(data:RegisterDto){
+  signup(data:any){
     return this.http.post(this.api + 'auth/register', data);
   }
 
