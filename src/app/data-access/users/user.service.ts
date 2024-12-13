@@ -19,7 +19,7 @@ export class UserService extends HttpService {
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;
     console.log(userId)
-    return this.http.get(this.api + `user/${userId}`,);
+    return this.http.get(this.api + `user/getProfile/${userId}`,);
   }
 
   getaddress(){

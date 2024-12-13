@@ -41,5 +41,12 @@ export const routes: Routes = [
     },{
       path: 'address',
       loadComponent:()=> import('./components/client/address/address.component').then(m=>m.AddressComponent)
+    },{
+      path:'forget-password',
+      loadComponent:()=> import('./components/auth/forget-password/forget-password.component').then(m=>m.ForgetPasswordComponent)
+    },
+    {
+      path:'reset-password',
+      loadComponent:()=> import('./components/auth/password-reset/password-reset.component').then(m=>m.PasswordResetComponent)
     }
 ];

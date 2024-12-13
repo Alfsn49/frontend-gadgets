@@ -30,6 +30,17 @@ export class AuthService extends HttpService{
     return this.http.post(this.api + 'auth/register', data);
   }
 
+  tokenResetPassword(token:string){
+    return this.http.get(this.api + 'user/reset-password?token='+token);
+  }
+
+  resertPassword(data:any, token:any){
+    return this.http.post(this.api + 'user/reset-password/'+token, data);
+  }
+
+  requestResetPassword(email:string){
+    return this.http.post(this.api + 'user/request-password-reset', {email});
+  }
   getToken(){
     return localStorage.getItem('token') || '';
   }

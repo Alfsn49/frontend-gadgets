@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {ReactiveFormsModule,FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {ReactiveFormsModule,FormGroup, FormBuilder, Validators, FormControlOptions } from '@angular/forms';
 import { AuthService } from '../../../data-access/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthStateService } from '../../../data-access/auth/auth-state.service';
@@ -43,8 +43,8 @@ export class SignupComponent implements OnInit {
       rolId:["",],
       image:['']
     },{
-      validator: CustomValidators.MatchingPassword
-    });
+      validator: CustomValidators.MatchingPassword 
+    }as FormControlOptions);
   }
 
   ngOnInit() {

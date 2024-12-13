@@ -2,6 +2,7 @@ import { Component, inject,HostListener,ElementRef  } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartStateService } from '../../data-access/cart/cart-state.service';
 import { AuthService } from '../../data-access/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { AuthService } from '../../data-access/auth/auth.service';
 })
 export class NavbarComponent {
  cartState = inject(CartStateService).state
+ router = inject(Router)
  isUserMenuVisible = false;
  public authService= inject(AuthService);
  constructor(private elementRef: ElementRef) {}
@@ -32,5 +34,6 @@ onClickOutside(event: MouseEvent) {
 
 logout(){
   this.authService.logout();
+  this.router.navigate(['/login']);
 }
 }
