@@ -28,13 +28,13 @@ export class PasswordResetComponent implements OnInit{
     console.log(this.token)
     this.authService.tokenResetPassword(this.token).subscribe(
      {next:(data:unknown|any)=>{
-        console.log(data)
+        console.log(data) 
         if(!data){
           console.log('Token invalido')
         }
      },
      error:(error:unknown|any)=>{
-      console.error('Error validando el token:', error);
+      console.error('No hay token:', error);
        this.router.navigate(['/']);
      }
     } 

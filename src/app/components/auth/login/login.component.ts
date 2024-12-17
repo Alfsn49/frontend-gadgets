@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit{
              });
             
             
-             this.router.navigate(['/login']);
+             this.router.navigate(['/']);
             },
           error: (error:unknown|any) => {
             //console.log('Error en la peticion: ', error);

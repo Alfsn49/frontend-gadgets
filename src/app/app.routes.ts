@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { loginGuard } from './guards/login.guard';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,7 @@ export const routes: Routes = [
         (m) => m.ProductDetailComponent)
   },{
     path: 'cart',
+    canActivate: [loginGuard],
     loadChildren:()=> import('./components/cart/cart.routes')
     },
     {
@@ -48,5 +50,13 @@ export const routes: Routes = [
     {
       path:'reset-password',
       loadComponent:()=> import('./components/auth/password-reset/password-reset.component').then(m=>m.PasswordResetComponent)
+    },
+    {
+      path:'categoria',
+      loadComponent:()=> import('./components/categoria/categoria.component').then(m=>m.CategoriaComponent)
+    },
+    {
+      path:'about',
+      loadComponent:()=> import('./components/about/about.component').then(m=>m.AboutComponent)
     }
 ];

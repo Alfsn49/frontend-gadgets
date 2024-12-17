@@ -33,4 +33,8 @@ export class CartService extends HttpService{
       body: { product_id: productId },
     });
   }
+
+  checkout(data: any): Observable<any> {
+    return this.http.post(`${this.api}stripe/checkout`, data);
+  }
 }
