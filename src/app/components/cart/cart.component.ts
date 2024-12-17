@@ -33,4 +33,20 @@ export class CartComponent {
       quantity:1
     })
   }
+
+  checkout(){
+    console.log('checkout')
+    console.log(this.state.products())
+    const dataCheckout = this.state.products().map(product=>{
+      return{
+        amount: product.product.price * 100, // Multiplica por 100 si usas centavos para Stripe
+    currency: "usd",
+    productId: product.product.id,
+    name: product.product.name,
+    image: product.product.image,
+    quantity: product.quantity
+      }
+    })
+    console.log(dataCheckout)
+  }
 }
