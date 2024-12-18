@@ -12,6 +12,6 @@ import { ProductsStateService } from '../../data-access/content/products-state.s
 })
 export class HomeComponent {
 
-  products= inject(ProductsStateService)
+
 
 }

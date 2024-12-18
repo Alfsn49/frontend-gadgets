@@ -20,6 +20,10 @@ export class NavbarComponent {
  toggleUserMenu() {
   this.isUserMenuVisible = !this.isUserMenuVisible;
 }
+onRemoveItem(id:number){
+  console.log(id)
+  this.cartState.remove(id);
+}
 
 // Detectar clics fuera del menú para cerrarlo
 @HostListener('document:click', ['$event'])
