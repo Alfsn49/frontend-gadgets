@@ -45,7 +45,13 @@ export class UserStateService {
           map((users)=>({
             users,
             status: 'success' as const
-          }))
+          })),
+          catchError(()=>{
+            return of({
+              users:[],
+              status: 'error' as const
+            })
+          })
         )
       ]
     })
@@ -60,7 +66,13 @@ export class UserStateService {
           map((address)=>({
             address,
             status: 'success' as const
-          }))
+          })),
+          catchError(()=>{
+            return of({
+              address:[],
+              status: 'error' as const
+            })
+          })
         )
       ]
     })

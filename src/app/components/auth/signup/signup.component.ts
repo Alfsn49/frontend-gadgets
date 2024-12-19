@@ -8,7 +8,6 @@ import { Rol } from '../../../Dto/rol.dto';
 import { CustomValidators } from '../../../utils/validation.service';
 import { Router } from '@angular/router';
 import {CloudinaryModule} from '@cloudinary/ng';
-import { Cloudinary } from '@cloudinary/url-gen/index';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
