@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 
 interface State {
   products: ProductItemCart[];
+  status: 'loading' | 'success' | 'error';
   loaded: boolean;
 }
 
@@ -29,14 +30,14 @@ export class CartStateService {
   
   private initialState: State = {
     products: [],
+    status: 'loading' as const,
     loaded: false,
   };
   private loadCartProducts(): Observable<State> {
     if(this.authService.isLoggedIn){
-      return this.cartService.getCart().pipe(map((response) => ({ products: response.products, loaded: true })));
-      
+      return this.cartService.getCart().pipe(map((response) => ({ products: response.products, loaded: true, status:'success' })));
     }else{
-      return of ({ products: [], loaded: false })
+      return of ({ products: [], loaded: false, status:'error' })
     }
   }
   loadProducts$ = this.cartService

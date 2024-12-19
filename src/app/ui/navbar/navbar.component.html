@@ -60,6 +60,10 @@
         </button>
 
         <div id="myCartDropdown1" class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
+          @if(cartState().status == 'error'){
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Your cart is empty</p>
+
+          }
           @for(cartItem of cartState.products(); track cartItem.product.id){
             <div class="grid grid-cols-2">
               <div>
@@ -82,7 +86,6 @@
                 </div>
               </div>
             </div>
-
           }
           <div class="grid grid-cols-2">
             <div>
@@ -148,7 +151,7 @@
     </div>
 
     <div id="ecommerce-navbar-menu-1" class="bg-gray-50 dark:bg-gray-700 dark:border-gray-600 border border-gray-200 rounded-lg py-3 hidden px-4 mt-4">
-      <ul class="text-gray-900 dark:text-white text-sm font-medium dark:text-white space-y-3">
+      <ul class="text-gray-900 dark:text-white text-sm font-medium space-y-3">
         <li>
           <a href="#" class="hover:text-primary-700 dark:hover:text-primary-500">Home</a>
         </li>

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
  cartState = inject(CartStateService).state
+
  router = inject(Router)
  isUserMenuVisible = false;
  public authService= inject(AuthService);
