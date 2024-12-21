@@ -116,8 +116,8 @@
         }
         <div id="userDropdown1" class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
           <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
-            <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Mi cuenta </a></li>
-            <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Direcciones </a></li>
+            <li><a routerLink="/profile" title="" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="bg-gray-200" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Mi cuenta </a></li>
+            <li><a routerLink="/address" title="" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="bg-gray-200" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Direcciones </a></li>
             <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Orden de compras </a></li>
         
           </ul>
