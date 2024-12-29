@@ -15,6 +15,11 @@ export class UserService extends HttpService {
   private authService = inject(AuthService);
   createAddressSignal = signal<any|null>(null)
 
+  createDataUser(data:any){
+    return this.http.post(this.api + `user/add-data`, data);
+
+  }
+  
   profile(){
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;

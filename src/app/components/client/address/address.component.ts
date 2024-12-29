@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UserService } from '../../../data-access/users/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditAddressComponent } from './edit-address/edit-address.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-address',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './address.component.html',
   styleUrl: './address.component.css'
 })
@@ -37,8 +38,11 @@ export class AddressComponent {
     this.bandera = !this.bandera;
   }
 
-  openModal(){
-    this.dialog.open(EditAddressComponent,)
+  openModal(data:any){
+    console.log(data)  
+    this.dialog.open(EditAddressComponent,{
+      data: data  // Pasa la dirección seleccionada
+    })
   }
 
   onSubmit(){

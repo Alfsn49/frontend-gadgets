@@ -1,5 +1,5 @@
 <div class="bg-white overflow-hidden shadow rounded-lg border">
-    @if(userService().status === 'error'){
+    @if(userService().status === 'error' ){
         <div class="flex items-center justify-center min-h-screen bg-gray-100">
             <div class="max-w-md  bg-white border border-gray-200 rounded-lg shadow-md">
               <h2 class="text-lg font-semibold text-gray-700 text-center mb-2">
@@ -9,7 +9,7 @@
                 Usuario no posee información adicional, por favor llene con sus datos personales.
               </p>
               <div class="flex justify-center">
-                <button
+                <button (click)="changeValue()"
                   class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                  
                 >
@@ -50,7 +50,13 @@
                         Correo Electronico
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {{userService.users().apellido}}
+                        {{userService.users().email}}
+                    </dd>
+                </div>
+                <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Imagen:</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        <img class="h-auto max-w-lg rounded-lg" [src]="userService.users().image" width="200px"  alt="image description">
                     </dd>
                 </div>
                 <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -74,30 +80,138 @@
                         Fecha de nacimiento
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {{userService.users().birthdate}}
+                        {{userService.users().birthdate | date }}
                     </dd>
                 </div>
             </dl>
         </div>
         <Button>Editar</Button>
-
     }
     
 </div>
 
+
 <ng-content #name>
-    <form action="">
-        <label for="">Nombre</label>
-        <input type="text" name="" id="">
-        <label for="">Apellido</label>
-        <input type="text">
-        <label for="">Correo Electronico</label>
-        <input type="text">
-        <label for="">Telefono</label>
-        <input type="text">
-        <label for="">Cedula</label>
-        <input type="text">
-        <label for="">Fecha de nacimiento</label>
-        <input type="text">
-    </form>
+    
+
+<form class="max-w-md mx-auto">
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="text" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nombre</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="text" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="email" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Correo Electrónico</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <label
+        for=""
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Imagen de Perfil</label
+      >
+      <div
+      class="w-full p-4 border-2 border-dashed border-gray-400 text-center cursor-pointer relative"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+      [class.border-cyan-500]="isDragging"
+      [class.bg-gray-100]="isDragging"
+    >
+      <input
+        #fileInput
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="image/png, image/jpeg"
+        hidden
+      />
+      @if(!previewUrl){
+        <p class="text-gray-600">Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
+      }
+      @if(previewUrl){
+        <img  [src]="previewUrl" alt="Previsualización de imagen" class="max-w-xs mx-auto mt-4" />
+      }
+      
+    </div>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="text" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="text" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cédula</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+        <input type="date" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+        <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de nacimiento</label>
+    </div>
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+  </form>
+  
 </ng-content>
+
+@if(activeForm){
+    <ng-content #name>
+        <form class="max-w-md mx-auto" [formGroup]="createDataClientForm" (ngSubmit)="dataclientcreate()">
+          <div class="relative z-0 w-full mb-5 group">
+              <input type="text" formControlName="CI" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cédula</label>
+              @if(createDataClientForm.get('CI')?.invalid && createDataClientForm.get('CI')?.touched){
+                <div>
+                    @if(createDataClientForm.get('CI')?.errors?.['required']){
+                        <div><small>Cédula requerida</small></div>
+                    }
+                    @if(createDataClientForm.get('CI')?.errors?.['cedulaInvalida']){
+                        <div><small>Cédula inválida</small></div>
+                    }
+                </div>
+              }
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+              <input type="date" formControlName="birthdate" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de nacimiento</label>
+              @if(createDataClientForm.get('birthdate')?.invalid && createDataClientForm.get('birthdate')?.touched){
+                <div>
+                    @if(createDataClientForm.get('birthdate')?.errors?.['required']){
+                        <div><small>Fecha de nacimiento requerida</small></div>
+                    }
+                </div>
+              }
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+              <input type="text" formControlName="telephone" name="repeat_password" id="floating_repeat_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <label for="floating_repeat_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefono</label>
+              @if(createDataClientForm.get('telephone')?.invalid && createDataClientForm.get('telephone')?.touched){
+                <div>
+                    @if(createDataClientForm.get('telephone')?.errors?.['required']){
+                        <div><small>Telefono requerido</small></div>
+                    }
+                </div>
+              }
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+            <label for="sexo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select your country</label>
+      <select id="sexo" formControlName="sexo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    
+        <option value="M">Masculino</option>
+        <option value="F">Femenino</option>
+        
+      </select>
+      @if(createDataClientForm.get('sexo')?.invalid && createDataClientForm.get('sexo')?.touched){
+        <div>
+            @if(createDataClientForm.get('sexo')?.errors?.['required']){
+                <div><small>Sexo requerido</small></div>
+            }
+        </div>
+      }
+          </div>
+         
+          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar los datos adicionales</button>
+        </form>
+    </ng-content>
+}
+
