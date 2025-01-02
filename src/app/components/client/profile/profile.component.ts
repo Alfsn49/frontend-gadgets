@@ -8,6 +8,8 @@ import { UserService } from '../../../data-access/users/user.service';
 import { verificarCedula } from '../../../utils/validators/cedula-validator.validator';
 import { ToastrService } from 'ngx-toastr';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +34,7 @@ export class ProfileComponent {
  isDragging = false;
  
 
- constructor(){
+ constructor(private dialog: MatDialog){
   this.userEditForm = this.fb.group({
   name: ['', [Validators.required]],
   lastname: ['', [Validators.required]],
@@ -130,6 +132,13 @@ onDragLeave(event: DragEvent): void {
 
  updateProfile(){
 
+ }
+
+ openModal(data:any){
+  console.log(data)
+  this.dialog.open(EditProfileComponent,{
+    data: data
+  })
  }
  changeValue(){
   this.activeForm = !this.activeForm;

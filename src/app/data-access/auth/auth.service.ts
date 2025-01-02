@@ -14,14 +14,14 @@ export class AuthService extends HttpService{
   private decodeToken = inject(JwtDecodeService);
   private readonly tokenKey = 'token';
 
-  private loggedInSignal = signal<boolean>(!!localStorage.getItem(this.tokenKey));
+   loggedInSignal = signal<boolean>(!!localStorage.getItem(this.tokenKey));
 
   get isLoggedIn() {
     return this.loggedInSignal();
   }
 
   login(data:LoginDto){
-    this.loggedInSignal.set(true);
+   
     return this.http.post(this.api + 'auth/login', data)
     
   }

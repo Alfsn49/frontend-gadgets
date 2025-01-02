@@ -30,7 +30,7 @@ export class ForgetPasswordComponent {
       {next:(data:unknown|any)=>{
         console.log(data)
         this.toastr.success('Se ha enviado un correo para restablecer la contraseña')
-        this.router.navigate(['/login'])
+        this.router.navigate(['auth/login'])
       },
       error:(error:unknown|any)=>{
         console.error('Error al solicitar el cambio de contraseña:', error);

@@ -64,6 +64,7 @@ export class LoginComponent implements OnInit{
               rol: data.user.rol
             }
             console.log(user)
+            this.loginService.loggedInSignal.set(true);
             localStorage.setItem('User', JSON.stringify(user));
             localStorage.setItem('token', data.backendTokens.accessToken);
             localStorage.setItem('refreshToken', data.backendTokens.refreshToken);
