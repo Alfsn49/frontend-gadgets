@@ -178,21 +178,6 @@ export class SignupComponent implements OnInit {
   
   
 
-  // Subir la imagen a Cloudinary
-  async uploadImage(file: File): Promise<string> {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'demo123'); // Ajusta tu upload preset
-    //formData.append('folder', 'users');
-
-    try {
-      // No añadimos el header de Authorization y dejamos que la API de Cloudinary maneje la autorización internamente.
-    const data: any = await this.http.post('https://api.cloudinary.com/v1_1/dwhexzxkv/image/upload', formData).toPromise();
-      return data.secure_url; // URL segura de la imagen subida
-    } catch (error) {
-      console.error('Error al subir la imagen:', error);
-      throw new Error('No se pudo subir la imagen.');
-    }
-  }
+ 
   
 }

@@ -137,7 +137,11 @@ onDragLeave(event: DragEvent): void {
  openModal(data:any){
   console.log(data)
   this.dialog.open(EditProfileComponent,{
-    data: data
+    data: data,
+    width: '50%', // Ajusta al 80% del ancho del viewport
+    height: '100%', // Ajusta al 90% del alto del viewport
+    maxWidth: '100vw', // Permite que use todo el ancho si es necesario
+    maxHeight: '100vh' // Permite que use todo el alto si es necesario
   })
  }
  changeValue(){

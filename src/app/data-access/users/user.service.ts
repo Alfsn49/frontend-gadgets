@@ -11,8 +11,7 @@ import { UserStateService } from './user-state.service';
 })
 export class UserService extends HttpService {
   
-  private decodeToken = inject(JwtDecodeService);
-  private authService = inject(AuthService);
+  
   createAddressSignal = signal<any|null>(null)
 
   createDataUser(data:any){
@@ -25,6 +24,12 @@ export class UserService extends HttpService {
     const userId = userdata ? JSON.parse(userdata).id : null;
     console.log(userId)
     return this.http.get(this.api + `user/getProfile/${userId}`,);
+  }
+
+  editProfile(data:any){
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    return this.http.patch(this.api + `user/editUser/${userId}`, data);
   }
 
   getaddress(){
