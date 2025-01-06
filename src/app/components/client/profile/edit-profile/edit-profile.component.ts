@@ -95,12 +95,12 @@ export class EditProfileComponent {
       this.previewImage(file);
     }
   }
+  
   close(){
     this.dialogRef.close();
   }
   async onSubmit(){
     console.log(this.profileEditForm.value)
-
     const formData = new FormData();
     formData.append('name', this.profileEditForm.value.name);
     formData.append('lastname', this.profileEditForm.value.lastname);
