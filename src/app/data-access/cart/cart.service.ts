@@ -17,7 +17,7 @@ export class CartService extends HttpService{
     console.log(userdata)
     const userId = userdata ? JSON.parse(userdata).id : null;
     console.log(userId)
-    return this.http.get(this.api + 'cart/get-cart/'+userId)
+    return this.http.get(this.api + 'cart/get-cart')
   }
 
   updateCartItem(data: any): Observable<any> {

@@ -64,18 +64,26 @@ export class LoginComponent implements OnInit{
               rol: data.user.rol
             }
             console.log(user)
-            this.loginService.loggedInSignal.set(true);
+            
             localStorage.setItem('User', JSON.stringify(user));
             localStorage.setItem('token', data.backendTokens.accessToken);
             localStorage.setItem('refreshToken', data.backendTokens.refreshToken);
             // console.log('Respuesta del servidor: ', data  );
-            this.toastr.success('Inicio de sesion exitoso','Exitoso',{
+            this.loginService.loggedInSignal.set(true);
+            
+            
+            
+            this.toastr.success('Inicio de sesión exitoso', 'Exitoso', {
               timeOut: 3000,
-             positionClass: 'toast-top-right'
-             });
+              positionClass: 'toast-top-right'
+            });
             
-            
-             this.router.navigate(['/']);
+            // Usamos un retraso para recargar después de que el mensaje se muestra
+            setTimeout(() => {
+              this.router.navigate(['/']).then(() => {
+                window.location.reload();
+              })
+            }, 3000); // El tiempo coincide con el `timeOut` del mensaje
             },
           error: (error:unknown|any) => {
             //console.log('Error en la peticion: ', error);

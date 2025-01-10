@@ -3,6 +3,7 @@ import { CartItemComponent } from "./ui/cart-item/cart-item.component";
 import { CartStateService } from '../../data-access/cart/cart-state.service';
 import { ProductItemCart } from '../../Dto/Product.dto';
 import { CartService } from '../../data-access/cart/cart.service';
+import { UserStateService } from '../../data-access/users/user-state.service';
 
 @Component({
   selector: 'app-cart',
@@ -14,6 +15,7 @@ import { CartService } from '../../data-access/cart/cart.service';
 export class CartComponent {
   state = inject(CartStateService).state;
   cartService = inject(CartService);
+  getaddress = inject(UserStateService).getAddress()
 
   onRemoveItem(id:number){
     console.log(id)

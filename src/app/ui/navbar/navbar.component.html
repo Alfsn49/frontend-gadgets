@@ -1,6 +1,4 @@
-<div>
-  @for(cartItem of cartState.products(); track cartItem.product.id){}
-</div>
+
 
 
 <nav class="bg-white dark:bg-gray-800 antialiased">
@@ -70,12 +68,12 @@
           </svg>              
         </button>
   
-        <div id="myCartDropdown1" class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
+        <div id="myCartDropdown1" class="hidden z-50 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
           @if(cartState().status == 'error' || cartState().products.length == 0) {
             <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Your cart is empty</p>
   
           }@else{
-            @for(cartItem of cartState.products(); track cartItem.product.id){
+            @for(cartItem of cartState().products; track cartItem.product.id){
               <div class="grid grid-cols-2">
                 <div>
                   <a href="#" class="break-words text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline">{{cartItem.product.name}}</a>
@@ -115,7 +113,7 @@
         </button>
   
         }
-        <div id="userDropdown1" class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
+        <div id="userDropdown1" class="hidden z-50 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
           <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
             <li><a routerLink="/profile" title="" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="bg-gray-200" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Mi cuenta </a></li>
             <li><a routerLink="/address" title="" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="bg-gray-200" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Direcciones </a></li>

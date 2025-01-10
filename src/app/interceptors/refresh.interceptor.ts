@@ -2,11 +2,13 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../data-access/auth/auth.service';
 import { catchError, switchMap, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
 
   const authService = inject(AuthService);
   const token = authService.getToken();
+  const toastr = inject(ToastrService);
 
   // Verificar si la solicitud no es para el endpoint de refresco de token
   if (!req.url.includes('auth/refresh')) {
@@ -23,6 +25,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
           return authService.refrershToken().pipe(
             switchMap((res: any) => {
               console.log('Token refrescado', res);
+              console.log('Datos User', res.user);
               localStorage.setItem('User', res.user);
               localStorage.setItem('token', res.accessToken);
               localStorage.setItem('refreshToken', res.refreshToken);
@@ -33,7 +36,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
                   Authorization: `Bearer ${res.accessToken}`
                 }
               });
-
+              toastr.success('Token refrescado');
               return next(newReq);
             }),
             catchError((refreshErr) => {

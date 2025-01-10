@@ -25,6 +25,7 @@ export class ProductCardComponent {
       event.stopPropagation();
     event.preventDefault();
     
+    this.toastr.success('Producto agregado al carrito', 'Agregado');
     console.log(this.product())
     this.addToCart.emit(this.product());
     }else{

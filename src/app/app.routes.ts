@@ -58,5 +58,11 @@ export const routes: Routes = [
     {
       path:'about',
       loadComponent:()=> import('./components/about/about.component').then(m=>m.AboutComponent)
+    },{
+      path:'success',
+      loadComponent:()=> import('./components/success/success.component').then(m=>m.SuccessComponent)
+    },{
+      path:'cancel',
+      loadComponent:()=> import('./components/cancel/cancel.component').then(m=>m.CancelComponent)
     }
 ];

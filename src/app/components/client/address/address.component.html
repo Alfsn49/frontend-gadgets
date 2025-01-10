@@ -93,11 +93,24 @@
                       <div class="flex-1 py-5 pl-5 overflow-hidden">
                         <ul>
                           <li class="text-xs text-gray-600 uppercase">Dirección</li>
-                          <li>{{ direccion.calle_principal }} {{ direccion.numero }}</li>
+                          <span>Calle Principal</span>
+                          <li>{{ direccion.calle_principal }}</li>
+                           <span>Calle Secundaria</span>
                           <li>{{ direccion.calle_secundaria }}</li>
-                          <li>{{ direccion.ciudad }}, {{ direccion.estado }}, {{ direccion.codigo_postal }}</li>
+                           <span>Número de casa</span>
+                           <li>{{ direccion.numero }}</li>
+                           <span>Ciudad</span>
+                          <li>{{ direccion.ciudad }}</li>
+                          <span>Estado/Provincia</span>
+                          <li>{{ direccion.estado }}</li>
+                          <span>Código Postal</span>
+                          <li>{{ direccion.codigo_postal }}</li>
+                           <span>Pais</span>
                           <li>{{ direccion.pais }}</li>
-                          <li class="text-xs text-gray-600">Referencia: {{ direccion.referencia }}</li>
+                          <li>Referencia</li>
+                          <li class=" text-gray-600">{{ direccion.referencia }}</li>
+                          <span>Activo</span>
+                          <li class=" text-gray-600">Activo: {{ direccion.activo }}</li>
                         </ul>
                       </div>
                       <div class="flex-none pt-2.5 pr-2.5 pl-1">

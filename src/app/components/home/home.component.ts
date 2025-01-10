@@ -13,6 +13,7 @@ import { CarouselComponent } from '../../ui/carousel/carousel.component';
 })
 export class HomeComponent {
 
+  
 
 
 }

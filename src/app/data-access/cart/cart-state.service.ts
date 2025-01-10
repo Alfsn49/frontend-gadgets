@@ -17,14 +17,8 @@ interface State {
 })
 export class CartStateService {
   constructor() {
-    if(this.authService.isLoggedIn){
-
-    }else{
-      
-    }
+    
   }
-
-  private _storageService = inject(StorageService);
   private cartService = inject(CartService);
   private authService= inject(AuthService);
   
@@ -34,15 +28,33 @@ export class CartStateService {
     loaded: false,
   };
   private loadCartProducts(): Observable<State> {
-    if(this.authService.isLoggedIn){
-      return this.cartService.getCart().pipe(map((response) => ({ products: response.products, loaded: true, status:'success' })));
-    }else{
-      return of ({ products: [], loaded: false, status:'error' })
+    console.log(this.authService.isLoggedIn)
+    if (this.authService.isLoggedIn) {
+      return this.cartService.getCart().pipe(
+        map((response) => ({
+          products: response.products,
+          loaded: true,
+          status: 'success' as const, // Asegura que 'success' sea del tipo esperado
+        })),
+        catchError((error) => {
+          console.error('Error al cargar el carrito:', error); // Log para depuración
+          return of({
+            products: [],
+            loaded: false,
+            status: 'error' as const, // Asegura que 'error' sea del tipo esperado
+          });
+        })
+      );
+    } else {
+      return of({
+        products: [],
+        loaded: false,
+        status: 'error' as const, // Asegura que 'error' sea del tipo esperado
+      });
     }
   }
-  loadProducts$ = this.cartService
-    .getCart()
-    .pipe(map((response) => ({ products: response.products, loaded: true })));
+  
+  
 
   state = signalSlice({
     initialState: this.initialState,
