@@ -4,6 +4,8 @@ import { CartStateService } from '../../data-access/cart/cart-state.service';
 import { ProductItemCart } from '../../Dto/Product.dto';
 import { CartService } from '../../data-access/cart/cart.service';
 import { UserStateService } from '../../data-access/users/user-state.service';
+import { UserService } from '../../data-access/users/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cart',
@@ -16,6 +18,8 @@ export class CartComponent {
   state = inject(CartStateService).state;
   cartService = inject(CartService);
   getaddress = inject(UserStateService).getAddress()
+  userService = inject(UserService);
+  toastrService = inject(ToastrService);
 
   onRemoveItem(id:number){
     console.log(id)
@@ -36,6 +40,27 @@ export class CartComponent {
       product:product.product,
       quantity:1
     })
+  }
+
+  selectAddress(idAddress:string){
+    console.log(idAddress)
+    this.userService.preferedAddress(idAddress).subscribe(
+      {
+        next:(data:any)=>{
+          console.log(data)
+          this.toastrService.success('Dirección seleccionada','Exitoso',{
+            timeOut: 3000,
+          })
+          setTimeout(()=>{
+            window.location.reload();
+          },5000)
+          
+        },
+        error:(error:any)=>{
+          console.log(error)
+        }
+      }
+    )
   }
 
   checkout(){

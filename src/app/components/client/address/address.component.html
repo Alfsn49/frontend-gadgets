@@ -87,44 +87,54 @@
                    </div>
               </form>
             }
-            <div class="mt-5 bg-white shadow cursor-pointer rounded-xl">
-              @for(direccion  of getaddress().address;track direccion.id){
-                  <div class="flex border-b border-gray-200">
-                      <div class="flex-1 py-5 pl-5 overflow-hidden">
-                        <ul>
-                          <li class="text-xs text-gray-600 uppercase">Dirección</li>
-                          <span>Calle Principal</span>
-                          <li>{{ direccion.calle_principal }}</li>
-                           <span>Calle Secundaria</span>
-                          <li>{{ direccion.calle_secundaria }}</li>
-                           <span>Número de casa</span>
-                           <li>{{ direccion.numero }}</li>
-                           <span>Ciudad</span>
-                          <li>{{ direccion.ciudad }}</li>
-                          <span>Estado/Provincia</span>
-                          <li>{{ direccion.estado }}</li>
-                          <span>Código Postal</span>
-                          <li>{{ direccion.codigo_postal }}</li>
-                           <span>Pais</span>
-                          <li>{{ direccion.pais }}</li>
-                          <li>Referencia</li>
-                          <li class=" text-gray-600">{{ direccion.referencia }}</li>
-                          <span>Activo</span>
-                          <li class=" text-gray-600">Activo: {{ direccion.activo }}</li>
-                        </ul>
-                      </div>
-                      <div class="flex-none pt-2.5 pr-2.5 pl-1">
-                        <button type="button" class="px-2 py-2 font-medium tracking-wide text-black capitalize transition duration-300 ease-in-out transform rounded-xl hover:bg-gray-300 focus:outline-none active:scale-95" (click)="openModal(direccion)">
-                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                            <path d="M0 0h24v24H0V0z" fill="none"></path>
-                            <path d="M5 18.08V19h.92l9.06-9.06-.92-.92z" opacity=".3"></path>
-                            <path d="M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29s-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM5.92 19H5v-.92l9.06-9.06.92.92L5.92 19z"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-              }
-            </div>
+            <div class="mt-5 bg-white shadow rounded-xl p-4">
+               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                 @for(direccion of getaddress().address; track direccion.id) {
+                   <div class="border rounded-lg p-4 shadow-sm hover:shadow-md transition duration-300 cursor-pointer">
+                     <div class="space-y-2">
+                       <p class="text-xs font-semibold text-gray-600 uppercase">Dirección</p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Calle Principal:</strong> {{ direccion.calle_principal }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Calle Secundaria:</strong> {{ direccion.calle_secundaria }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Número de Casa:</strong> {{ direccion.numero }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Ciudad:</strong> {{ direccion.ciudad }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Estado/Provincia:</strong> {{ direccion.estado }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Código Postal:</strong> {{ direccion.codigo_postal }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>País:</strong> {{ direccion.pais }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Referencia:</strong> {{ direccion.referencia }}
+                       </p>
+                       <p class="text-sm text-gray-800">
+                         <strong>Activo:</strong> {{ direccion.activo ? 'Sí' : 'No' }}
+                       </p>
+                     </div>
+                     <div class="mt-4">
+                       <button
+                         type="button"
+                         class="w-full px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none"
+                         (click)="openModal(direccion)"
+                       >
+                         Editar
+                       </button>
+                     </div>
+                   </div>
+                 }
+               </div>
+             </div>
+             
          </div>
       </div>
    }

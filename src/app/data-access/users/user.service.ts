@@ -54,4 +54,8 @@ export class UserService extends HttpService {
     
     //return this.http.post(this.api + `user/createAddress/${userId}`, data);
   }
+
+  preferedAddress(data:any){
+    return this.http.get(this.api + `user/preferedAddress/`+ data);
+  }
 }
