@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { AuthService } from '../data-access/auth/auth.service';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { refresh } from '@cloudinary/url-gen/qualifiers/artisticFilter';
 
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
 
@@ -17,7 +18,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${token}`
       }
     });
-
+    
     return next(authReq).pipe(
       catchError((err) => {
         console.log(err.status)
@@ -61,4 +62,8 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
     // Para la solicitud de refresh, simplemente pasarla sin modificar
     return next(req);
   }
+
+  
 };
+
+
