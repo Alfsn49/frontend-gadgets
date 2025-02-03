@@ -7,15 +7,15 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { refreshInterceptor } from './interceptors/refresh.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideStore } from '@ngrx/store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(
-      withInterceptors([refreshInterceptor])
-    ),
+    provideHttpClient(withInterceptors([refreshInterceptor])),
     provideAnimations(),
     provideToastr(), provideAnimationsAsync(),
-  ],
+    provideStore()
+],
 };

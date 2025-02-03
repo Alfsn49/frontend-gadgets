@@ -165,6 +165,7 @@
           @for (product of products.state().products; track product) {
             <app-product-card class="block" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
           }
+          
         </div>
       }
     }
