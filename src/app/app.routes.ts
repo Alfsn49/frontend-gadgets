@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { loginGuard } from './guards/login.guard';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -34,11 +35,12 @@ export const routes: Routes = [
         (m) => m.ProductDetailComponent)
   },{
     path: 'cart',
-    canActivate: [loginGuard],
+    canActivate: [authGuard],
     loadChildren:()=> import('./components/cart/cart.routes')
     },
     {
       path: 'profile',
+      canActivate: [authGuard],
       loadComponent:()=> import('./components/client/profile/profile.component').then(m=>m.ProfileComponent)
     },{
       path: 'address',
@@ -64,5 +66,7 @@ export const routes: Routes = [
     },{
       path:'cancel',
       loadComponent:()=> import('./components/cancel/cancel.component').then(m=>m.CancelComponent)
-    }
+    },
+    { path: '**', loadComponent:() => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent)
+    }, // Ruta 404 (debe ir al final SIEMPRE)
 ];
