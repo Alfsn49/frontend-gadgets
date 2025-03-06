@@ -29,12 +29,14 @@ export class EditProfileComponent {
       email:[data.email, [Validators.required, Validators.email]],
       image:[data.image, [Validators.required]],
       CI:[data.cedula, [Validators.required,this.validateCedula.bind(this)]],
-      birthdate:[data.birthdate, [Validators.required]],
+      birthdate:[this.formatDate(data.birthdate), [Validators.required]],
       telephone:[data.telefono],
     });
     this.previewUrl = data.image;
   }
-
+  formatDate(isoDate: string): string {
+    return isoDate ? isoDate.split('T')[0] : ''; // Extrae solo YYYY-MM-DD
+  }
   validateCedula(control: AbstractControl): { [key: string]: any } | null {
     const cedula = control.value;
     const isValid = verificarCedula(cedula);

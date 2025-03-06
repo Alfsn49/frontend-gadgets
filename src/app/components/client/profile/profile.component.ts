@@ -133,7 +133,9 @@ onDragLeave(event: DragEvent): void {
  updateProfile(){
 
  }
-
+ formatDate(isoDate: string): string {
+  return isoDate ? isoDate.split('T')[0] : ''; // Extrae solo YYYY-MM-DD
+}
  openModal(data:any){
   console.log(data)
   this.dialog.open(EditProfileComponent,{

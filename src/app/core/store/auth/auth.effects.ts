@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from "@angular/common";
 import { AuthService } from "../../../data-access/auth/auth.service";
-import { login, loginFailure, loginSuccess, logout } from "./auth.actions";
+import { login, loginFailure, loginSuccess, logout,  refreshTokenErr } from "./auth.actions";
 import { catchError, map, mergeMap, tap } from "rxjs";
 import { of } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -16,7 +16,6 @@ export class AuthEffects{
     private toastr = inject(ToastrService);
     private router = inject(Router);
     constructor(){
-
     }
 
     login$ = createEffect(()=>
@@ -61,5 +60,17 @@ export class AuthEffects{
         })
     ),{dispatch:false})
 
+    errorRefreshToken$ = createEffect(()=>
+    this.actions$.pipe(
+        ofType(refreshTokenErr),
+        tap(()=>{
+            localStorage.removeItem('User');
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('isAuthenticated');
+            this.toastr.error('Error', 'Token expirado');
+            this.router.navigate(['/auth/login']);
+        })
+    ),{dispatch:false})
    
 }

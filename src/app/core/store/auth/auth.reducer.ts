@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { login, loginSuccess, loginFailure, logout } from "./auth.actions";
+import { login, loginSuccess, loginFailure, logout, refreshTokenErr } from "./auth.actions";
 
 
 export interface AuthState{
@@ -57,5 +57,13 @@ export const authReducer = createReducer(
         isAuthenticated: false,
         error: null,
     })),
+    on(refreshTokenErr,(state)=>({
+        ...state,
+        loading:false,
+        error:null,
+        isAuthenticated:false,
+        user:null,
+        token:null,
+    }))
     
 )

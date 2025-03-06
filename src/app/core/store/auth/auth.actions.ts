@@ -20,4 +20,7 @@ export const logout = createAction(
     '[Auth] Logout'
 )
 
+export const refreshTokenErr = createAction(
+    '[Auth] Refresh Token'
+)
 
