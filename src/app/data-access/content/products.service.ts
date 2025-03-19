@@ -45,4 +45,8 @@ export class ProductsService extends HttpService{
   getBrands(): Observable<any>{
     return this.http.get(this.api + 'product-category/get-brands');
   }
+
+  searchProducts(search:string |any){
+    return this.http.get(this.api + `product/search?q=${search}`); 
+  }
 }

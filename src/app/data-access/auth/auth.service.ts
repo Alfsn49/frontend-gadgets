@@ -12,6 +12,7 @@ import { JwtDecodeService } from '../../services/utils/jwt-decode.service';
 })
 export class AuthService extends HttpService{
   private decodeToken = inject(JwtDecodeService);
+   isRefreshingToken = false;
   private readonly tokenKey = 'token';
 
    loggedInSignal = signal<boolean>(!!localStorage.getItem(this.tokenKey));
@@ -72,6 +73,7 @@ export class AuthService extends HttpService{
     const headers = {
       Authorization: `Refresh ${refreshToken}`
     };
+    this.isRefreshingToken = true;
     return this.http.post(this.api + 'auth/refresh','', { headers })}
   logout(){
     this.loggedInSignal.set(false);
