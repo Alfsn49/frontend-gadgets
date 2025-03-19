@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class HttpService {
+export class  HttpService {
   http = inject(HttpClient);
   api= environment.api;
   

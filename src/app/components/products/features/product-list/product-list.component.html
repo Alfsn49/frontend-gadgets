@@ -171,3 +171,10 @@
     }
   </div>
 </div>
+
+<div *ngIf="(products$ | async) as products">
+  <div *ngFor="let product of products">
+    {{ product.name }} - {{ product.price | currency }}
+  </div>
+</div>
+

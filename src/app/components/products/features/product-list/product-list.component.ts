@@ -5,6 +5,10 @@
   import { Product } from '../../../../Dto/Product.dto';
   import { CommonModule } from '@angular/common';
   import { ProductsService } from '../../../../data-access/content/products.service';
+  import { Store } from '@ngrx/store';
+  import { loadProducts } from '../../../../data-access/content/products/state/products.actions';
+import { Observable } from 'rxjs';
+import { selectAllProducts, selectFilters, selectPage } from '../../../../data-access/content/products/state/products.selectors';
   @Component({
     selector: 'app-product-list',
     standalone: true,
@@ -13,6 +17,10 @@
     styleUrl: './product-list.component.css'
   })
   export class ProductListComponent {
+    private store = inject(Store);
+    products$: Observable<Product[]>;
+    page$: Observable<number>;
+    filters$: Observable<any>;
     products= inject(ProductsStateService)
     productsService= inject(ProductsService)
     cartState= inject(CartStateService).state;
@@ -26,8 +34,16 @@
     constructor(){
       this.loadCategories();
       this.loadBrands();
+
+      this.products$ = this.store.select(selectAllProducts);
+    this.page$ = this.store.select(selectPage);
+    this.filters$ = this.store.select(selectFilters);
+    console.log('Dispatching loadProducts()');  
+    this.store.dispatch(loadProducts())
+     
     }
 
+    
     
 
     changePage(){
