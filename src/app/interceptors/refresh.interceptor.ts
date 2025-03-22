@@ -16,10 +16,11 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const store = inject(Store);
   const token = authService.getToken();
-  const refreshToken = localStorage.getItem('refreshToken') || '';
+ 
 
   // Verificar si la solicitud no es para refrescar el token y si hay un token actual
-  if (!req.url.includes('auth/refresh') && token) {
+  if (!req.url.includes('auth/refresh')) {
+    console.log("funcionando")
     const authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`

@@ -29,7 +29,7 @@ export class CarouselComponent implements OnInit {
     setInterval(() => {
       this.nextImage();
     }, 3000); // Cambia cada 3 segundos (ajustable)
-  initFlowbite();
+  
   }
 
   // Método para cambiar a la imagen siguiente

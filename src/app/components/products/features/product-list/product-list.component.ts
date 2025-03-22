@@ -34,12 +34,12 @@ import { selectAllProducts, selectFilters, selectPage } from '../../../../data-a
     constructor(){
       this.loadCategories();
       this.loadBrands();
-
+      this.store.dispatch(loadProducts())
       this.products$ = this.store.select(selectAllProducts);
     this.page$ = this.store.select(selectPage);
     this.filters$ = this.store.select(selectFilters);
     console.log('Dispatching loadProducts()');  
-    this.store.dispatch(loadProducts())
+    
      
     }
 

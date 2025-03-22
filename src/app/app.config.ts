@@ -14,19 +14,21 @@ import { AuthEffects } from './core/store/auth/auth.effects';
 import { authReducer } from './core/store/auth/auth.reducer';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
+import { productReducer } from './data-access/content/products/state/products.reducer';
+import { ProductsEffects } from './data-access/content/products/state/products.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(),
-    provideHttpClient(withInterceptors([refreshInterceptor,loadingInterceptor])),
+    provideHttpClient(withInterceptors([refreshInterceptor])),
     provideAnimations(),
     provideToastr(), provideAnimationsAsync(),
     provideStore({
       auth: authReducer,
+      products: productReducer,
     }),
-    provideEffects(AuthEffects),
+    provideEffects(AuthEffects, ProductsEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(
       [BrowserAnimationsModule]
