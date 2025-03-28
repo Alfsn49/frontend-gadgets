@@ -3,7 +3,7 @@ import { HttpService } from '../http/http.service';
 import { JwtDecodeService } from '../../services/utils/jwt-decode.service';
 import { AuthService } from '../auth/auth.service';
 import { HttpParams } from '@angular/common/http';
-import { catchError, of, retry } from 'rxjs';
+import { catchError, Observable, of, retry } from 'rxjs';
 import { UserStateService } from './user-state.service';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class UserService extends HttpService {
 
   }
   
-  profile(){
+  profile():Observable<any>{
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;
     console.log(userId)
