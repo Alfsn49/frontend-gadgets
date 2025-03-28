@@ -122,52 +122,33 @@ export class SignupComponent implements OnInit {
   async onSubmit() {
     if (this.register.valid && this.imageFile) {
       try {
-
-        // // Primero, sube la imagen al backend
-        // const uploadResponse: any = await this.authService.uploadImage(this.imageFile).toPromise();
-        // console.log(uploadResponse);
-        // const imageUrl = uploadResponse.imageUrl; // URL de la imagen devuelta por el backend
-        // console.log('Imagen subida:', imageUrl);
-  
-        // // Crear el objeto de datos del formulario con la URL de la imagen
-        // const formData = { ...this.register.value, image: imageUrl };
-        // delete formData.confirmPassword; // Eliminar confirmación de contraseña antes de enviar
-  
-        // // Registrar al usuario en el backend
-        // await this.authService.signup(formData).toPromise();
-
         const formData = new FormData();
-      const formValues = this.register.value;
-
-      // Quitar confirmPassword antes de enviar
-      const { confirmPassword, ...formValuesWithoutConfirm } = formValues;
-
-      // Añadir datos del formulario al FormData
-      Object.keys(formValuesWithoutConfirm).forEach((key) => {
-        formData.append(key, formValuesWithoutConfirm[key]);
-      });
-
-      // Añadir la imagen al FormData si existe
-      if (this.imageFile) {
-        formData.append('image', this.imageFile);
-      }
-
-      // Enviar el formulario con los datos y la imagen
-      await this.authService.signup(formData).toPromise();
+        const { confirmPassword, ...formValues } = this.register.value;
   
-        // Notificar éxito y redirigir al login
-        this.toastr.success('Usuario registrado con éxito', 'Éxito', {
-          timeOut: 3000,
-          positionClass: 'toast-top-right',
+        Object.keys(formValues).forEach((key) => {
+          formData.append(key, formValues[key]);
         });
-        this.router.navigate(['/auth/login']);
-      } catch (error:any) {
-        this.toastr.error(error.error.message, 'Error', {
-          timeOut: 3000,
-          positionClass: 'toast-top-right',
+  
+        if (this.imageFile) {
+          formData.append('image', this.imageFile);
+        }
+  
+        await this.authService.signup(formData).subscribe({
+          next: () => {
+            this.toastr.success('Usuario registrado con éxito', 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-right',
+            });
+            this.router.navigate(['/auth/login']);
+          },
+          error: (error) => {
+            this.toastr.error(error.error.message, 'Error', {
+              timeOut: 3000,
+              positionClass: 'toast-top-right',
+            });
+          },
         });
-        console.error(error.error.message);
-      }
+      } catch (error: any) {}
     } else {
       this.toastr.error('Por favor completa todos los campos.', 'Error', {
         timeOut: 3000,
@@ -175,6 +156,7 @@ export class SignupComponent implements OnInit {
       });
     }
   }
+  
   
   
 

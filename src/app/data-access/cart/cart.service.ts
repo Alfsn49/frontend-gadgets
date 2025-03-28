@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../http/http.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,29 @@ export class CartService extends HttpService{
     userId = localStorage.getItem('User');
     console.log(userId.id)
   }
+
+  // cart.service.ts
+saveCartToLocalStorage(products: any[]) {
+  localStorage.setItem('cart', JSON.stringify(products));
+}
+loadCartFromLocalStorage(): any[] {
+  const cart = localStorage.getItem('cart');
+  return cart ? JSON.parse(cart) : [];
+}
+
+syncCartAfterLogin(){
+  const localCart = this.loadCartFromLocalStorage();
+
+  if(localCart.length ===0){
+    return this.getCart().pipe(
+      tap((response) => {
+        this.saveCartToLocalStorage(response.products);
+      })
+    )
+  }else{
+    return 0
+  }
+}
 
   getCart():Observable<any>{
     const userdata = localStorage.getItem('User');

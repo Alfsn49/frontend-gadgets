@@ -10,7 +10,7 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css'
 })
-export class CarouselComponent implements OnInit {
+export class CarouselComponent  {
   // Definimos un arreglo para gestionar el estado de las imágenes activas
   images = [
     'https://cdn.donmai.us/sample/4d/10/__sakurai_momoka_idolmaster_and_2_more__sample-4d104d2f3f14f644efda79c9df21a580.jpg',
@@ -24,13 +24,7 @@ export class CarouselComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-    // Puede ser útil si deseas un control automático de cambio de imágenes (opcional)
-    setInterval(() => {
-      this.nextImage();
-    }, 3000); // Cambia cada 3 segundos (ajustable)
   
-  }
 
   // Método para cambiar a la imagen siguiente
   nextImage() {

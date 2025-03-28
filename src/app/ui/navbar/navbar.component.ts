@@ -27,14 +27,15 @@ export class NavbarComponent {
   showResults = false;
   private searchSubject = new Subject<string>();
   
-  cartState = inject(CartStateService).state;
+  
   router = inject(Router);
   isAuthenticated$: Observable<boolean>;
   productService = inject(ProductsService);
+
   public authService = inject(AuthService);
 
   constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState }>) {
-    this.cartState.loaded();
+    
     initFlowbite();
     this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
 
@@ -53,7 +54,7 @@ export class NavbarComponent {
 
   onRemoveItem(id: number) {
     console.log(id);
-    this.cartState.remove(id);
+    
   }
 
   logout() {

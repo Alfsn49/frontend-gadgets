@@ -73,7 +73,6 @@ export class AuthService extends HttpService{
     const headers = {
       Authorization: `Refresh ${refreshToken}`
     };
-    this.isRefreshingToken = true;
     return this.http.post(this.api + 'auth/refresh','', { headers })}
   logout(){
     this.loggedInSignal.set(false);

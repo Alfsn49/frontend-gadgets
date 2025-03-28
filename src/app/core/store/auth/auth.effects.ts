@@ -7,6 +7,8 @@ import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { loadCart } from "../cart/cart.actions";
 
 
 @Injectable()
@@ -15,6 +17,7 @@ export class AuthEffects{
     private authService = inject(AuthService);
     private toastr = inject(ToastrService);
     private router = inject(Router);
+    private store = inject(Store); // Inyectar Store
     constructor(){
     }
 
@@ -32,7 +35,8 @@ export class AuthEffects{
                     setTimeout(() => {
                         this.router.navigate(['/']); // Redirigir sin recargar la página
                       }, 50);
-
+                      // 🚀 Despachar la acción para cargar el carrito después del login
+                     this.store.dispatch(loadCart());
                     return loginSuccess({
                         user: response.user,
                         token: response.backendTokens.accessToken,

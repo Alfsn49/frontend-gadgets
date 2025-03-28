@@ -16,6 +16,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { productReducer } from './data-access/content/products/state/products.reducer';
 import { ProductsEffects } from './data-access/content/products/state/products.effects';
+import { cartReducer } from './core/store/cart/cart.reducer';
+import { CartEffects } from './core/store/cart/cart.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,8 +29,9 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       auth: authReducer,
       products: productReducer,
+      cart: cartReducer
     }),
-    provideEffects(AuthEffects, ProductsEffects),
+    provideEffects(AuthEffects, ProductsEffects, CartEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(
       [BrowserAnimationsModule]

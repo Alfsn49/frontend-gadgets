@@ -23,7 +23,7 @@ import { selectAllProducts, selectFilters, selectPage } from '../../../../data-a
     filters$: Observable<any>;
     products= inject(ProductsStateService)
     productsService= inject(ProductsService)
-    cartState= inject(CartStateService).state;
+    //cartState= inject(CartStateService).state;
     isSidebarVisible = false; // Control de visibilidad del menú lateral
     categories:any = [];
     subcategories:any = [];
@@ -52,10 +52,10 @@ import { selectAllProducts, selectFilters, selectPage } from '../../../../data-a
     }
     addToCart(product:any){
       console.log(product)
-      this.cartState.add({
-        product,
-        quantity: 1
-      })
+      // this.cartState.add({
+      //   product,
+      //   quantity: 1
+      // })
     }
     toggleSidebar() {
       this.isSidebarVisible = !this.isSidebarVisible;
