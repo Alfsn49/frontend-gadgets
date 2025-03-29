@@ -7,14 +7,14 @@ import { image } from '@cloudinary/url-gen/qualifiers/source';
 import { UserService } from '../../../data-access/users/user.service';
 import { verificarCedula } from '../../../utils/validators/cedula-validator.validator';
 import { ToastrService } from 'ngx-toastr';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, CommonModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -24,7 +24,10 @@ export class ProfileComponent {
  private ServiceUser = inject(UserService);
  userEditForm:FormGroup;
  createDataClientForm: FormGroup;
+ profileEditForm:FormGroup;
  activeForm = false;
+ modalCreateDataClient = false;
+ modalEditProfile = false;
  private userdata = localStorage.getItem('User');
  private userId = this.userdata ? JSON.parse(this.userdata).id : null;
  private toastr = inject(ToastrService);
@@ -32,6 +35,12 @@ export class ProfileComponent {
  previewUrl: string | null = null;
  imageFile: any = null; // Para almacenar temporalmente la imagen seleccionada
  isDragging = false;
+
+
+ items = [
+  { label: "Masculino", value: "M" },
+  { label: "Femenino", value: "F" },
+];
  
 
  constructor(private dialog: MatDialog){
@@ -52,11 +61,42 @@ export class ProfileComponent {
     sexo:['', [Validators.required]],
     userId:[this.userId,],
     });
+  
+  this.profileEditForm = this.fb.group({
+    name: ['', [Validators.required]],
+    lastname: ['', [Validators.required]],
+    email:['', [Validators.required, Validators.email]],
+    image:[''],
+    CI:[''],
+    birthdate:[''],
+    telephone:[''],
+  });
  }
  validateCedula(control: AbstractControl): { [key: string]: any } | null {
   const cedula = control.value;
   const isValid = verificarCedula(cedula);
   return isValid ? null : { 'cedulaInvalida': true };
+}
+
+getProfile(){
+  this.ServiceUser.profile().subscribe({
+    next:(data:unknown|any)=>{
+      console.log(data)
+      this.userEditForm.patchValue({
+        name: data.nombre,
+        lastname: data.apellido,
+        email:data.email,
+        image:data.image,
+        CI:data.cedula,
+        birthdate:this.formatDate(data.birthdate),
+        telephone:data.telefono,
+      })
+      this.previewUrl = data.image;
+    },
+    error:(error:unknown|any)=>{
+      console.error('Error al obtener los datos del perfil', error);
+    }
+  })
 }
 
 previewImage(file:File):void{
@@ -130,9 +170,7 @@ onDragLeave(event: DragEvent): void {
   )
  }
 
- updateProfile(){
 
- }
  formatDate(isoDate: string): string {
   return isoDate ? isoDate.split('T')[0] : ''; // Extrae solo YYYY-MM-DD
 }
@@ -149,4 +187,58 @@ onDragLeave(event: DragEvent): void {
  changeValue(){
   this.activeForm = !this.activeForm;
  }
+
+ mostrarModal(){
+  this.modalCreateDataClient = !this.modalCreateDataClient;
+ }
+
+ cerrarModal(){
+  this.modalCreateDataClient = false;
+ }
+  mostrarModalEditProfile(){
+    this.modalEditProfile = !this.modalEditProfile;
+    this.getProfile();
+  }
+  cerrarModalEditProfile(){
+    this.modalEditProfile = false;
+  }
+
+  async onSubmit(){
+    console.log(this.profileEditForm.value)
+    const formData = new FormData();
+    formData.append('name', this.profileEditForm.value.name);
+    formData.append('lastname', this.profileEditForm.value.lastname);
+    formData.append('email', this.profileEditForm.value.email);
+    formData.append('CI', this.profileEditForm.value.CI);
+    formData.append('birthdate', this.profileEditForm.value.birthdate);
+    formData.append('telephone', this.profileEditForm.value.telephone);
+
+    if (this.imageFile) {
+      // Si se seleccionó una nueva imagen, la añadimos
+      formData.append('image', this.imageFile);
+    } else if (this.previewUrl) {
+      // Si no hay nueva imagen, añadimos la URL actual
+      formData.append('image', this.previewUrl);
+    }
+    // Forma 1: Iterar sobre el contenido del FormData
+formData.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+
+ this.ServiceUser.editProfile(formData).subscribe({
+    next:(data:unknown|any)=>{
+      console.log(data)
+      this.toastr.success('Perfil actualizado con éxito');
+     
+      
+      // Agregar un pequeño retraso para asegurar que el mensaje de éxito se muestra antes de recargar
+      window.location.reload();
+    },
+    error:(error:unknown|any)=>{
+      console.error('Error al actualizar el perfil:', error);
+      this.toastr.error('Error al actualizar el perfil');
+    }
+  });
+    //this.dialogRef.close(this.profileEditForm.value);
+  }
 }

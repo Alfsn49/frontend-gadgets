@@ -128,10 +128,12 @@ formData.forEach((value, key) => {
       console.log(data)
       this.toastr.success('Perfil actualizado con éxito');
       this.dialogRef.close(data);
+      
       // Agregar un pequeño retraso para asegurar que el mensaje de éxito se muestra antes de recargar
-    setTimeout(() => {
-      location.reload(); // Reinicia la página
-    }, 500); // 500ms es suficiente para que el toastr se vea
+      setTimeout(() => {
+        window.location.reload();
+      }
+      , 6000); // 1 segundo de retraso
     },
     error:(error:unknown|any)=>{
       console.error('Error al actualizar el perfil:', error);

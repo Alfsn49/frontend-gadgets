@@ -24,6 +24,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((err: any) => {
+      console.log('Error interceptado:', err);
       // Solo manejar errores 401 que no sean de la ruta de refresh
       if (err.status === 401 && !req.url.includes('auth/refresh')) {
         console.log('Error 401 detectado, intentando refrescar token...');
@@ -48,9 +49,7 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
             return next(newReq);
           }),
           catchError((refreshErr: any) => {
-            console.log('⛔ Error al refrescar el token:', refreshErr);
-            // Solo cerrar sesión si el error es realmente de autenticación
-            if (refreshErr.status === 401 || refreshErr.status === 403) {
+                       if (refreshErr.status === 401 || refreshErr.status === 403) {
               toastr.error('Sesión expirada, inicie sesión nuevamente.');
               authService.logout();
               router.navigate(['/auth/login']);
