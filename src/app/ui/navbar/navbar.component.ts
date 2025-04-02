@@ -63,7 +63,7 @@ export class NavbarComponent {
 
   onRemoveItem(id: number) {
     console.log(id);
-    this.store.dispatch(removeCartItem({data:id}))
+    this.store.dispatch(removeCartItem({product_id:id}))
   }
 
   logout() {

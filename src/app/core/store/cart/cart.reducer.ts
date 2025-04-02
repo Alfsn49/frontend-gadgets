@@ -92,10 +92,9 @@ export const cartReducer = createReducer(
             loaded: true,
         }
     }),
-    on(removeCartItemSuccess, (state, { products, cart }) => ({
+    on(removeCartItemSuccess, (state, { cart }) => ({
         ...state,
-        products: products, // Nombre consistente
-        cartInfo: cart || state,
+        cart: cart
       })),
     on(removeCartItemFailure, (state, data)=>{
         return{

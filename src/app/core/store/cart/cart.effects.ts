@@ -89,31 +89,27 @@ export class CartEffects {
 //     )
 //   );
 
-// // Ejemplo completo de effect corregido
-// removeItem$ = createEffect(() =>
-//   this.actions$.pipe(
-//     ofType(removeCartItem),
-//     mergeMap(({ data }) => {
-//       const localData = this.cartService.loadCartFromLocalStorage();
-//       const updatedProducts = localData.products.filter(item => item.product.id !== data.product_id);
+removeItem$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(removeCartItem),
+    mergeMap(({ product_id }) => {
+      // Guardamos el carrito actual por si hay error
+      const currentCart = this.cartService.loadCartFromLocalStorage();
       
-//       this.cartService.saveCartToLocalStorage({
-//         cart: localData.cart,
-//         products: updatedProducts
-//       });
-
-//       return this.cartService.removeProduct(data.product_id).pipe(
-//         switchMap(() => this.cartService.getCart()),
-//         map(fullResponse => removeCartItemSuccess({
-//           cart: fullResponse.cart,
-//           products: fullResponse.products
-//         })),
-//         catchError(error => {
-//           this.cartService.saveCartToLocalStorage(localData);
-//           return of(removeCartItemFailure({ error }));
-//         })
-//       );
-//     })
-//   )
-// );
+      return this.cartService.removeProduct(product_id).pipe(
+        switchMap(() => this.cartService.getCart()),
+        tap(updatedCart => {
+          // Guardamos el nuevo carrito en localStorage
+          this.cartService.saveCartToLocalStorage(updatedCart);
+        }),
+        map(updatedCart => removeCartItemSuccess({ cart: updatedCart })),
+        catchError(error => {
+          // Restauramos el carrito anterior si hay error
+          this.cartService.saveCartToLocalStorage(currentCart);
+          return of(removeCartItemFailure({ error }));
+        })
+      );
+    })
+  )
+);
 }

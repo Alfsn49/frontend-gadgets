@@ -31,6 +31,6 @@ export const updateCartItem = createAction('[Cart] Update Cart Item', props<{ da
 export const updateCartItemSuccess = createAction('[Cart] Update Cart Item Success', props<{ data: any }>());
 export const updateCartItemFailure = createAction('[Cart] Update Cart Item Failure');
 
-export const removeCartItem = createAction('[Cart] Remove Cart Item', props<{ data: any }>());
-export const removeCartItemSuccess = createAction('[Cart] Remove Cart Item Success',  props<{ cart?: any; products: any[] }>());
+export const removeCartItem = createAction('[Cart] Remove Cart Item', props<{ product_id: any }>());
+export const removeCartItemSuccess = createAction('[Cart] Remove Cart Item Success',  props<{ cart?: any; }>());
 export const removeCartItemFailure = createAction('[Cart] Remove Cart Item Failure', props<{ error: any }>());
