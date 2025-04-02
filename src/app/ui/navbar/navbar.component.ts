@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { logout } from '../../core/store/auth/auth.actions';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ProductsService } from '../../data-access/content/products.service';
+import { loadCart, removeCartItem } from '../../core/store/cart/cart.actions';
+import { selectCart } from '../../core/store/cart/cart.selectors';
 
 @Component({
   selector: 'app-navbar',
@@ -26,7 +28,9 @@ export class NavbarComponent {
   searchResults: any = [];
   showResults = false;
   private searchSubject = new Subject<string>();
-  
+  data$: any;
+  cartData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')!) : null;
+  cartData$ = this.store.select(selectCart);
   
   router = inject(Router);
   isAuthenticated$: Observable<boolean>;
@@ -35,7 +39,12 @@ export class NavbarComponent {
   public authService = inject(AuthService);
 
   constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState }>) {
+    const cartdataGet = this.store.dispatch(loadCart());
     
+    this.cartData$.subscribe(data => {
+      this.data$ = data;
+      console.log('Datos del carrito:', data);
+    });
     initFlowbite();
     this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
 
@@ -54,7 +63,7 @@ export class NavbarComponent {
 
   onRemoveItem(id: number) {
     console.log(id);
-    
+    this.store.dispatch(removeCartItem({data:id}))
   }
 
   logout() {

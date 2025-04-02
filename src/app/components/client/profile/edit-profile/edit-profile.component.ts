@@ -4,11 +4,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { verificarCedula } from '../../../../utils/validators/cedula-validator.validator';
 import { UserService } from '../../../../data-access/users/user.service';
+import { LoadingComponent } from '../../../../ui/loading/loading.component';
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,LoadingComponent],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })

@@ -9,6 +9,7 @@
   import { loadProducts } from '../../../../data-access/content/products/state/products.actions';
 import { Observable } from 'rxjs';
 import { selectAllProducts, selectFilters, selectPage } from '../../../../data-access/content/products/state/products.selectors';
+import { addToCart } from '../../../../core/store/cart/cart.actions';
   @Component({
     selector: 'app-product-list',
     standalone: true,
@@ -23,6 +24,7 @@ import { selectAllProducts, selectFilters, selectPage } from '../../../../data-a
     filters$: Observable<any>;
     products= inject(ProductsStateService)
     productsService= inject(ProductsService)
+    
     //cartState= inject(CartStateService).state;
     isSidebarVisible = false; // Control de visibilidad del menú lateral
     categories:any = [];
@@ -52,6 +54,7 @@ import { selectAllProducts, selectFilters, selectPage } from '../../../../data-a
     }
     addToCart(product:any){
       console.log(product)
+      
       // this.cartState.add({
       //   product,
       //   quantity: 1

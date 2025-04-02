@@ -3,6 +3,8 @@ import { Component, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../data-access/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { addToCart } from '../../../../core/store/cart/cart.actions';
 
 @Component({
   selector: 'app-product-card',
@@ -13,6 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProductCardComponent {
   product = input.required<any>();
+
+  store = inject(Store);
 
   authService = inject(AuthService);
 
@@ -25,9 +29,14 @@ export class ProductCardComponent {
       event.stopPropagation();
     event.preventDefault();
     
-    this.toastr.success('Producto agregado al carrito', 'Agregado');
+   
     console.log(this.product())
-    this.addToCart.emit(this.product());
+    const cartItem = {
+      product_id: this.product().id,  // Accedemos al ID a través de product.product
+      quantity: 1                     // Cantidad a añadir
+    };
+    console.log(cartItem)
+    this.store.dispatch(addToCart({ product_id: cartItem.product_id, quantity: cartItem.quantity }));
     }else{
       this.toastr.info('Debes iniciar sesión para agregar productos al carrito', 'Login requerido');
     }

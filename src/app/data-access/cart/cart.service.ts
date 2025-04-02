@@ -12,46 +12,42 @@ export class CartService extends HttpService{
     console.log(userId.id)
   }
 
-  // cart.service.ts
-saveCartToLocalStorage(products: any[]) {
-  localStorage.setItem('cart', JSON.stringify(products));
+ // Guarda el carrito en localStorage
+ saveCartToLocalStorage(cartData: any): void {
+  localStorage.setItem('cart', JSON.stringify(cartData));
 }
-loadCartFromLocalStorage(): any[] {
+
+
+// Carga el carrito desde localStorage
+loadCartFromLocalStorage(): any {
   const cart = localStorage.getItem('cart');
-  return cart ? JSON.parse(cart) : [];
+  return cart ? JSON.parse(cart) : {
+    id: null,
+    user_id: null,
+    total: 0,
+    completed: false,
+    items: []
+  };
 }
 
-syncCartAfterLogin(){
-  const localCart = this.loadCartFromLocalStorage();
-
-  if(localCart.length ===0){
-    return this.getCart().pipe(
-      tap((response) => {
-        this.saveCartToLocalStorage(response.products);
-      })
-    )
-  }else{
-    return 0
-  }
+// Método auxiliar para el getCart (mejor tipado)
+getCart(): Observable<{cart: any, products: any[]}> {
+  return this.http.get<{cart: any, products: any[]}>(`${this.api}cart/get-cart`).pipe(
+    tap(response => console.log('Respuesta del backend:', response))
+  );
 }
-
-  getCart():Observable<any>{
-    const userdata = localStorage.getItem('User');
-    console.log(userdata)
-    const userId = userdata ? JSON.parse(userdata).id : null;
-    console.log(userId)
-    return this.http.get(this.api + 'cart/get-cart')
-  }
 
   updateCartItem(data: any): Observable<any> {
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;
+    console.log(data)
     return this.http.post(`${this.api}cart/add-product-item/${userId}`, data);
   }
 
   removeProduct(productId: number): Observable<any> {
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;
+    console.log(productId)
     return this.http.delete(`${this.api}cart/remove-product/${userId}`, {
       body: { product_id: productId },
     });

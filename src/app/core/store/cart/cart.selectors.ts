@@ -5,5 +5,6 @@ export const selectCartState = createFeatureSelector<CartState>('cart');
 
 export const selectCart = createSelector(
     selectCartState,
-    (state: CartState) => state.products
+    (state: CartState) => state.cart || []
 )
+

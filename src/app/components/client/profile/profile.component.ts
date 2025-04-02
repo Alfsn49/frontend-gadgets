@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { UserStateService } from '../../../data-access/users/user-state.service';
 import { AbstractControl, Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
-import { last } from 'rxjs';
+import { finalize, last } from 'rxjs';
 import { image } from '@cloudinary/url-gen/qualifiers/source';
 import { UserService } from '../../../data-access/users/user.service';
 import { verificarCedula } from '../../../utils/validators/cedula-validator.validator';
@@ -10,11 +10,12 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { LoadingComponent } from '../../../ui/loading/loading.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -22,9 +23,10 @@ export class ProfileComponent {
  private fb = inject(FormBuilder);
  userService = inject(UserStateService).loadUsers();
  private ServiceUser = inject(UserService);
- userEditForm:FormGroup;
+
  createDataClientForm: FormGroup;
  profileEditForm:FormGroup;
+ loading: boolean = false;
  activeForm = false;
  modalCreateDataClient = false;
  modalEditProfile = false;
@@ -44,15 +46,7 @@ export class ProfileComponent {
  
 
  constructor(private dialog: MatDialog){
-  this.userEditForm = this.fb.group({
-  name: ['', [Validators.required]],
-  lastname: ['', [Validators.required]],
-  email:['', [Validators.required, Validators.email]],
-  image:[''],
-  CI:[''],
-  birthdate:[''],
-  telephone:[''],
-  });
+
 
   this.createDataClientForm = this.fb.group({
     CI:['', [Validators.required,this.validateCedula.bind(this)]],
@@ -82,7 +76,7 @@ getProfile(){
   this.ServiceUser.profile().subscribe({
     next:(data:unknown|any)=>{
       console.log(data)
-      this.userEditForm.patchValue({
+      this.profileEditForm.patchValue({
         name: data.nombre,
         lastname: data.apellido,
         email:data.email,
@@ -225,20 +219,21 @@ formData.forEach((value, key) => {
   console.log(`${key}: ${value}`);
 });
 
- this.ServiceUser.editProfile(formData).subscribe({
-    next:(data:unknown|any)=>{
-      console.log(data)
-      this.toastr.success('Perfil actualizado con éxito');
-     
-      
-      // Agregar un pequeño retraso para asegurar que el mensaje de éxito se muestra antes de recargar
-      window.location.reload();
-    },
-    error:(error:unknown|any)=>{
-      console.error('Error al actualizar el perfil:', error);
-      this.toastr.error('Error al actualizar el perfil');
-    }
-  });
+this.loading = true; // Iniciar el loading
+this.ServiceUser.editProfile(formData)
+    .pipe(finalize(() => (this.loading = false))) // Desactivar loading cuando termine la petición
+    .subscribe({
+      next: (data: unknown | any) => {
+        console.log(data);
+        this.toastr.success('Perfil actualizado con éxito');
+        setTimeout(() => window.location.reload(), 500); // Pequeño delay para el mensaje
+      },
+      error: (error: unknown | any) => {
+        console.error('Error al actualizar el perfil:', error);
+        this.toastr.error('Error al actualizar el perfil');
+      } 
+    });
+ 
     //this.dialogRef.close(this.profileEditForm.value);
   }
 }
