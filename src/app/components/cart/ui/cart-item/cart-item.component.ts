@@ -10,11 +10,16 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './cart-item.component.css'
 })
 export class CartItemComponent {
-  productCartItem = input.required<ProductItemCart>();
+  productCartItem = input.required<any>();
 
   onRemove = output<number>();
 
   onIncrease = output<any>();
 
   onDecrease = output<any>();
+
+  constructor() {
+    // Constructor logic if needed
+  console.log(this.productCartItem)
+  }
 }

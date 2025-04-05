@@ -69,6 +69,26 @@ export class CartEffects {
     )
   );
 
+  reduceToCart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(reduceCartItem),
+      mergeMap(({ product_id, quantity }) => {
+        const currentCart = this.cartService.loadCartFromLocalStorage();
+        
+        return this.cartService.updateCartItem({product_id, quantity}).pipe(
+          switchMap(() => this.cartService.getCart()),
+          tap(cart => {
+            this.cartService.saveCartToLocalStorage(cart);
+          }),
+          map(cart => reduceCartItemSuccess({ cart })),
+          catchError(error => {
+            this.cartService.saveCartToLocalStorage(currentCart);
+            return of(reduceCartItemFailure({ error }));
+          })
+        );
+      })
+    )
+  );
   
 //   reduceCartItem$ = createEffect(() =>
 //     this.actions$.pipe(

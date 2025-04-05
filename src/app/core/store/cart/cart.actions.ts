@@ -15,12 +15,12 @@ export const addToCartFailure = createAction('[Cart] Add To Cart Failure',props<
 // Para reducir cantidad (similar a addToCart pero con lógica inversa)
 export const reduceCartItem = createAction(
     '[Cart] Reduce Cart Item', 
-    props<{ productId: number }>()  // Solo necesitamos el ID del producto
+    props<{ product_id: number, quantity?: number  }>()  // Solo necesitamos el ID del producto
   );
   // Para reduceCartItemSuccess
 export const reduceCartItemSuccess = createAction(
   '[Cart] Reduce Cart Item Success',
-  props<{ cart?: any; products: any[] }>()
+  props<{ cart?: any }>()
 );
   export const reduceCartItemFailure = createAction(
     '[Cart] Reduce Cart Item Failure',
