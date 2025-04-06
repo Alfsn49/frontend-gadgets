@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { loadCart, loadCartFailure, loadCartSuccess, addToCart, addToCartFailure, addToCartSuccess, updateCartItem, updateCartItemFailure, updateCartItemSuccess, removeCartItem, removeCartItemFailure, removeCartItemSuccess } from "./cart.actions";
+import { loadCart, loadCartFailure, loadCartSuccess, addToCart, addToCartFailure, addToCartSuccess, updateCartItem, updateCartItemFailure, updateCartItemSuccess, removeCartItem, removeCartItemFailure, removeCartItemSuccess, reduceCartItem, reduceCartItemSuccess, reduceCartItemFailure } from "./cart.actions";
+import { state } from "@angular/animations";
 // Función para cargar el carrito desde localStorage
 const loadInitialCartState = () => {
     const cartData = localStorage.getItem('cart');
@@ -85,6 +86,24 @@ export const cartReducer = createReducer(
             loaded: false,
         }
     }),
+    on(reduceCartItem, (state, data)=>{
+        return{
+            ...state,
+            data,
+            loaded: true,
+        }
+    }),
+    on(reduceCartItemSuccess, (state, { cart }) => ({
+        ...state,
+        cartInfo: cart || state, // Mantiene el existente si no viene nuevo
+        cart: cart,
+       
+      })),
+      on(reduceCartItemFailure, (state, {error}) => ({
+        ...state,
+        
+        error: error
+      })),
     on(removeCartItem, (state, data)=>{
         return{
             ...state,
