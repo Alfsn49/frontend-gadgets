@@ -53,12 +53,9 @@ export class CartEffects {
       ofType(addToCart),
       mergeMap(({ product_id, quantity }) => {
         const currentCart = this.cartService.loadCartFromLocalStorage();
-        
-        return this.cartService.updateCartItem({product_id, quantity}).pipe(
-          switchMap(() => this.cartService.getCart()),
-          tap(cart => {
-            this.cartService.saveCartToLocalStorage(cart);
-          }),
+  
+        return this.cartService.updateCartItem({ product_id, quantity }).pipe(
+          tap(cart => this.cartService.saveCartToLocalStorage(cart)),
           map(cart => addToCartSuccess({ cart })),
           catchError(error => {
             this.cartService.saveCartToLocalStorage(currentCart);
@@ -68,15 +65,15 @@ export class CartEffects {
       })
     )
   );
+  
 
   reduceToCart$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reduceCartItem),
       mergeMap(({ product_id, quantity }) => {
         const currentCart = this.cartService.loadCartFromLocalStorage();
-        
-        return this.cartService.updateCartItem({product_id, quantity}).pipe(
-          switchMap(() => this.cartService.getCart()),
+  
+        return this.cartService.updateCartItem({ product_id, quantity }).pipe(
           tap(cart => {
             this.cartService.saveCartToLocalStorage(cart);
           }),
@@ -89,6 +86,7 @@ export class CartEffects {
       })
     )
   );
+  
   
 //   reduceCartItem$ = createEffect(() =>
 //     this.actions$.pipe(
@@ -113,18 +111,14 @@ removeItem$ = createEffect(() =>
   this.actions$.pipe(
     ofType(removeCartItem),
     mergeMap(({ product_id }) => {
-      // Guardamos el carrito actual por si hay error
       const currentCart = this.cartService.loadCartFromLocalStorage();
-      
+
       return this.cartService.removeProduct(product_id).pipe(
-        switchMap(() => this.cartService.getCart()),
         tap(updatedCart => {
-          // Guardamos el nuevo carrito en localStorage
           this.cartService.saveCartToLocalStorage(updatedCart);
         }),
         map(updatedCart => removeCartItemSuccess({ cart: updatedCart })),
         catchError(error => {
-          // Restauramos el carrito anterior si hay error
           this.cartService.saveCartToLocalStorage(currentCart);
           return of(removeCartItemFailure({ error }));
         })
@@ -132,4 +126,5 @@ removeItem$ = createEffect(() =>
     })
   )
 );
+
 }

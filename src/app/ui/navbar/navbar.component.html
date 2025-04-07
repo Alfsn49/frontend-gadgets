@@ -90,11 +90,11 @@
         </button>
   
         <div id="myCartDropdown1" class="hidden z-50 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
-          @if((cartData$ | async)?.length === 0 ) {
+          @if(data$?.items?.length === 0) {
             <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Your cart is empty</p>
             
           }@else{
-            @for(cartItem of (data$ .items) ; track cartItem.id){
+            @for(cartItem of (data$.items) ; track cartItem.id){
               <div class="grid grid-cols-2">
                 <div>
                   <a href="#" class="break-words text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline">{{cartItem.name}}</a>

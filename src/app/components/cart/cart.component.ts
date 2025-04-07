@@ -8,7 +8,7 @@ import { UserService } from '../../data-access/users/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { selectCart } from '../../core/store/cart/cart.selectors';
 import { Store } from '@ngrx/store';
-import { addToCart, reduceCartItem } from '../../core/store/cart/cart.actions';
+import { addToCart, reduceCartItem, removeCartItem } from '../../core/store/cart/cart.actions';
 
 @Component({
   selector: 'app-cart',
@@ -34,9 +34,11 @@ export class CartComponent {
     });
   }
 
-  onRemoveItem(id:number){
-    console.log(id)
-    //this.state.remove(id);
+  onRemoveItem(id:any){
+    console.log(id.product_id)
+    const product_id = id.product_id; // Accedemos al ID a través de id.product
+    this.store.dispatch(removeCartItem({product_id:product_id}))
+    
   }
 
   onDecrease(product:any){

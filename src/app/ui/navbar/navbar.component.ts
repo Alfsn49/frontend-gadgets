@@ -14,6 +14,22 @@ import { ProductsService } from '../../data-access/content/products.service';
 import { loadCart, removeCartItem } from '../../core/store/cart/cart.actions';
 import { selectCart } from '../../core/store/cart/cart.selectors';
 
+interface CartItem {
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  name: string;
+  image: string;
+}
+
+interface Cart {
+  id: string;
+  user_id: string;
+  total: number;
+  completed: boolean;
+  items: CartItem[]; // Este es el array que contiene los productos
+}
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -28,8 +44,7 @@ export class NavbarComponent {
   searchResults: any = [];
   showResults = false;
   private searchSubject = new Subject<string>();
-  data$: any;
-  cartData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')!) : null;
+  data$: Cart | any = null;
   cartData$ = this.store.select(selectCart);
   
   router = inject(Router);
@@ -39,9 +54,9 @@ export class NavbarComponent {
   public authService = inject(AuthService);
 
   constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState }>) {
-    const cartdataGet = this.store.dispatch(loadCart());
     
-    this.cartData$.subscribe(data => {
+    
+    this.cartData$.subscribe((data:Cart) => {
       this.data$ = data;
       console.log('Datos del carrito:', data);
     });
