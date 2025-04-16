@@ -3,7 +3,7 @@
   <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
     <div *ngFor="let image of images; let i = index" class="absolute inset-0 transition-opacity duration-700 ease-in-out"
          [ngClass]="{'opacity-0': currentIndex !== i, 'opacity-100': currentIndex === i}">
-      <img [src]="image" class="w-full h-full object-cover" alt="Imagen del carrusel">
+      <img [src]="image" class="w-full h-full object-cover z-10" alt="Imagen del carrusel">
     </div>
   </div>
 

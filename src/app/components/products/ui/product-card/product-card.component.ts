@@ -5,6 +5,7 @@ import { AuthService } from '../../../../data-access/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Store } from '@ngrx/store';
 import { addToCart } from '../../../../core/store/cart/cart.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-card',
@@ -14,6 +15,7 @@ import { addToCart } from '../../../../core/store/cart/cart.actions';
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent {
+
   product = input.required<any>();
 
   store = inject(Store);
@@ -23,9 +25,22 @@ export class ProductCardComponent {
   addToCart= output<any>();
 
   toastr = inject(ToastrService);
+
+  isAuthenticated$: Observable<boolean>;
+
+  isAuthenticated: boolean = false;
+
+  constructor(){
+    this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
+
+    this.isAuthenticated$.subscribe(isAuthenticated => {
+      this.isAuthenticated = isAuthenticated;
+      console.log('isAuthenticated:', this.isAuthenticated);
+    });
+  }
   add(event: Event){
 
-    if(this.authService.isLoggedIn){
+    if(this.isAuthenticated){
       event.stopPropagation();
     event.preventDefault();
     

@@ -1,4 +1,4 @@
-import { Component, inject, HostListener, ElementRef } from '@angular/core';
+import { Component, inject, HostListener, ElementRef, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartStateService } from '../../data-access/cart/cart-state.service';
 import { AuthService } from '../../data-access/auth/auth.service';
@@ -38,6 +38,8 @@ interface Cart {
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
+  loading = input<false>() ;
+  toggleSidebarEvent = output<any>() ;
   searchControl = new FormControl('');
   results: any = [];
   searchQuery: string = '';
@@ -46,7 +48,7 @@ export class NavbarComponent {
   private searchSubject = new Subject<string>();
   data$: Cart | any = null;
   cartData$ = this.store.select(selectCart);
-  
+  isSidebarOpen: boolean = true;
   router = inject(Router);
   isAuthenticated$: Observable<boolean>;
   productService = inject(ProductsService);
@@ -76,6 +78,12 @@ export class NavbarComponent {
     });
   }
 
+
+
+  toggleSidebar(): void {
+    this.toggleSidebarEvent.emit(true);
+    localStorage.setItem('sidebarState', JSON.stringify(this.isSidebarOpen));
+  }
   onRemoveItem(id: number) {
     console.log(id);
     this.store.dispatch(removeCartItem({product_id:id}))
