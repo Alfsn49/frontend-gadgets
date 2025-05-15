@@ -16,29 +16,32 @@ const loadInitialCartState = () => {
 export interface CartState {
     cart: any;
     status: 'loading' | 'success' | 'error';
+    loaded: boolean;
     error: any | null;
   }
   
   export const initialState: CartState = {
     cart: loadInitialCartState(), 
     status: 'loading',
+    loaded: false,
     error: null
   };
 
 export const cartReducer = createReducer(
     initialState,
-    on(loadCart, (state, data)=>{
+    on(loadCart, (state)=>{
         return{
             ...state,
-            data,
             loaded: true,
         }
     }),
-    on(loadCartSuccess, (state, { data }) => ({
+    on(loadCartSuccess, (state, { cart }) => 
+       {return {
         ...state,
-        data
-     
-      })),
+        carta:cart,
+        loaded: true,
+        error: null,
+      }}),
     on(loadCartFailure, (state, data)=>{
         return{
             ...state,
@@ -57,7 +60,7 @@ export const cartReducer = createReducer(
         ...state,
         cartInfo: cart || state, // Mantiene el existente si no viene nuevo
         cart: cart,
-       
+        loaded: true,
       })),
     
       on(addToCartFailure, (state, {error}) => ({

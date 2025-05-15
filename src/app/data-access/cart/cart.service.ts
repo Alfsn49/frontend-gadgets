@@ -17,6 +17,9 @@ export class CartService extends HttpService{
   localStorage.setItem('cart', JSON.stringify(cartData));
 }
 
+clearCartFromLocalStorage(){
+  localStorage.removeItem('cart');
+}
 
 // Carga el carrito desde localStorage
 loadCartFromLocalStorage(): any {

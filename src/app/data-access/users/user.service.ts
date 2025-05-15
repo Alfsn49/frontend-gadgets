@@ -39,6 +39,8 @@ export class UserService extends HttpService {
     return this.http.get(this.api + `user/getAddress/${userId}`);
   }
 
+  
+
   createAddress(data:any){
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;
@@ -55,7 +57,17 @@ export class UserService extends HttpService {
     //return this.http.post(this.api + `user/createAddress/${userId}`, data);
   }
 
+  editAddress(data:any){
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    return this.http.patch(this.api + `user/editAddress/${userId}`, data);
+  }
+
   preferedAddress(data:any){
     return this.http.get(this.api + `user/preferedAddress/`+ data);
+  }
+
+  deleteAddress(id:string){
+    return this.http.delete(this.api + `user/deleteAddress/${id}`);
   }
 }

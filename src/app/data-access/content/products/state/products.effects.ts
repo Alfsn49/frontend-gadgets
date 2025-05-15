@@ -11,13 +11,21 @@ export class ProductsEffects {
 
   loadProducts$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadProducts), // Escucha cuando se despacha `loadProducts`
-      mergeMap(() =>
-        this.productsService.getProducts(1).pipe( // Llama al servicio para obtener productos
-          map((products) => loadProductsSuccess({ products })), // Despacha `loadProductsSuccess` si tiene éxito
-          catchError((error) => of(loadProductsFailure({ error: error.message }))) // Despacha `loadProductsFailure` en caso de error
+      ofType(loadProducts),
+      mergeMap(({ page, limit }) =>
+        this.productsService.getProducts(page, limit).pipe(
+          map((response) =>
+            loadProductsSuccess({
+              products: response.products,
+              total: response.total,
+              page: response.page,
+              totalPages: response.totalPages,
+            })
+          ),
+          catchError((error) => of(loadProductsFailure({ error: error.message })))
         )
       )
     )
   );
+  
 }

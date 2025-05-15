@@ -20,6 +20,11 @@ export const selectPage = createSelector(
   (state) => state?.page
 );
 
+export const selectTotalPages = createSelector(
+  selectProductState,
+  (state) => state.totalPages
+);
+
 export const selectFilters = createSelector(
   selectProductState,
   (state) => ({

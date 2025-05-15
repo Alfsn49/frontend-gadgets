@@ -32,17 +32,20 @@ export class AuthEffects{
                     localStorage.setItem('refreshToken', response.backendTokens.refreshToken);
                     localStorage.setItem('isAuthenticated', 'true');
                     this.toastr.success('Bienvenido', 'Inicio de sesión exitoso');
-                    setTimeout(() => {
-                        this.router.navigate(['/']); // Redirigir sin recargar la página
-                      }, 50);
-                      // 🚀 Despachar la acción para cargar el carrito después del login
-                     this.store.dispatch(loadCart());
+                  
                     return loginSuccess({
                         user: response.user,
                         token: response.backendTokens.accessToken,
                         refreshToken: response.backendTokens.refreshToken
                       });
-                }),
+                }),               
+        tap(() => {
+          // Después, ya aparte, disparamos loadCart
+          this.store.dispatch(loadCart());
+           setTimeout(() => {
+            window.location.href = '/';
+            },1000);
+        }),
                 catchError((error)=>{
                     this.toastr.error('Error', 'Inicio de sesión fallido');
                     return of(loginFailure({error}))
@@ -51,14 +54,22 @@ export class AuthEffects{
             )
         ))
 
+        loadCartAfterLogin$ = createEffect(() =>
+            this.actions$.pipe(
+              ofType(loginSuccess),
+              tap(() => {
+                this.store.dispatch(loadCart());
+                this.router.navigate(['/']);
+              })
+            ),
+            { dispatch: false }
+          );
+          
     loggout$ = createEffect(()=>
     this.actions$.pipe(
         ofType(logout),
         tap(()=>{
-            localStorage.removeItem('User');
-            localStorage.removeItem('token');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('isAuthenticated');
+            localStorage.clear()
             this.toastr.success('Adios', 'Cierre de sesión exitoso');
             this.router.navigate(['/auth/login']);
         })

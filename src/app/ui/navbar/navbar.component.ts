@@ -12,7 +12,8 @@ import { logout } from '../../core/store/auth/auth.actions';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ProductsService } from '../../data-access/content/products.service';
 import { loadCart, removeCartItem } from '../../core/store/cart/cart.actions';
-import { selectCart } from '../../core/store/cart/cart.selectors';
+import { selectCart, selectCartLoaded } from '../../core/store/cart/cart.selectors';
+import { CartState } from '../../core/store/cart/cart.reducer';
 
 interface CartItem {
   product_id: number;
@@ -41,6 +42,8 @@ export class NavbarComponent {
   loading = input<false>() ;
   toggleSidebarEvent = output<any>() ;
   searchControl = new FormControl('');
+  showCartDropdown = false;
+  showDropAccount = false;
   results: any = [];
   searchQuery: string = '';
   searchResults: any = [];
@@ -48,22 +51,26 @@ export class NavbarComponent {
   private searchSubject = new Subject<string>();
   data$: Cart | any = null;
   cartData$ = this.store.select(selectCart);
+  cartLoaded$ = this.store.select(selectCartLoaded);
   isSidebarOpen: boolean = true;
   router = inject(Router);
   isAuthenticated$: Observable<boolean>;
   productService = inject(ProductsService);
+  cart$: Observable<any>;
 
   public authService = inject(AuthService);
 
-  constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState }>) {
-    
-    
+  constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState, cart: CartState }>) {
+   this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
+    this.cartData$ = this.store.select(selectCart);
+    this.cartLoaded$ = this.store.select(selectCartLoaded);
+    this.cart$ = this.store.select(state => state.cart.cart); 
     this.cartData$.subscribe((data:Cart) => {
       this.data$ = data;
       console.log('Datos del carrito:', data);
     });
     initFlowbite();
-    this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
+    
 
     // Suscripción para manejar el valor del formulario
     this.searchControl.valueChanges.pipe(
@@ -78,12 +85,27 @@ export class NavbarComponent {
     });
   }
 
+  toggleCartDropdown() {
+    this.showCartDropdown = !this.showCartDropdown;
+    if(this.showDropAccount){
+      this.showDropAccount = false;
+    }
+  }
+
+  toggleDropAccount() {
+    this.showDropAccount = !this.showDropAccount;
+    if(this.showCartDropdown){
+      this.showCartDropdown = false;
+    }
+  }
 
 
   toggleSidebar(): void {
     this.toggleSidebarEvent.emit(true);
     localStorage.setItem('sidebarState', JSON.stringify(this.isSidebarOpen));
   }
+
+
   onRemoveItem(id: number) {
     console.log(id);
     this.store.dispatch(removeCartItem({product_id:id}))
@@ -95,6 +117,8 @@ export class NavbarComponent {
     if (dropdown) {
       dropdown.classList.add('hidden');
     }
+    this.showDropAccount = false;
+    this.showCartDropdown = false;
     this.store.dispatch(logout());
   }
 

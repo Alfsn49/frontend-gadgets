@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
-import { LoginComponent } from './components/auth/login/login.component';
-import { SignupComponent } from './components/auth/signup/signup.component';
+import { LoginComponent } from './components/dashboard-client/auth/login/login.component';
+import { SignupComponent } from './components/dashboard-client/auth/signup/signup.component';
 import { NavbarComponent } from './ui/navbar/navbar.component';
 import { FooterComponent } from './ui/footer/footer.component';
 import { initFlowbite } from 'flowbite';

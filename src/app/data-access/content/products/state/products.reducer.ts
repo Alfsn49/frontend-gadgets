@@ -6,7 +6,9 @@ import { loadProductsSuccess, loadProductsFailure, changePage, setFilters } from
 
 export interface ProductState {
   products: any[];
+  total: number;
   status: 'loading' | 'success' | 'error';
+  totalPages: number;
   page: number;
   selectedCategory: number | null;
   selectedSubCategory: number | null;
@@ -15,8 +17,10 @@ export interface ProductState {
 
 export const initialState: ProductState = {
   products: [],
+  total: 0,
   status: 'loading',
   page: 1,
+  totalPages: 1,
   selectedCategory: null,
   selectedSubCategory: null,
   selectedBrand: null,
@@ -24,9 +28,12 @@ export const initialState: ProductState = {
 
 export const productReducer = createReducer(
   initialState,
-  on(loadProductsSuccess, (state, { products }) => ({
+  on(loadProductsSuccess, (state, { products, total, page, totalPages }) => ({
     ...state,
     products,
+    total,
+    page,
+    totalPages,
     status: 'success' as 'success',
   })),
   on(loadProductsFailure, (state, { error }) => ({
