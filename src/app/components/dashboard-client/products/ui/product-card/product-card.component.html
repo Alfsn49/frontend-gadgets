@@ -1,0 +1,53 @@
+
+    
+
+<ul >
+    <li>
+      <a  class="group block overflow-hidden">
+        <img
+          [src]="product().image"
+          alt=""
+          class="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
+        />
+
+        <div class="relative bg-white pt-3">
+            <a [routerLink]="['/product', product().id]">
+              <h3 class="text-sm text-gray-700 group-hover:underline group-hover:underline-offset-4 overflow-hidden text-ellipsis line-clamp-2">
+                {{ product().name }}
+              </h3>
+            </a>
+          
+            <div class="mt-2 flex items-center justify-between">
+              <span class="sr-only"> Regular Price </span>
+          
+              <span class="tracking-wider text-gray-900 font-medium">
+                {{ product().price }} $
+              </span>
+          
+              <button (click)="add($event)" 
+        class="p-2 bg-slate-500 hover:bg-slate-600 rounded-md shadow-md transition">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 24 24"
+       width="20"
+       height="20"
+       class="text-white cursor-pointer hover:text-yellow-300 transition"
+       fill="none">
+    <path d="M8 16H15.2632C19.7508 16 20.4333 13.1808 21.261 9.06908C21.4998 7.88311 21.6192 7.29013 21.3321 6.89507C21.045 6.5 20.4947 6.5 19.3941 6.5H6"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M8 16L5.37873 3.51493C5.15615 2.62459 4.35618 2 3.43845 2H2.5"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M8.88 16H8.46857C7.10522 16 6 17.1513 6 18.5714C6 18.8081 6.1842 19 6.41143 19H17.5"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="10.5" cy="20.5" r="1.5" stroke="currentColor" stroke-width="1.5" />
+    <circle cx="17.5" cy="20.5" r="1.5" stroke="currentColor" stroke-width="1.5" />
+  </svg>
+</button>
+
+            </div>
+          </div>
+          
+      </a>
+    </li>
+  </ul>
+
+

@@ -5,6 +5,18 @@ export const login = createAction(
     props<{ email: string; password: string }>()
 )
 
+export const loginAdmin = createAction(
+    '[Auth] Login Admin',
+    props<{ email: string; password: string }>()
+)
+
+
+export const loginAdminSuccess = createAction(
+    '[Auth] Login Admin Success',
+    props<any>()
+)
+
+
 
 export const loginSuccess = createAction(
     '[Auth] Login Success',

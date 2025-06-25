@@ -9,10 +9,11 @@ const LIMIT = 5;
 })
 export class ProductsService extends HttpService{
 
-  getProducts(page:number){
-    return this.http.get(this.api + 'product/list-products',{
-      params:{
-        limit: page*LIMIT
+  getProducts(page: number, limit: number) {
+    return this.http.get<any>(this.api + 'product/list-products', {
+      params: {
+        page,
+        limit
       }
     });
   }

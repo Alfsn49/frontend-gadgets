@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from "@angular/common";
 import { AuthService } from "../../../data-access/auth/auth.service";
-import { login, loginFailure, loginSuccess, logout,  refreshTokenErr } from "./auth.actions";
+import { login, loginAdmin, loginAdminSuccess, loginFailure, loginSuccess, logout,  refreshTokenErr } from "./auth.actions";
 import { catchError, map, mergeMap, tap } from "rxjs";
 import { of } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -27,22 +27,31 @@ export class AuthEffects{
             mergeMap(({email, password})=>
             this.authService.login({email, password}).pipe(
                 map((response:any)=>{
+                    console.log('Respuesta del login:', response);
                     localStorage.setItem('User', JSON.stringify(response.user));
                     localStorage.setItem('token', response.backendTokens.accessToken);
                     localStorage.setItem('refreshToken', response.backendTokens.refreshToken);
                     localStorage.setItem('isAuthenticated', 'true');
                     this.toastr.success('Bienvenido', 'Inicio de sesión exitoso');
-                    setTimeout(() => {
-                        this.router.navigate(['/']); // Redirigir sin recargar la página
-                      }, 50);
-                      // 🚀 Despachar la acción para cargar el carrito después del login
-                     this.store.dispatch(loadCart());
+                  
                     return loginSuccess({
                         user: response.user,
                         token: response.backendTokens.accessToken,
                         refreshToken: response.backendTokens.refreshToken
                       });
-                }),
+                }),               
+        tap(() => {
+            const user = JSON.parse(localStorage.getItem('User') || '{}');
+          // Después, ya aparte, disparamos loadCart
+          this.store.dispatch(loadCart());
+           setTimeout(() => {
+            if(user.sub.rol ==='admin'){
+                this.router.navigate(['/dashboard-admin']);
+            }else{
+                window.location.href = '/';
+            }
+            },1000);
+        }),
                 catchError((error)=>{
                     this.toastr.error('Error', 'Inicio de sesión fallido');
                     return of(loginFailure({error}))
@@ -51,14 +60,48 @@ export class AuthEffects{
             )
         ))
 
+    loginAdmin$ = createEffect(()=>
+        this.actions$.pipe(
+            ofType(loginAdmin),
+            mergeMap(({email,password})=>
+                this.authService.loginAdmin({email,password}).pipe(
+                    map((response:any)=>{
+                        console.log('Respuesta del login:', response);
+                        localStorage.setItem('User', JSON.stringify(response.user));
+                        localStorage.setItem('token', response.backendTokens.accessToken);
+                        localStorage.setItem('refreshToken', response.backendTokens.refreshToken);
+                        localStorage.setItem('isAuthenticated', 'true');
+                        this.toastr.success('Bienvenido', 'Inicio de sesión exitoso');
+                        this.router.navigate(['/admin/dashboard']);
+                        return loginAdminSuccess({
+                            user: response.user,
+                            token: response.backendTokens.accessToken,
+                            refreshToken: response.backendTokens.refreshToken,
+                        });
+                    }),catchError((error)=>{
+                    this.toastr.error('Error', 'Inicio de sesión fallido');
+                    return of(loginFailure({error}))
+                })
+                )
+            )
+        )  )  
+
+        loadCartAfterLogin$ = createEffect(() =>
+            this.actions$.pipe(
+              ofType(loginSuccess),
+              tap(() => {
+                this.store.dispatch(loadCart());
+                this.router.navigate(['/']);
+              })
+            ),
+            { dispatch: false }
+          );
+          
     loggout$ = createEffect(()=>
     this.actions$.pipe(
         ofType(logout),
         tap(()=>{
-            localStorage.removeItem('User');
-            localStorage.removeItem('token');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('isAuthenticated');
+            localStorage.clear()
             this.toastr.success('Adios', 'Cierre de sesión exitoso');
             this.router.navigate(['/auth/login']);
         })

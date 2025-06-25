@@ -1,9 +1,9 @@
-import { catchError, switchMap, throwError } from "rxjs";
-import { AuthService } from "../data-access/auth/auth.service";
-import { HttpInterceptorFn } from "@angular/common/http";
-import { ToastrService } from "ngx-toastr";
-import { Router } from "@angular/router";
-import { inject } from "@angular/core";
+import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from '../data-access/auth/auth.service';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -18,8 +18,8 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
 
   const authReq = req.clone({
     setHeaders: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   return next(authReq).pipe(
@@ -37,31 +37,47 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
             localStorage.setItem('refreshToken', response.refreshToken);
             localStorage.setItem('User', JSON.stringify(response.user));
             localStorage.setItem('isAuthenticated', 'true');
-            
 
             // Reintentar la solicitud original con el nuevo token
             const newReq = req.clone({
               setHeaders: {
-                Authorization: `Bearer ${response.accessToken}`
-              }
+                Authorization: `Bearer ${response.accessToken}`,
+              },
             });
 
             return next(newReq);
           }),
           catchError((refreshErr: any) => {
-                       if (refreshErr.status === 401 || refreshErr.status === 403) {
+            if (refreshErr.status === 401 || refreshErr.status === 403) {
               toastr.error('Sesión expirada, inicie sesión nuevamente.');
+              const userData = localStorage.getItem('User');
+              let rol = '';
+
+              if (userData) {
+                try {
+                  const user = JSON.parse(userData);
+                  rol = user.rol; // Asegúrate de que la propiedad sea 'rol'
+                } catch (e) {
+                  console.error('Error al parsear el usuario:', e);
+                }
+              }
+              
               authService.logout();
-              router.navigate(['/auth/login']);
+              // Redirige según el rol
+    if (rol === 'Administrador') {
+      router.navigate(['/admin/login']);
+    } else {
+      router.navigate(['/auth/login']);
+    }
             }
             return throwError(() => refreshErr);
-          })
+          }),
         );
       }
 
       // Para otros errores (incluyendo 404), simplemente propagarlos
       // sin cerrar sesión
       return throwError(() => err);
-    })
+    }),
   );
 };

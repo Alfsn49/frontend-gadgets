@@ -1,0 +1,98 @@
+<section class="animate-fadeIn" >
+    <div class="md:hidden absolute top-0 left-0 w-full h-full overflow-hidden z-[-1]">
+        <div class="absolute w-40 h-40 md:w-52 md:h-52 rounded-full bg-red-100 opacity-60 animate-moveUpDown"></div>
+        <div class="absolute w-40 h-40 md:w-52 md:h-52 rounded-full bg-orange-100 opacity-60 animate-moveLeftRight">
+        </div>
+    </div>
+    <div class="relative z-10 flex w-screen flex-wrap text-black">
+        <div class="flex w-full flex-col-reverse md:flex-row">
+            <div
+                class="flex w-full flex-col md:w-1/2 h-screen items-center justify-center md:items-start md:justify-start">
+                <div
+                    class="my-auto mx-auto flex flex-col justify-center px-6 pt-8 md:justify-start lg:w-[30rem] md:border md:bg-white md:rounded-xl md:shadow-lg md:shadow-gray-500/50">
+                    <div class="md:hidden flex flex-col items-center mb-6 relative z-10 mt-10">
+                        <img src="https://www.bqc.com.ec/img/logobac2.png" alt="Logo principal"
+                            class="w-40 sm:w-40 md:w-52 lg:w-[300px] xl:w-[180px] animate-fadeIn">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/softpochbot.appspot.com/o/BQC%2Ficons%2Fcrm_icon.png?alt=media&token=499439a1-3717-499a-99ac-57f5969e3754"
+                            alt="Ícono CRM" class="w-16 md:w-20 lg:w-24 animate-fadeIn mt-4">
+                    </div>
+                    <p class="text-center text-3xl font-bold md:leading-tight md:text-left md:text-5xl mb-3">
+                        Bienvenido👋🏻
+                    </p>
+                    <p class="text-center font-medium md:text-left text-xl md:text-2xl">Iniciar sesión</p>
+                    <form [formGroup]="loginFormAdmin" (ngSubmit)="onSubmit()"
+                        class="flex flex-col items-stretch pt-3 mb-14">
+                        <div for="email1" class="flex flex-col pt-4">
+                            <div
+                                class="relative flex overflow-hidden rounded-md border-2 transition-all duration-300 focus-within:border-red-200">
+                                <input formControlName="email" type="email" id="login-email"
+                                    class="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
+                                    placeholder="Correo electrónico" />
+                            </div>
+                        </div>
+                        <div class="mb-4 flex flex-col pt-4">
+                            <div for="password1"
+                                class="relative flex overflow-hidden rounded-md border-2 transition-all duration-300 focus-within:border-red-200">
+                                <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'"
+                                    id="login-password"
+                                    class="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
+                                    placeholder="Contraseña" />
+                                <button type="button" *ngIf="!passwordVisible" (click)="togglePasswordVisibility()"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                        color="#5b5959" fill="none">
+                                        <path
+                                            d="M21.544 11.045C21.848 11.4713 22 11.6845 22 12C22 12.3155 21.848 12.5287 21.544 12.955C20.1779 14.8706 16.6892 19 12 19C7.31078 19 3.8221 14.8706 2.45604 12.955C2.15201 12.5287 2 12.3155 2 12C2 11.6845 2.15201 11.4713 2.45604 11.045C3.8221 9.12944 7.31078 5 12 5C16.6892 5 20.1779 9.12944 21.544 11.045Z"
+                                            stroke="currentColor" stroke-width="1.5" />
+                                        <path
+                                            d="M15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12Z"
+                                            stroke="currentColor" stroke-width="1.5" />
+                                    </svg>
+                                </button>
+                                <button type="button" *ngIf="passwordVisible" (click)="togglePasswordVisibility()"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                        color="#5b5959" fill="none">
+                                        <path d="M22 8C22 8 18 14 12 14C6 14 2 8 2 8" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" />
+                                        <path d="M15 13.5L16.5 16" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M20 11L22 13" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2 13L4 11" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M9 13.5L7.5 16" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <a [routerLink]="['/signin/retrive-password']"
+                            class="mb-6 text-center text-sm font-medium text-gray-700 md:text-left">Olvisate tu
+                            contraseña?</a>
+                        <button type="submit"
+                            class="rounded-lg bg-gradient-to-l from-red-600 to-orange-600 px-4 py-2 text-center text-base font-semibold text-white transition-transform duration-300 hover:scale-105 md:w-32">
+                            Empezar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div
+                class="relative hidden h-screen select-none bg-gradient-to-br md:flex md:w-1/2 items-center justify-center overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+                    <div
+                        class="absolute w-40 h-40 md:w-52 md:h-52 rounded-full bg-red-100 opacity-60 animate-moveUpDown">
+                    </div>
+                    <div
+                        class="absolute w-40 h-40 md:w-52 md:h-52 rounded-full bg-orange-100 opacity-60 animate-moveLeftRight">
+                    </div>
+                </div>
+                <div class="relative z-10 flex flex-col items-center justify-center px-8 text-white xl:w-[40rem]">
+                    <img src="assets/logo_empresa.jpg" alt="Logo principal"
+                        class="w-32 sm:w-40 md:w-52 lg:w-[200px] xl:w-[300px] animate-fadeIn">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

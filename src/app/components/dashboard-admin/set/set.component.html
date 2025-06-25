@@ -1,0 +1,319 @@
+<section class="px-4 md:px-8 lg:px-16">
+    <div class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 ">
+        <img src="https://amkt.ppg.br/wp-content/uploads/2019/01/Gif.gif" alt="Ícono"
+            class="w-16 h-16 justify-center rounded-full md:w-60 md:h-60 lg:w-24 lg:h-24">
+    </div>
+    <div class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
+        <h1 class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-4xl md:text-4xl lg:text-5xl">
+            Gestión de Expansiones
+        </h1>
+    </div>
+    
+    <div class="mt-10 flex justify-center items-center">
+        <button (click)="openModalCreate()" class="flex items-center justify-center bg-orange-400 text-white py-3 px-6 rounded-2xl hover:bg-orange-500 text-sm md:text-base lg:text-lg shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" class="mr-2">
+                <path d="M12 8V16M16 12L8 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            Agregar
+        </button>
+    </div>
+
+    <div class="mt-8 overflow-x-auto">
+      <div class="text-search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Marcas a Buscar</mat-label>
+          <input matInput placeholder="Ej. Yu-gi-oh!" value="Yu-gi-oh" [(ngModel)]="searchText" (keyup)="onInputChange()">
+        </mat-form-field>
+      </div>
+       
+      
+        <table matSort (matSortChange)="sortData($event)" mat-table [dataSource]="dataSource" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-900 border border-dark-900 mat-elevation-z8">
+
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-sort-header="id" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500">id</th>
+            <td mat-cell *matCellDef="let sets" class="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+              <a [routerLink]="['/admin/dashboard/specific/education-programs', sets.id]" class="text-orange-500 text-base hover:underline">
+                {{ sets.id }}
+              </a>
+            </td>
+          </ng-container>
+      
+          <!-- Nombre Column -->
+          <ng-container matColumnDef="name">
+            <th mat-sort-header="name" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500">name</th>
+            <td mat-cell *matCellDef="let sets" class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+              {{ sets.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="brand">
+            <th mat-sort-header="brand" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500">Marcas</th>
+            <td mat-cell *matCellDef="let sets" class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+              {{ sets.brand.name }}
+            </td>
+          </ng-container>
+      
+          <!-- Acciones Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500 items-center">Acciones</th>
+            <td mat-cell *matCellDef="let sets" class="">
+              <!-- Botón editar -->
+              <button (click)="openModalEdit(sets)"
+                                  class="p-2 bg-sky-200 rounded-xl hover:bg-sky-400 transition relative group">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000"
+                                    fill="none">
+                                    <path
+                                      d="M16.9459 3.17305C17.5332 2.58578 17.8268 2.29215 18.1521 2.15173C18.6208 1.94942 19.1521 1.94942 19.6208 2.15173C19.946 2.29215 20.2397 2.58578 20.8269 3.17305C21.4142 3.76032 21.7079 4.05395 21.8483 4.37925C22.0506 4.8479 22.0506 5.37924 21.8483 5.84789C21.7079 6.17319 21.4142 6.46682 20.8269 7.05409L15.8054 12.0757C14.5682 13.3129 13.9496 13.9315 13.1748 14.298C12.4 14.6645 11.5294 14.7504 9.78823 14.9222L9 15L9.07778 14.2118C9.24958 12.4706 9.33549 11.6 9.70201 10.8252C10.0685 10.0504 10.6871 9.43183 11.9243 8.19464L16.9459 3.17305Z"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                                    <path
+                                      d="M6 15H3.75C2.7835 15 2 15.7835 2 16.75C2 17.7165 2.7835 18.5 3.75 18.5H13.25C14.2165 18.5 15 19.2835 15 20.25C15 21.2165 14.2165 22 13.25 22H11"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  </svg>
+                                  <div
+                                    class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2">
+                                    Editar</div>
+                                </button>
+                                <button (click)="openModalDelete(sets.id)"
+                                  class="p-2 bg-red-200 rounded-xl hover:bg-red-400 transition relative group">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000"
+                                    fill="none">
+                                    <path
+                                      d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                    <path
+                                      d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                  </svg>
+                                  <div
+                                    class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2">
+                                    Eliminar</div>
+                                </button>
+            </td>
+          </ng-container>
+      
+          <!-- Header y Row -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-white text-black-200"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="bg-white border-b border-orange-500 hover:bg-orange-300"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
+</section>
+
+@if(modalCreate){
+    <section class="modal fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-4 sm:px-8">
+          <div
+            class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md max-h-[70vh] overflow-y-auto relative flex flex-col items-center ml-4 mr-4">
+            
+            <!-- Botón cerrar -->
+            <button (click)="closeModalCreate()"
+              class="absolute top-3 right-3 bg-gray-300 text-gray-700 w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition">
+              &times;
+            </button>
+      
+            <!-- Título + ícono -->
+            <div class="flex items-center justify-center gap-4 text-center mt-2 mb-4">
+              <img
+                src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbndoZzEzemx0NGxvYnVzeGpodGxnaDh0OW5ob3ZkeWszbzJ6aGtsdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/S7JlIq8ccjl3vg3ykH/giphy.gif"
+                alt="Ícono" class="h-12 w-14" />
+              <h2 class="text-gray-800 text-xl md:text-2xl font-bold">Registrar Set del Producto</h2>
+            </div>
+      
+            <!-- Formulario -->
+            <div class="w-full">
+                <form class="space-y-6" [formGroup]="createForm" (ngSubmit)="onSubmitCreate()">
+                    <!-- Campo Nombre con validación -->
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Nombre *</label>
+                      <input
+                        formControlName="name"
+                        type="text"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none
+                               transition duration-200
+                               "
+                        [ngClass]="{
+                          'border-gray-300 focus:ring-orange-500': !createForm.get('name')?.invalid || !createForm.get('name')?.touched,
+                          'border-red-500 focus:ring-red-500': createForm.get('name')?.invalid && createForm.get('name')?.touched
+                        }"
+                        placeholder="Ingrese el nombre"
+                        maxlength="50" />
+                  
+                      <!-- Mensaje de error -->
+                        @if(createForm.get('name')?.invalid && createForm.get('name')?.touched){
+                          <div class="text-sm text-red-600 mt-1">
+                            <span *ngIf="createForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
+                            <span *ngIf="createForm.get('name')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                          </div>
+                        }
+                      
+                    </div>
+
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Marca *</label>
+                      <select formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" >
+                        <option value="" disabled selected>Seleccione una marca</option>
+                        <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+                          
+                      </select>
+                    </div>
+                  
+                    <!-- Botón Guardar -->
+                    <div class="flex justify-end">
+                      <button
+                        type="submit"
+                        [disabled]="createForm.invalid"
+                        class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Guardar
+                      </button>
+                    </div>
+                  </form>
+                  
+            </div>
+          </div>
+        </div>
+      </section>
+      
+  }
+
+  @if(modalEditar){
+    <section class="modal fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-4 sm:px-8">
+        <div
+          class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md max-h-[70vh] overflow-y-auto relative flex flex-col items-center ml-4 mr-4">
+          
+          <!-- Botón cerrar -->
+          <button (click)="closeModalEdit()"
+            class="absolute top-3 right-3 bg-gray-300 text-gray-700 w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition">
+            &times;
+          </button>
+    
+          <!-- Título + ícono -->
+          <div class="flex items-center justify-center gap-4 text-center mt-2 mb-4">
+            <img
+              src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbndoZzEzemx0NGxvYnVzeGpodGxnaDh0OW5ob3ZkeWszbzJ6aGtsdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/S7JlIq8ccjl3vg3ykH/giphy.gif"
+              alt="Ícono" class="h-12 w-14" />
+            <h2 class="text-gray-800 text-xl md:text-2xl font-bold">Editar Datos del set</h2>
+          </div>
+    
+          <!-- Formulario -->
+          <div class="w-full">
+              <form class="space-y-6" [formGroup]="editarForm" (ngSubmit)="onSubmitEdit()">
+                  <!-- Campo Nombre con validación -->
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Nombre *</label>
+                    <input
+                      formControlName="name"
+                      type="text"
+                      class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none
+                             transition duration-200
+                             "
+                      [ngClass]="{
+                        'border-gray-300 focus:ring-orange-500': !editarForm.get('name')?.invalid || !editarForm.get('name')?.touched,
+                        'border-red-500 focus:ring-red-500': editarForm.get('name')?.invalid && editarForm.get('name')?.touched
+                      }"
+                      placeholder="Ingrese el nombre"
+                      maxlength="50" />
+                
+                    <!-- Mensaje de error -->
+                      @if(editarForm.get('name')?.invalid && editarForm.get('name')?.touched){
+                        <div class="text-sm text-red-600 mt-1">
+                          <span *ngIf="editarForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
+                          <span *ngIf="editarForm.get('name')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                        </div>
+                      }
+                    
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Marca *</label>
+                    <select formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" >
+                      <option value="" disabled>Seleccione una marca</option>
+                      <option *ngFor="let brand of brands" [ngValue]="brand.id">{{ brand.name }}</option>
+                        
+                    </select>
+                  </div>
+                
+                  <!-- Botón Guardar -->
+                  <div class="flex justify-end">
+                    <button
+                      type="submit"
+                      [disabled]="editarForm.invalid"
+                      class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                      Guardar
+                    </button>
+                  </div>
+                </form>
+                
+          </div>
+        </div>
+      </div>
+    </section>
+    }
+
+    @if(modalEliminar){
+      <section 
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal">
+      <div class="bg-white p-6 rounded-lg shadow-2xl max-w-xs md:max-w-sm w-full relative border border-gray-300">
+        <button (click)="closeModalDelete()"
+          class="absolute top-2 right-2 bg-gray-100 text-black w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition">
+          &times;
+        </button>
+        <div class="flex items-center justify-center gap-3 text-center">
+          <img src="https://emojitool.com/img/twitter/twemoji-15.0/twemoji-15.0-2366.png" alt="Advertencia"
+            class="w-16 h-16">
+      
+          <h2 class="text-lg font-bold text-gray-900">Eliminar</h2>
+        </div>
+        <p class="text-sm text-black mt-4 text-center">
+          ¿Estás seguro de que deseas eliminar? <br> <br>
+          <span class="text-red-700 font-semibold">Esta acción no se puede deshacer.</span>
+        </p>
+        <div class="flex flex-col space-y-2 mt-5">
+          <button (click)="openModalConfirmDelete()"
+            class="bg-red-600 text-white font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-red-700">
+            Confirmar Eliminación
+          </button>
+          <button (click)="closeModalDelete()"
+            class="bg-gray-100 text-gray-700 border border-gray-300 font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-gray-200">
+            Cancelar
+          </button>
+        </div>
+      </div>
+      </section>
+      }
+      
+      @if(modalConfirmarEliminar){
+      <section 
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modal">
+      <div class="bg-white p-6 rounded-lg shadow-2xl max-w-xs md:max-w-sm w-full relative border border-gray-300">
+        <button (click)="closeModalConfirmDelete()"
+          class="absolute top-2 right-2 bg-gray-100 text-black w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition">
+          &times;
+        </button>
+        <div class="flex items-center justify-center">
+          <img src="https://assets-v2.lottiefiles.com/a/e09820ea-116b-11ee-8e93-4f2a1602d144/VSOpyqTQGL.gif"
+            alt="Advertencia" class="w-16 h-16">
+        </div>
+        <h2 class="text-lg font-bold text-red-600 text-center mt-2">Confirmar Eliminación</h2>
+        <p class="text-sm text-black mt-3 text-center">
+          ¿Realmente deseas proceder con la eliminación de esta categoria <br><br>
+          <span class="text-black font-semibold">Los datos asociados se perderán.</span>
+        </p>
+        <div class="flex flex-col space-y-2 mt-5">
+          <button (click)="onSubmitDelete()"
+            class="bg-red-600 text-white font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-red-700">
+            Confirmar Eliminación
+          </button>
+          <button (click)="closeModalConfirmDelete()"
+            class="bg-gray-100 text-gray-700 border border-gray-300 font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-gray-200">
+            Cancelar
+          </button>
+        </div>
+      </div>
+      </section>
+      }

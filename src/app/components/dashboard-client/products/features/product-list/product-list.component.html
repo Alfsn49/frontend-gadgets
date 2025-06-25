@@ -1,0 +1,85 @@
+
+ <section>
+  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <header>
+      <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Lista de productos</h2>
+
+      <p class="mt-4 max-w-md text-gray-500">
+        ¿Buscas alguna carta que necesites para mejorar tu baraja?, aqui lo podras encontrar.
+      </p>
+    </header>
+
+    <div class="mt-8">
+      <p class="text-sm text-gray-500">Showing <span> 4 </span> of 40</p>
+    </div>
+    
+    <div class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      @for (product of products; track product) {
+        <app-product-card [product]="product" (addToCart)="addToCart($event)"></app-product-card>
+      }
+    </div>
+    
+    <ol class="mt-8 flex justify-center gap-1 text-xs font-medium" >
+      @if(pageData$ | async; as pageData){
+        <li>
+          <button
+          (click)="changePage(pageData.page  - 1)"
+          [disabled]="pageData.page  === 1"
+            class="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100"
+          >
+            <span class="sr-only">Prev Page</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </li>
+    
+        <li *ngFor="let i of [].constructor(pageData.totalPages); let index = index">
+          <button
+            (click)="changePage(index + 1)"
+            [class.bg-black]="index + 1 === pageData.page"
+            [class.text-white]="index + 1 === pageData.page"
+            class="block size-8 rounded-sm border border-gray-100 text-center leading-8"
+          >
+            {{ index + 1 }}
+          </button>
+        </li>
+    
+    
+        <li>
+          <button
+          (click)="changePage(pageData.page + 1)"
+          [disabled]="pageData.page === pageData.totalPages"
+            class="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100"
+          >
+            <span class="sr-only">Next Page</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+
+

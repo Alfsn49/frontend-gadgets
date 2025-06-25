@@ -55,48 +55,11 @@ loadProducts$ = this.changePageS.pipe(
   startWith(1), // Inicia con la página 1
   switchMap((page) =>
     this.combinedFilters$.pipe(
-      switchMap((filters) => {
-        // Si hay filtros, llama a `getFilteredProducts`
-        const hasFilters =
-          Object.values(filters).filter((v) => v !== null).length > 0;
-
-        return hasFilters
-          ? this.productService.getFilteredProducts(filters).pipe(
-              map((products) => ({
-                products,
-                status: 'success' as const,
-              })),
-              catchError(() =>
-                of({
-                  products: [],
-                  status: 'error' as const,
-                })
-              )
-            )
-          : this.productService.getProducts(page).pipe(
-              map((products) => ({
-                products,
-                status: 'success' as const,
-              })),
-              catchError(() =>
-                of({
-                  products: [],
-                  status: 'error' as const,
-                })
-              )
-            );
-      })
+      
     )
   )
 );
 
     // Estado gestionado por signalSlice
-    state = signalSlice({
-      initialState: this.initialState,
-      sources: [
-        this.loadProducts$.pipe(
-          map(({ products, status }) => ({ products, status }))
-        ),
-      ],
-    });
+  
   }
