@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { login, loginSuccess, loginFailure, logout, refreshTokenErr } from "./auth.actions";
+import { login, loginSuccess, loginFailure, logout, refreshTokenErr, loginAdminSuccess, loginAdmin, logoutAdmin } from "./auth.actions";
 
 
 export interface AuthState{
@@ -34,7 +34,25 @@ export const authReducer = createReducer(
             ...state,
             user,
             token,
-  refreshToken,
+            refreshToken,
+            isAuthenticated:true,
+            loading:false,
+            error:null
+        }
+    }),
+    on(loginAdmin,(state)=>{
+        return {
+            ...state,
+            loading: true,
+            error: null
+        }
+    }),
+    on(loginAdminSuccess,(state,{user, token, refreshToken})=>{
+        return{
+            ...state,
+            user,
+            token,
+            refreshToken,
             isAuthenticated:true,
             loading:false,
             error:null
@@ -57,6 +75,16 @@ export const authReducer = createReducer(
         isAuthenticated: false,
         error: null,
     })),
+    on(
+        logoutAdmin,(state)=>({
+            ...state,
+        user: null,
+        token: null,
+        refreshToken: null,
+        isAuthenticated: false,
+        error: null,
+        })
+    ),
     on(refreshTokenErr,(state)=>({
         ...state,
         loading:false,

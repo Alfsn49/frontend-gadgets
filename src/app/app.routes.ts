@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { loginGuard } from './guards/login.guard';
 import { authGuard } from './core/guards/auth.guard';
+import { rolesGuard } from './guards/roles.guard';
 
 export const routes: Routes = [
   {
@@ -45,15 +46,25 @@ export const routes: Routes = [
             (m) => m.ProductDetailComponent)
       },{
         path: 'cart',
-        canActivate: [authGuard],
+        data:{
+          roles: ['Cliente'] // Solo los clientes pueden acceder al carrito
+        },
+        canActivate: [authGuard, rolesGuard],
         loadChildren:()=> import('./components/dashboard-client/cart/cart.routes')
         },
         {
           path: 'profile',
-          canActivate: [authGuard],
+          data:{
+            roles: ['Cliente'] // Solo los clientes pueden acceder al perfil
+          },
+          canActivate: [authGuard, rolesGuard],
           loadComponent:()=> import('./components/dashboard-client/client/profile/profile.component').then(m=>m.ProfileComponent)
         },{
           path: 'address',
+          data:{
+            roles: ['Cliente'] // Solo los clientes pueden acceder a la dirección
+          },
+          canActivate: [authGuard, rolesGuard],
           loadComponent:()=> import('./components/dashboard-client/client/address/address.component').then(m=>m.AddressComponent)
         },{
           path:'forget-password',
@@ -80,9 +91,16 @@ export const routes: Routes = [
     ]
   },{
     path:'admin/login',
+    canActivate:[authGuard],
     loadComponent:()=> import('./components/dashboard-admin/auth/login/login.component').then(m=>m.LoginComponent),
   },{
     path: 'admin',
+    canActivate:[
+        rolesGuard
+    ],
+    data:{
+      roles: ['Administrador'] 
+    },
     loadChildren: () =>
       import('./components/dashboard-admin/admin.routes').then(
         (m) => m.ADMIN_ROUTES

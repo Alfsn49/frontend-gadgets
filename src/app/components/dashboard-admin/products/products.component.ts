@@ -87,6 +87,7 @@ export class ProductsComponent {
  // Cuando un archivo es seleccionado desde el input
  onFileSelected(event: any): void {
   const file = event.target.files[0];
+  console.log(file);
   if (file) {
      // Validación de tipo de archivo
      if (!file.type.startsWith('image/')) {
@@ -198,7 +199,12 @@ onDragLeave(event: DragEvent): void {
     this.catalogService.getSetsByBrand(id).subscribe(
       {
         next: (res) => {
+          console.log(res);
           this.sets = res;
+          // Si solo hay un set, seleccionarlo automáticamente
+        if (this.sets.length === 1) {
+          this.editForm.patchValue({ setId: this.sets[0].id });
+        }
         },
         error: (err) => {
           console.log(err);
@@ -257,12 +263,119 @@ onDragLeave(event: DragEvent): void {
   
 
   openModalEdit(data:any){
+    console.log(data);
+    this.modalEditar = true;
+    this.idProducts = data.id; // Para usarlo en el update si lo necesitas
 
+    this.editForm.patchValue({
+      name: data.name,
+      image: data.image,
+      cardCode: data.cardCode,
+      stock: data.stock,
+      price: data.price,
+      description: data.description,
+      subCategoryId: data.subCategory.id,
+      brandId: data.brandId,
+      setId: data.setId
+    });
+     this.listSubCategories();
+    this.listBrands();
+    this.listSetsByBrand(data.brandId);
+  this.previewUrl = data.image; // Mostrar la imagen existente
   }
 
-  openModalDelete(id: any) {
+  closeModalEdit() {
+    this.editForm.reset();
+    this.previewUrl = null; // Limpiar la previsualización de la imagen
+    this.imageFile = null; // Limpiar el archivo de imagen
+    this.idProducts = null; // Limpiar el ID del producto
+    this.brands = []; // Limpiar las marcas
+    this.sets = []; // Limpiar los sets
+    this.subCategories = []; // Limpiar las subcategorías
+    this.modalEditar = false;
+    
+  }
+
+
+
+  onSubmitEdit(){
+    console.log(this.editForm.value);
+    const formData = new FormData();
+    formData.append('name', this.editForm.value.name);
+    formData.append('cardCode', this.editForm.value.cardCode);
+    formData.append('stock', this.editForm.value.stock);
+    formData.append('price', this.editForm.value.price);
+    formData.append('description', this.editForm.value.description);
+    formData.append('subCategoryId', this.editForm.value.subCategoryId);
+    formData.append('brandId', this.editForm.value.brandId);
+    formData.append('setId', this.editForm.value.setId);
+    if (this.imageFile) {
+      // Si se seleccionó una nueva imagen, la añadimos
+      formData.append('image', this.imageFile);
+    } else if (this.previewUrl) {
+      // Si no hay nueva imagen, añadimos la URL actual
+      formData.append('image', this.previewUrl);
+    }
+    formData.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+
+});
+  this.productsService.updateProducts(this.idProducts, formData).subscribe({
+
+      next: (res: any) => {
+        this.toastr.success('Producto actualizado correctamente', 'Éxito');
+        this.listProducts();
+        this.modalEditar = false;
+        this.editForm.reset();
+        this.previewUrl = null; // Limpiar la previsualización de la imagen
+        this.imageFile = null; // Limpiar el archivo de imagen
+        this.idProducts = null; // Limpiar el ID del producto
+        this.brands = []; // Limpiar las marcas
+        this.sets = []; // Limpiar los sets
+        this.subCategories = []; // Limpiar las subcategorías
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('Error al actualizar el producto', 'Error');
+      }
+    });
+  }
+
+  openModalDelete(id:any){
     this.modalEliminar = true;
-   
+    this.idProducts = id; // Guardar el ID del producto a eliminar
+    console.log(id);
+  }
+
+  closeModalDelete() {
+    this.modalEliminar = false;
+    this.idProducts = null; // Limpiar el ID del producto
+  }
+
+  openModalConfirmDelete() {
+    this.modalConfirmarEliminar = true;
+  }
+
+  closeModalConfirmDelete() {
+    this.modalConfirmarEliminar = false;
+  }
+
+  onSubmitDelete() {
+    console.log(this.idProducts)
+    this.productsService.deleteProducts(this.idProducts).subscribe({
+      next: (res: any) => {
+        this.toastr.success('Producto eliminado correctamente', 'Éxito');
+        this.listProducts();
+        this.modalConfirmarEliminar = false; // Cerrar el modal de confirmación
+        this.modalEliminar = false;
+        this.idProducts = null; // Limpiar el ID del producto
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastr.error('Error al eliminar el producto', 'Error');
+      }
+    });
+    
   }
 
  feedDataSource(data: any) {
@@ -323,7 +436,7 @@ onDragLeave(event: DragEvent): void {
 
         onSelectSubCategory(event: any) {
           const selectedSubCategoryId = event.value;
-          console.log(selectedSubCategoryId);
+
           const selectedSubCategory = this.subCategories.find((subCategory: any) => subCategory.id === selectedSubCategoryId) || null;
     
         }
@@ -333,9 +446,11 @@ onDragLeave(event: DragEvent): void {
   if (brandId) {
     this.listSetsByBrand(brandId);
     this.createForm.get('setId')?.enable(); // 🔥 habilitas el select
+    this.editForm.get('setId')?.enable();
   } else {
     this.sets = []; // Si no hay marca seleccionada, limpias los sets
     this.createForm.patchValue({ setId: '' });
+    this.editForm.patchValue({ setId: '' });
     this.createForm.get('setId')?.disable(); // 🔥 deshabilitas el select
   }
     
@@ -343,6 +458,7 @@ onDragLeave(event: DragEvent): void {
 
         onSelectSet(event: any) {
           const selectedSetId = event.value;
+          console.log(selectedSetId);
           const selectedSet = this.sets.find((set: any) => set.id === selectedSetId) || null;
     
         }

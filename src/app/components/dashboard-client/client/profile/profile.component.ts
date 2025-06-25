@@ -49,7 +49,7 @@ export class ProfileComponent {
 
 
   this.createDataClientForm = this.fb.group({
-    CI:['', [Validators.required,this.validateCedula.bind(this)]],
+    ci:['', [Validators.required,this.validateCedula.bind(this)]],
     birthdate:['', [Validators.required]],
     telephone:['', [Validators.required]],
     sexo:['', [Validators.required]],
@@ -61,7 +61,7 @@ export class ProfileComponent {
     lastname: ['', [Validators.required]],
     email:['', [Validators.required, Validators.email]],
     image:[''],
-    CI:[''],
+    ci:[''],
     birthdate:[''],
     telephone:[''],
   });
@@ -81,7 +81,7 @@ getProfile(){
         lastname: data.apellido,
         email:data.email,
         image:data.image,
-        CI:data.cedula,
+        ci:data.cedula,
         birthdate:this.formatDate(data.birthdate),
         telephone:data.telefono,
       })
@@ -203,7 +203,7 @@ onDragLeave(event: DragEvent): void {
     formData.append('name', this.profileEditForm.value.name);
     formData.append('lastname', this.profileEditForm.value.lastname);
     formData.append('email', this.profileEditForm.value.email);
-    formData.append('CI', this.profileEditForm.value.CI);
+    formData.append('ci', this.profileEditForm.value.ci);
     formData.append('birthdate', this.profileEditForm.value.birthdate);
     formData.append('telephone', this.profileEditForm.value.telephone);
 

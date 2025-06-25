@@ -1,8 +1,10 @@
 import { Routes } from "@angular/router";
+import { rolesGuard } from "../../guards/roles.guard";
 
 export const ADMIN_ROUTES:Routes = [{
     path: 'dashboard',
     loadComponent:()=> import('./dashboard-admin.component').then((m)=>m.DashboardAdminComponent),
+    
     children:[
         {
             path:'home',
@@ -29,6 +31,15 @@ export const ADMIN_ROUTES:Routes = [{
         },{
             path:'roles',
             loadComponent:()=> import('./rols/rols.component').then((m)=>m.RolsComponent),
+        },{
+            path:'orders',
+            loadComponent:()=> import('./orders/orders.component').then((m)=>m.OrdersComponent),
+        },{
+            path:'clients',
+            loadComponent:()=> import('./clients/clients.component').then((m)=>m.ClientsComponent),
+        },{
+           path:"reportaje",
+           loadComponent:()=> import('./reports/reports.component').then((m)=>m.ReportsComponent) 
         }
     ]
 }]

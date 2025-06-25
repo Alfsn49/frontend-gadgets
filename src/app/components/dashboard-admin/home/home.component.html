@@ -1,1 +1,79 @@
-<p>home works!</p>
+<section class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+  <!-- Encabezado -->
+  <header class="mb-10 text-center">
+    <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white">
+      Panel de Administración TCG
+    </h1>
+    <p class="text-gray-500 dark:text-gray-300 text-lg mt-2">
+      Administra productos, pedidos y usuarios de forma eficiente
+    </p>
+  </header>
+
+  <!-- Métricas rápidas -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="ventas">
+      <div class="flex items-center justify-between mb-2">
+        <h2 id="ventas" class="text-sm font-medium text-gray-500 dark:text-gray-300">Ventas Hoy</h2>
+        <span class="text-green-600 dark:text-green-400 text-lg font-semibold">$120.00</span>
+      </div>
+      <progress max="100" value="80" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="pedidos">
+      <div class="flex items-center justify-between mb-2">
+        <h2 id="pedidos" class="text-sm font-medium text-gray-500 dark:text-gray-300">Pedidos Pendientes</h2>
+        <span class="text-yellow-600 dark:text-yellow-400 text-lg font-semibold">5</span>
+      </div>
+      <progress max="10" value="5" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="stock">
+      <div class="flex items-center justify-between mb-2">
+        <h2 id="stock" class="text-sm font-medium text-gray-500 dark:text-gray-300">Stock Bajo</h2>
+        <span class="text-red-600 dark:text-red-400 text-lg font-semibold">8</span>
+      </div>
+      <progress max="20" value="8" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="usuarios">
+      <div class="flex items-center justify-between mb-2">
+        <h2 id="usuarios" class="text-sm font-medium text-gray-500 dark:text-gray-300">Usuarios Registrados</h2>
+        <span class="text-blue-600 dark:text-blue-400 text-lg font-semibold">123</span>
+      </div>
+      <progress max="200" value="123" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
+    </div>
+  </div>
+
+  <!-- Enlaces rápidos -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-productos">
+      <h3 id="gestionar-productos" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Productos</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        Agrega, edita o elimina cartas de tu catálogo.
+      </p>
+      <a routerLink="/admin/productos" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
+        Ir a Productos
+      </a>
+    </article>
+
+    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-pedidos">
+      <h3 id="gestionar-pedidos" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Pedidos</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        Revisa y actualiza los estados de los pedidos.
+      </p>
+      <a routerLink="/admin/pedidos" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
+        Ir a Pedidos
+      </a>
+    </article>
+
+    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-usuarios">
+      <h3 id="gestionar-usuarios" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Usuarios</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        Gestiona cuentas, roles y accesos.
+      </p>
+      <a routerLink="/admin/usuarios" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
+        Ir a Usuarios
+      </a>
+    </article>
+  </div>
+</section>

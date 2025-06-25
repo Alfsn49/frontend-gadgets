@@ -13,7 +13,7 @@ import { initFlowbite } from 'flowbite';
 export class CarouselComponent  {
   // Definimos un arreglo para gestionar el estado de las imágenes activas
   images = [
-    'https://cdn.donmai.us/sample/4d/10/__sakurai_momoka_idolmaster_and_2_more__sample-4d104d2f3f14f644efda79c9df21a580.jpg',
+    // 'https://cdn.donmai.us/sample/4d/10/__sakurai_momoka_idolmaster_and_2_more__sample-4d104d2f3f14f644efda79c9df21a580.jpg',
     'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1/carousel/r5r4ock1onlqj6i5dnim',
     'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1736194154/carousel/i4zoc9ilogf3a3cgtl40.jpg',
     'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1736196590/carousel/fwkamb1eg7ld3iq6rzrm.jpg'

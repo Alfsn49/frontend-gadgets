@@ -94,14 +94,14 @@
     <ng-content #name>
         <form class="max-w-md mx-auto" [formGroup]="createDataClientForm" (ngSubmit)="dataclientcreate()">
           <div class="relative z-0 w-full mb-5 group">
-              <input type="text" formControlName="CI" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <input type="text" formControlName="ci" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
               <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cédula</label>
-              @if(createDataClientForm.get('CI')?.invalid && createDataClientForm.get('CI')?.touched){
+              @if(createDataClientForm.get('ci')?.invalid && createDataClientForm.get('CI')?.touched){
                 <div>
-                    @if(createDataClientForm.get('CI')?.errors?.['required']){
+                    @if(createDataClientForm.get('ci')?.errors?.['required']){
                         <div><small>Cédula requerida</small></div>
                     }
-                    @if(createDataClientForm.get('CI')?.errors?.['cedulaInvalida']){
+                    @if(createDataClientForm.get('ci')?.errors?.['cedulaInvalida']){
                         <div><small>Cédula inválida</small></div>
                     }
                 </div>
@@ -178,15 +178,15 @@
             <div class="space-y-4">
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Cedula *</label>
-                <input formControlName="CI" type="text"
+                <input formControlName="ci" type="text"
                   class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
                   placeholder="Ingrese el nombre" maxlength="50" />
-                  @if(createDataClientForm.get('CI')?.invalid && createDataClientForm.get('CI')?.touched){
+                  @if(createDataClientForm.get('ci')?.invalid && createDataClientForm.get('ci')?.touched){
                     <div>
-                      @if(createDataClientForm.get('CI')?.errors?.['required']){
+                      @if(createDataClientForm.get('ci')?.errors?.['required']){
                       <div><small class="text-orange-300">Cédula requerida</small></div>
                       }
-                      @if(createDataClientForm.get('CI')?.errors?.['cedulaInvalida']){
+                      @if(createDataClientForm.get('ci')?.errors?.['cedulaInvalida']){
                       <div><small class="text-red-600">Cédula inválida</small></div>
                       }
                     </div>

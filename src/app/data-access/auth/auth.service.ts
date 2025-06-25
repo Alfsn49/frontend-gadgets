@@ -27,6 +27,10 @@ export class AuthService extends HttpService{
     
   }
 
+  loginAdmin(data:LoginDto){
+    return this.http.post(this.api + 'auth/login-admin', data)
+  }
+
   signup(data:any){
     return this.http.post(this.api + 'auth/register', data);
   }
@@ -76,8 +80,7 @@ export class AuthService extends HttpService{
     return this.http.post(this.api + 'auth/refresh','', { headers })}
   logout(){
     this.loggedInSignal.set(false);
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('User');
+    localStorage.clear();
+
   }
   }

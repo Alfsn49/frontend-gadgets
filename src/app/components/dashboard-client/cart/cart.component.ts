@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { selectCart } from '../../../core/store/cart/cart.selectors';
 import { Store } from '@ngrx/store';
 import { addToCart, reduceCartItem, removeCartItem } from '../../../core/store/cart/cart.actions';
+import { selectRole } from '../../../core/store/auth/auth.selectors';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -30,6 +32,7 @@ export class CartComponent {
   data$: any;
   
   constructor(){
+
     this.cartData$.subscribe(data => {
       console.log('Datos del carrito:', data.items);
       this.data$ = data;

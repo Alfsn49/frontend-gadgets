@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import {ReactiveFormsModule,FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { AuthService } from '../../../../data-access/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Cloudinary, CloudinaryImage } from '@cloudinary/url-gen/index';
 import { Store } from '@ngrx/store';
 import { login } from '../../../../core/store/auth/auth.actions';
@@ -14,7 +14,7 @@ import {CloudinaryModule} from '@cloudinary/ng';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

@@ -24,3 +24,9 @@ export const selectLoading = createSelector(
     selectAuthState,
     state => state.loading
 )
+
+export const selectRole = createSelector(
+    selectAuthState,
+    state => state.user?.role
+)
+

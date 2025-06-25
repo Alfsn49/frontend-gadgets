@@ -14,6 +14,7 @@ import { ProductsService } from '../../data-access/content/products.service';
 import { loadCart, removeCartItem } from '../../core/store/cart/cart.actions';
 import { selectCart, selectCartLoaded } from '../../core/store/cart/cart.selectors';
 import { CartState } from '../../core/store/cart/cart.reducer';
+import { selectRole } from '../../core/store/auth/auth.selectors';
 
 interface CartItem {
   product_id: number;
@@ -53,15 +54,24 @@ export class NavbarComponent {
   cartData$ = this.store.select(selectCart);
   cartLoaded$ = this.store.select(selectCartLoaded);
   isSidebarOpen: boolean = true;
+  isMobileMenuOpen = false;
   router = inject(Router);
-  isAuthenticated$: Observable<boolean>;
+  isAuthenticated$!: Observable<boolean>;
   productService = inject(ProductsService);
-  cart$: Observable<any>;
+  cart$!: Observable<any>;
+  rol$:any
+  myrol:string = '';
 
   public authService = inject(AuthService);
 
   constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState, cart: CartState }>) {
-   this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
+    this.rol$ = this.store.select(selectRole).subscribe((role) => {
+      console.log('Rol del usuario:', role);
+      this.myrol = role;
+    });
+
+   if(this.myrol !== 'Administrador'){
+    this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
     this.cartData$ = this.store.select(selectCart);
     this.cartLoaded$ = this.store.select(selectCartLoaded);
     this.cart$ = this.store.select(state => state.cart.cart); 
@@ -69,6 +79,9 @@ export class NavbarComponent {
       this.data$ = data;
       console.log('Datos del carrito:', data);
     });
+   }else{
+    
+   }
     initFlowbite();
     
 
@@ -151,5 +164,20 @@ export class NavbarComponent {
     const escapedQuery = query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
     const regex = new RegExp(`\\b(${escapedQuery})`, 'i');
     return name.replace(regex, '<span class="text-blue-500 font-bold">$1</span>');
+  }
+  hideResultsLater() {
+  setTimeout(() => this.showResults = false, 200); // para evitar ocultar al hacer clic
+}
+navigateToProduct(productId: string) {
+  this.router.navigate(['/product', productId]);
+  this.showResults = false;
+}
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    console.log('Toggle ejecutado:', this.isMobileMenuOpen);
+  }
+  closeSearch() {
+    this.showResults = false;
   }
 }

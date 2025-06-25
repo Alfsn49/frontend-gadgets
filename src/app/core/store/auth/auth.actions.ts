@@ -5,6 +5,18 @@ export const login = createAction(
     props<{ email: string; password: string }>()
 )
 
+export const loginAdmin = createAction(
+    '[Auth] Login Admin',
+    props<{ email: string; password: string }>()
+)
+
+
+export const loginAdminSuccess = createAction(
+    '[Auth] Login Admin Success',
+    props<any>()
+)
+
+
 
 export const loginSuccess = createAction(
     '[Auth] Login Success',
@@ -18,6 +30,10 @@ export const loginFailure = createAction(
 
 export const logout = createAction(
     '[Auth] Logout'
+)
+
+export const logoutAdmin = createAction(
+    '[Auth] LogoutAdmin'
 )
 
 export const refreshTokenErr = createAction(
