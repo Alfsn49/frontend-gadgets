@@ -1,0 +1,47 @@
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:36:06 2025}: reset: moving to HEAD~
+[33m853f53f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{Wed Jun 25 02:33:54 2025}: reset: moving to 853f53f0d61c635c8b092061698c7afaf09991f9
+[33m853f53f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{Wed Jun 25 02:31:20 2025}: reset: moving to 853f53f
+[33m853f53f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{Wed Jun 25 02:29:18 2025}: reset: moving to 853f53f
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:19:36 2025}: reset: moving to HEAD~
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:16:59 2025}: reset: moving to HEAD~
+[33m853f53f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{Wed Jun 25 02:16:04 2025}: commit: feat: Implement dashboard client components and product features
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:15:17 2025}: reset: moving to HEAD~
+[33madea1e5[m HEAD@{Wed Jun 25 02:15:02 2025}: reset: moving to HEAD~
+[33m028b4fd[m HEAD@{Wed Jun 25 02:14:43 2025}: reset: moving to HEAD~
+[33mae0c637[m HEAD@{Wed Jun 25 02:14:24 2025}: checkout: moving from Avances to master
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:14:23 2025}: reset: moving to HEAD
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:12:44 2025}: reset: moving to HEAD~
+[33m7a607e4[m HEAD@{Wed Jun 25 02:12:35 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:11:07 2025}: reset: moving to HEAD~
+[33m5671504[m HEAD@{Wed Jun 25 02:10:47 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:10:26 2025}: reset: moving to HEAD~
+[33mcc5300f[m HEAD@{Wed Jun 25 02:10:14 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:09:46 2025}: reset: moving to HEAD~
+[33m53ab39d[m HEAD@{Wed Jun 25 02:09:07 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:06:00 2025}: reset: moving to HEAD~
+[33m9a199f3[m HEAD@{Wed Jun 25 02:05:45 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:04:55 2025}: reset: moving to HEAD~
+[33m8778993[m HEAD@{Wed Jun 25 02:04:46 2025}: commit: feat: add SidebarComponent with basic functionality and tests
+[33md4fee7c[m[33m ([m[1;31morigin/Avances[m[33m, [m[1;32mAvances[m[33m)[m HEAD@{Wed Jun 25 02:02:56 2025}: reset: moving to HEAD~
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:02:50 2025}: reset: moving to HEAD~
+[33mf530183[m HEAD@{Wed Jun 25 02:02:37 2025}: commit: feat: Implement dashboard client components and product features
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:02:31 2025}: reset: moving to HEAD~
+[33m20d616b[m HEAD@{Wed Jun 25 02:02:17 2025}: commit: feat: Implement dashboard client components and product features
+[33m35905b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{Wed Jun 25 02:01:36 2025}: reset: moving to HEAD~
+[33madea1e5[m HEAD@{Wed Jun 25 02:01:30 2025}: reset: moving to HEAD~
+[33me476a48[m HEAD@{Wed Jun 25 02:01:20 2025}: commit: feat(auth): add admin login functionality and role selection
+[33madea1e5[m HEAD@{Wed Jun 25 01:59:22 2025}: reset: moving to HEAD~
+[33m00df498[m HEAD@{Wed Jun 25 01:59:10 2025}: pull --tags origin Avances: Fast-forward
+[33madea1e5[m HEAD@{Wed Jun 25 01:58:33 2025}: reset: moving to HEAD~
+[33m00df498[m HEAD@{Wed Jun 25 01:58:15 2025}: commit: feat(auth): add admin login functionality and role selection
+[33madea1e5[m HEAD@{Wed Jun 25 01:57:57 2025}: checkout: moving from master to Avances
+[33madea1e5[m HEAD@{Wed Jun 25 01:52:54 2025}: reset: moving to HEAD~
+[33mddb3f93[m HEAD@{Wed Jun 25 01:51:34 2025}: commit: feat(auth): add admin login functionality and role selection
+[33madea1e5[m HEAD@{Wed Jun 25 01:51:13 2025}: reset: moving to HEAD~
+[33m440f967[m HEAD@{Wed Jun 25 01:50:41 2025}: commit: feat(auth): add admin login functionality and role selection
+[33madea1e5[m HEAD@{Wed Jun 25 01:50:22 2025}: reset: moving to HEAD~
+[33m028b4fd[m HEAD@{Wed Jun 25 01:50:17 2025}: reset: moving to HEAD~
+[33m8396b27[m HEAD@{Wed Jun 25 01:50:01 2025}: commit: Refactor code structure for improved readability and maintainability
+[33m028b4fd[m HEAD@{Wed Jun 25 01:46:07 2025}: reset: moving to HEAD~
+[33mc6e3e62[m HEAD@{Wed Jun 25 01:43:33 2025}: commit: Refactor code structure for improved readability and maintainability
+[33m028b4fd[m HEAD@{Mon Jun 9 15:38:43 2025}: clone: from https://github.com/Alfsn49/frontend-gadgets.git
