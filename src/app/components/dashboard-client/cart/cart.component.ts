@@ -124,8 +124,8 @@ export class CartComponent {
     const dataCheckout = {
       
       userId:this.data$.user_id,
-      direccion_id: direccionSeleccionada.id, // ID de la dirección seleccionada   
-      cart_id:this.data$.id,
+      direccionId: direccionSeleccionada.id, // ID de la dirección seleccionada   
+      cartId:this.data$.id,
       products:this.data$.items.map((items:any)=>{
       return{
         amount: items.unit_price * 100, // Multiplica por 100 si usas centavos para Stripe
@@ -136,6 +136,8 @@ export class CartComponent {
     quantity: items.quantity
       }
     })}
+    
+    console.log('Datos de checkout:', dataCheckout);
     
     console.log(dataCheckout)
     this.cartService.checkout(dataCheckout).subscribe(

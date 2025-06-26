@@ -38,6 +38,13 @@ export const productReducer = createReducer(
   })),
   on(loadProductsFailure, (state, { error }) => ({
     ...state,
+    products: [],
+    total: 0,
+    totalPages: 0,
+    page: 1,
+    selectedCategory: null,
+    selectedSubCategory: null,
+    selectedBrand: null,
     status: 'error' as 'error',
   })),
   on(changePage, (state, { page }) => ({

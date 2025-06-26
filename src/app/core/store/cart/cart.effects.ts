@@ -19,12 +19,14 @@ import {
   reduceCartItemFailure,
 } from './cart.actions';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class CartEffects {
   constructor(
     private actions$: Actions,
     private cartService: CartService,
+    private toastr: ToastrService, // Asegúrate de importar ToastrService si lo necesitas
   ) {}
 
  loadCart$ = createEffect(() =>
@@ -75,11 +77,19 @@ export class CartEffects {
       ofType(addToCart),
       mergeMap(({ product_id, quantity }) => {
         const currentCart = this.cartService.loadCartFromLocalStorage();
-
+      
         return this.cartService.updateCartItem({ product_id, quantity }).pipe(
-          tap((cart) => this.cartService.saveCartToLocalStorage(cart)),
-          map((cart) => addToCartSuccess({ cart })),
+          tap((cart) => {
+  this.cartService.saveCartToLocalStorage(cart);
+  this.toastr.success('Producto agregado al carrito', 'Éxito');
+}),
+          map((cart) => 
+            
+            addToCartSuccess({ cart })),
           catchError((error) => {
+            console.log('Error al agregar al carrito:', error);
+            this.toastr.error(error.error.message, 'Error');
+            // Restaurar el carrito actual en caso de error
             this.cartService.saveCartToLocalStorage(currentCart);
             return of(addToCartFailure({ error }));
           }),
@@ -135,10 +145,12 @@ export class CartEffects {
 
         return this.cartService.removeProduct(product_id).pipe(
           tap((updatedCart) => {
+            this.toastr.success('Producto eliminado del carrito', 'Éxito');
             this.cartService.saveCartToLocalStorage(updatedCart);
           }),
           map((updatedCart) => removeCartItemSuccess({ cart: updatedCart })),
           catchError((error) => {
+            this.toastr.error('Error al eliminar el producto del carrito', 'Error');
             this.cartService.saveCartToLocalStorage(currentCart);
             return of(removeCartItemFailure({ error }));
           }),

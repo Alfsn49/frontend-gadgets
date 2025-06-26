@@ -1,3 +1,4 @@
 export const environment = {
-    api: 'http://localhost:3000/',
+    // api: 'https://backend-gadgets-2c8u.onrender.com/',
+    api: 'http://localhost:10000/',
 };

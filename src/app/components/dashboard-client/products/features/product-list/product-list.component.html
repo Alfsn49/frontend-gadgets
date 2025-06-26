@@ -9,15 +9,53 @@
       </p>
     </header>
 
-    <div class="mt-8">
-      <p class="text-sm text-gray-500">Showing <span> 4 </span> of 40</p>
-    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+
+  <select [ngModel]="filters.category" (ngModelChange)="onFilterChange('category', $event)" class="p-2 border rounded">
+    <option value="">Todas las categorías</option>
+    <option *ngFor="let c of categories" [value]="c.name">{{ c.name }}</option>
+  </select>
+
+  <select [ngModel]="filters.sort" (ngModelChange)="onFilterChange('sort', $event)" class="p-2 border rounded">
+  <option value="">Ordenar por</option>
+  <option value="name_asc">Nombre A-Z</option>
+  <option value="name_desc">Nombre Z-A</option>
+  <option value="price_asc">Precio menor a mayor</option>
+  <option value="price_desc">Precio mayor a menor</option>
+</select>
+
+  <input
+    type="number"
+    placeholder="Precio mínimo"
+    [ngModel]="filters.minPrice"
+    (ngModelChange)="onFilterChange('minPrice', $event)"
+    class="p-2 border rounded"
+  />
+
+  <input
+    type="number"
+    placeholder="Precio máximo"
+    [ngModel]="filters.maxPrice"
+    (ngModelChange)="onFilterChange('maxPrice', $event)"
+    class="p-2 border rounded"
+  />
+
+</div>
+
+
+
+
+    <div class="mt-8" *ngIf="products.length > 0">
+  <p class="text-sm text-gray-500">Mostrando <span>{{ products.length }}</span> productos</p>
+</div>
     
-    <div class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      @for (product of products; track product) {
-        <app-product-card [product]="product" (addToCart)="addToCart($event)"></app-product-card>
-      }
-    </div>
+    <div class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" *ngIf="products.length > 0; else noProducts">
+  <app-product-card *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
+</div>
+
+<ng-template #noProducts>
+  <p class="text-center text-gray-500 mt-8">No hay productos para mostrar.</p>
+</ng-template>
     
     <ol class="mt-8 flex justify-center gap-1 text-xs font-medium" >
       @if(pageData$ | async; as pageData){

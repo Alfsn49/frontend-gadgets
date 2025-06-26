@@ -111,7 +111,10 @@ export class OrdersComponent {
   console.log('Datos a enviar:', dataAEnviar);
     }
 
-    closeModalEdit(){}
+    closeModalEdit(){
+      this.modalEditar = false;
+      this.editarForm.reset();
+    }
     openModalDelete(order:any){}
     feedDataSource(data: any) {
     this.dataSource = new MatTableDataSource<any>(data);

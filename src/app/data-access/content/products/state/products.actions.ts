@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 
 export const loadProducts = createAction(
   '[Products] Load Products',
-  props<{ page: number; limit: number }>()
+  props<{ page: number; limit: number;filters?: any }>()
 );
 
 export const loadProductsSuccess = createAction(

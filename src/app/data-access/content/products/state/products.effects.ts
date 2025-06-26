@@ -12,8 +12,8 @@ export class ProductsEffects {
   loadProducts$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadProducts),
-      mergeMap(({ page, limit }) =>
-        this.productsService.getProducts(page, limit).pipe(
+      mergeMap(({ page, limit,filters }) =>
+        this.productsService.getProducts(page, limit,filters).pipe(
           map((response) =>
             loadProductsSuccess({
               products: response.products,
@@ -22,7 +22,12 @@ export class ProductsEffects {
               totalPages: response.totalPages,
             })
           ),
-          catchError((error) => of(loadProductsFailure({ error: error.message })))
+          catchError(error => {
+          if (error.error.statusCode === 404) {
+            return of(loadProductsSuccess({ products: [], total: 0, page: 1, totalPages: 0 }));
+          }
+          return of(loadProductsFailure({ error }));
+        })
         )
       )
     )

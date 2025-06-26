@@ -7,6 +7,7 @@ import { EditAddressComponent } from './edit-address/edit-address.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Locations, LocationData } from './locations';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class AddressComponent {
   createAddress:any;
   editAddressForm: FormGroup;
   userService = inject(UserService);
+  toastr = inject(ToastrService);
 
 
   loadProvinces(): void {
@@ -100,11 +102,11 @@ loadCitiesEdit(): void {
 
   constructor(private dialog: MatDialog){
     this.addressForm = this.fb.group({
-      calle_principal:['', Validators.required],
-      calle_secundaria:['',Validators.required],
+      callePrincipal:['', Validators.required],
+      calleSecundaria:['',Validators.required],
       referencia:['',Validators.required],
       numero:['', Validators.required],
-      codigo_postal:['',Validators.required],
+      codigoPostal:['',Validators.required],
       ciudad: [{ value: '', disabled: true }, Validators.required],
   estado: [{ value: '', disabled: true }, Validators.required],
       pais:['',Validators.required],
@@ -112,11 +114,11 @@ loadCitiesEdit(): void {
     })
     this.editAddressForm = this.fb.group({
       "id": [],
-      "calle_principal": [],
-      "calle_secundaria": [],
+      "callePrincipal": [],
+      "calleSecundaria": [],
       "referencia": [],
       "numero": [],
-      "codigo_postal": [],
+      "codigoPostal": [],
       "ciudad": [],
       "estado": [],
       "pais": [],
@@ -168,6 +170,7 @@ loadCitiesEdit(): void {
         this.addressForm.reset();
         this.provinces = [];
         this.cities = [];
+        this.toastr.success('Dirección creada correctamente', 'Éxito');
         this.getAddress(); // Actualiza la lista de direcciones después de crear una nueva
       },
       error: (error) => {
@@ -212,11 +215,11 @@ loadCitiesEdit(): void {
     
           this.editAddressForm.patchValue({
             "id": data.id,
-            "calle_principal": data.calle_principal,
-            "calle_secundaria": data.calle_secundaria,
+            "callePrincipal": data.callePrincipal,
+            "calleSecundaria": data.calleSecundaria,
             "referencia": data.referencia,
             "numero": data.numero,
-            "codigo_postal": data.codigo_postal,
+            "codigoPostal": data.codigoPostal,
             "ciudad": data.ciudad,
             "estado": provinciaFormValue, // usamos el valor real del select
             "pais": data.pais,
@@ -249,6 +252,7 @@ loadCitiesEdit(): void {
             this.editAddressForm.reset();
             this.provinces = [];
             this.cities = [];
+            this.toastr.success('Dirección editada correctamente', 'Éxito');
             this.getAddress(); // Actualiza la lista de direcciones después de editar
           },
           error: (error) => {
@@ -284,6 +288,7 @@ loadCitiesEdit(): void {
           console.log(data)
           this.modalDelete = false;
           this.modalConfirmDelete = false;
+          this.toastr.success('Dirección eliminada correctamente', 'Éxito');
           this.getAddress(); // Actualiza la lista de direcciones después de eliminar
         },
         error: (error) => {

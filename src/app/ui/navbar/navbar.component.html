@@ -13,9 +13,7 @@
         <ul class="hidden lg:flex items-center gap-6 md:gap-8 py-3">
           <li><a routerLink="/home" routerLinkActive="text-primary-700" [routerLinkActiveOptions]="{ exact: true }" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Inicio</a></li>
           <li><a routerLink="/products" routerLinkActive="text-primary-700" [routerLinkActiveOptions]="{ exact: true }" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Productos</a></li>
-          <li><a routerLink="/categoria" routerLinkActive="text-primary-700" [routerLinkActiveOptions]="{ exact: true }" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Categorias</a></li>
           <li><a routerLink="/about" routerLinkActive="text-primary-700" [routerLinkActiveOptions]="{ exact: true }" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Sobre Nosotros</a></li>
-
           <div class="flex space-x-4" *ngIf="!(isAuthenticated$ | async)">
             <li><a routerLink="/auth/login" routerLinkActive="text-primary-700" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Iniciar Sesión</a></li>
             <li><a routerLink="/auth/signup" routerLinkActive="text-primary-700" class="text-sm font-medium text-gray-900 hover:text-primary-700 dark:text-white dark:hover:text-primary-500">Registrarse</a></li>
@@ -113,7 +111,7 @@
       <ul class="text-gray-900 dark:text-white text-sm font-medium space-y-3">
         <li><a routerLink="/home" routerLinkActive="text-primary-700" class="hover:text-primary-700 dark:hover:text-primary-500">Inicio</a></li>
         <li><a routerLink="/products" routerLinkActive="text-primary-700" class="hover:text-primary-700 dark:hover:text-primary-500">Productos</a></li>
-        <li><a routerLink="/categoria" routerLinkActive="text-primary-700" class="hover:text-primary-700 dark:hover:text-primary-500">Categoria</a></li>
+        
         <li><a routerLink="/about" routerLinkActive="text-primary-700" class="hover:text-primary-700 dark:hover:text-primary-500">Sobre Nosotros</a></li>
         <ng-container *ngIf="!(isAuthenticated$ | async)">
           <li><a routerLink="/auth/login" routerLinkActive="text-primary-700" class="hover:text-primary-700 dark:hover:text-primary-500">Iniciar Sesión</a></li>

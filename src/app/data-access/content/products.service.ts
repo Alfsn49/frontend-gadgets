@@ -9,14 +9,33 @@ const LIMIT = 5;
 })
 export class ProductsService extends HttpService{
 
-  getProducts(page: number, limit: number) {
-    return this.http.get<any>(this.api + 'product/list-products', {
-      params: {
-        page,
-        limit
-      }
-    });
+  // products.service.ts
+getProducts(page: number, limit: number, filters: any = {}): Observable<any> {
+  const params: any = {
+    page,
+    limit,
+  };
+
+  if (filters.category) {
+    params.categoryId = filters.category;
   }
+
+  if (filters.minPrice !== null) {
+    params.minPrice = filters.minPrice;
+  }
+
+  if (filters.maxPrice !== null) {
+    params.maxPrice = filters.maxPrice;
+  }
+
+  if (filters.sort) {
+    params.sort = filters.sort;
+  }
+
+  return this.http.get(this.api +'product/list-products', { params });
+}
+
+
 
   getProductId(id:string){
     return this.http.get(this.api + 'product/find-product',{
