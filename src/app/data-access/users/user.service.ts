@@ -70,4 +70,10 @@ export class UserService extends HttpService {
   deleteAddress(id:string){
     return this.http.delete(this.api + `user/deleteAddress/${id}`);
   }
+
+  getOrders(){
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    return this.http.get(this.api + `order/ordersbyUser/${userId}`);
+  }
 }

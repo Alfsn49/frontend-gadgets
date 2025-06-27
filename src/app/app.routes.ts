@@ -87,6 +87,10 @@ export const routes: Routes = [
         },{
           path:'cancel',
           loadComponent:()=> import('./components/dashboard-client/cancel/cancel.component').then(m=>m.CancelComponent)
+        },
+        {
+          path:'orders',
+          loadComponent:()=> import('./components/dashboard-client/client/orders/orders.component').then(m=>m.OrdersComponent)
         }
     ]
   },{

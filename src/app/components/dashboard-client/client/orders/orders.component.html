@@ -1,0 +1,42 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Mis pedidos</h1>
+
+  <ng-container *ngIf="orders.length > 0; else sinOrdenes">
+    <div *ngFor="let order of orders" class="mb-10 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+      <!-- Encabezado por fecha -->
+      <div class="bg-gray-100 px-6 py-4 border-b border-gray-300 flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-gray-700">
+          Pedido realizado el {{ order.fecha | date:'longDate' }}
+        </h2>
+      </div>
+
+      <!-- Lista de productos -->
+      <div *ngFor="let producto of order.productos" class="flex flex-col md:flex-row gap-4 p-6 border-b last:border-none border-gray-200">
+        <!-- Imagen -->
+        <div class="flex-shrink-0 w-full md:w-40 h-40 overflow-hidden rounded-lg border border-gray-200">
+          <img [src]="producto.imagen" alt="Imagen del producto" class="object-cover w-full h-full">
+        </div>
+
+        <!-- Detalles del producto -->
+        <div class="flex-1 space-y-2">
+          <h3 class="text-lg font-semibold text-gray-800">{{ producto.nombre }}</h3>
+          <p class="text-sm text-gray-600">
+            <span class="font-medium">Cantidad:</span> {{ producto.cantidad }}
+          </p>
+          <p class="text-sm text-gray-600">
+            <span class="font-medium">Precio unitario:</span> ${{ producto.precio }}
+          </p>
+          <p class="text-sm text-gray-600">
+            <span class="font-medium">Total pagado:</span> <span class="text-green-600 font-semibold">${{ producto.precio * producto.cantidad }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #sinOrdenes>
+    <div class="text-center text-gray-500 mt-12">
+      <p class="text-xl">No se encontraron pedidos 🛒</p>
+    </div>
+  </ng-template>
+</div>

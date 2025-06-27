@@ -147,6 +147,9 @@ export class CartComponent {
           window.location.href = data.url;
         },
         error:(error:any)=>{
+          this.toastrService.error(error.error.message, 'Error', {
+            timeOut: 3000,
+          });
           console.log(error)
         }
       }
