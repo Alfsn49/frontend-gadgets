@@ -11,11 +11,13 @@ import { Store } from '@ngrx/store';
 import { addToCart, reduceCartItem, removeCartItem } from '../../../core/store/cart/cart.actions';
 import { selectRole } from '../../../core/store/auth/auth.selectors';
 import { map } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CartItemComponent],
+  imports: [CartItemComponent, CommonModule, RouterLink],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
@@ -27,10 +29,14 @@ export class CartComponent {
   store = inject(Store);
   cartData$ = this.store.select(selectCart);
   cartService = inject(CartService);
-  addressData: any = null;
-  
+  addressData: any[] = [];
+  addressLoaded = false;
   data$: any;
-  
+  userData$:any;
+  hasAddress = false;
+  // Variables booleanas para el template (evitar llamadas repetidas)
+  completePersonalData = false;
+  anyAddress = false;
   constructor(){
 
     this.cartData$.subscribe(data => {
@@ -38,6 +44,7 @@ export class CartComponent {
       this.data$ = data;
     });
     this.getAddress();
+    this.getUserData();
   }
 
   getAddress(){
@@ -46,13 +53,37 @@ export class CartComponent {
         next:(data:any)=>{
           console.log(data)
           this.addressData = data;
+          this.addressLoaded = true;
+          this.anyAddress = data.length > 0;
+          console.log('Direcciones obtenidas:', this.hasAddress);
         },
         error:(error:any)=>{
+          this.addressData=[]
+          this.addressLoaded = true;
+        this.anyAddress = false;
+          console.log('Error al obtener las direcciones', this.addressData.length)
           console.log(error)
         }
       }
     )
 
+  }
+
+  getUserData(){
+    this.userService.verifydataUser().subscribe(
+      {
+        next:(data:any)=>{
+          console.log(data)
+          this.userData$ = data;
+          this.completePersonalData = !!(data?.ci && data?.birthdate && data?.telephone);
+        } ,
+        error:(error:any)=>{
+          this.completePersonalData = false;
+          console.log(error)
+        }
+      }
+    )
+        
   }
 
   onRemoveItem(id:any){
@@ -112,6 +143,15 @@ export class CartComponent {
       }
     )
   }
+  hasCompletePersonalData(): boolean {
+    console.log('Datos del usuario:', this.userData$);
+  return this.userData$?.ci && this.userData$?.birthdate && this.userData$.telephone;
+}
+
+hasAnyAddress(): boolean {
+
+  return this.addressLoaded && this.addressData.length > 0;
+}
 
   checkout(){
     console.log('checkout')

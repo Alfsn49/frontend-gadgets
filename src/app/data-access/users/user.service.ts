@@ -39,7 +39,17 @@ export class UserService extends HttpService {
     return this.http.get(this.api + `user/getAddress/${userId}`);
   }
 
-  
+  verifydataUser(){
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    return this.http.get(this.api + `user/verify-dataUser/${userId}`).pipe(
+      retry(3),
+      catchError((error)=>{
+        console.error('Error en la verificación',error)
+        return of(null);
+      })
+    );
+  }
 
   createAddress(data:any){
     const userdata = localStorage.getItem('User');
