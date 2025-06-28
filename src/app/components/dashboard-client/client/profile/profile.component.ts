@@ -219,9 +219,8 @@ formData.forEach((value, key) => {
   console.log(`${key}: ${value}`);
 });
 
-this.loading = true; // Iniciar el loading
+
 this.ServiceUser.editProfile(formData)
-    .pipe(finalize(() => (this.loading = false))) // Desactivar loading cuando termine la petición
     .subscribe({
       next: (data: unknown | any) => {
         console.log(data);
