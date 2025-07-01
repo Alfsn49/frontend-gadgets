@@ -22,7 +22,7 @@
     <div class="mt-8 overflow-x-auto">
       <div class="text-search">
         <mat-form-field class="example-full-width">
-          <mat-label>Marcas a Buscar</mat-label>
+          <mat-label>Expansiones a Buscar</mat-label>
           <input matInput placeholder="Ej. Yu-gi-oh!" value="Yu-gi-oh" [(ngModel)]="searchText" (keyup)="onInputChange()">
         </mat-form-field>
       </div>
@@ -42,7 +42,7 @@
       
           <!-- Nombre Column -->
           <ng-container matColumnDef="name">
-            <th mat-sort-header="name" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500">name</th>
+            <th mat-sort-header="name" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-orange-500">Nombre</th>
             <td mat-cell *matCellDef="let sets" class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
               {{ sets.name }}
             </td>

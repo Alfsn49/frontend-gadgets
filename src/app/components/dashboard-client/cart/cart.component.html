@@ -115,6 +115,7 @@
       class="inline-block mt-2 text-blue-700 underline hover:text-blue-900 dark:text-blue-400"
       >Ir al perfil</a
     >
+    <button (click)="mostrarModal()" class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Llenar los datos</button>
   </ng-container>
   <ng-template #datosCompletos>
     <p class="text-sm">Tus datos personales están completos ✅</p>
@@ -132,11 +133,7 @@
   <h3 class="font-semibold text-lg mb-1">Paso 2: Dirección</h3>
   <ng-container *ngIf="!anyAddress; else direccionLista">
     <p>Necesitas tener al menos una dirección registrada para continuar.</p>
-    <a
-      [routerLink]="['/address']"
-      class="inline-block mt-2 text-blue-700 underline hover:text-blue-900 dark:text-blue-400"
-      >Gestionar direcciones</a
-    >
+    <button (click)="mostrarModaldireccion()" class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Llenar los datos</button>
   </ng-container>
   <ng-template #direccionLista>
     <p class="text-sm">Tienes direcciones disponibles ✅</p>
@@ -222,3 +219,288 @@
       </div>
     </div>
 </section>
+
+@if(modalCreateDataClient){
+  <section 
+  class="modal fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+  >
+  <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+    <div
+      class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto relative flex flex-col items-center">
+      <button (click)="cerrarModal()"
+        class="absolute top-3 right-3 bg-gray-300 text-gray-700 w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition">
+        &times;
+      </button>
+      <!-- Icono y Título -->
+      <div class="flex items-center justify-center gap-4 text-center mt-4">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/softpochbot.appspot.com/o/wired-gradient-49-plus-circle-hover-rotation.gif?alt=media&token=e4f138cd-bb52-444e-8bce-4d72933bc66b"
+          alt="Ícono" class="h-12 w-14">
+        <h2 class="text-gray-800 text-xl md:text-2xl font-bold">Crear Datos del cliente
+        </h2>
+      </div>
+
+      <div class="w-full p-4 mt-4">
+        <form class="space-y-4" [formGroup]="createDataClientForm" (ngSubmit)="onSubmitcreateclient()">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Cedula *</label>
+                <input formControlName="ci" type="text"
+                  class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                  placeholder="Ingrese el nombre" maxlength="50" />
+                  @if(createDataClientForm.get('ci')?.invalid && createDataClientForm.get('ci')?.touched){
+                    <div>
+                      @if(createDataClientForm.get('ci')?.errors?.['required']){
+                      <div><small class="text-red-600">Cédula requerida</small></div>
+                      }
+                      @if(createDataClientForm.get('ci')?.errors?.['cedulaInvalida']){
+                      <div><small class="text-red-600">Cédula inválida</small></div>
+                      }
+                    </div>
+                    }
+              </div>
+              
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">📞 Teléfono *</label>
+                <input formControlName="telephone" type="text"
+                  class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500"
+                  placeholder="Ingrese el N° de Teléfono" maxlength="50" />
+                  @if(createDataClientForm.get('telephone')?.invalid && createDataClientForm.get('telephone')?.touched){
+                    <div>
+                      @if(createDataClientForm.get('telephone')?.errors?.['required']){
+                      <div><small class="text-red-600">Teléfono requerido</small></div>
+                      }
+                    </div>
+                  }
+              </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">⚧️ Género *</label>
+                    <select formControlName="sexo"
+                      class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500">
+                      <option value="" disabled >Seleccione un género</option>
+                      <option *ngFor="let item of items" [value]="item.value">
+                        {{ item.label }}
+                      </option>
+                    </select>
+                    @if(createDataClientForm.get('sexo')?.invalid && createDataClientForm.get('sexo')?.touched){
+                    <div>
+                      @if(createDataClientForm.get('sexo')?.errors?.['required']){
+                      <div><small class="text-red-600">Género requerido</small></div>
+                      }
+                    </div>
+                  }
+                  </div>
+              <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">🎂 Cumpleaños *</label>
+                <input formControlName="birthdate" type="date"
+                  class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500" />
+                  @if(createDataClientForm.get('birthdate')?.invalid && createDataClientForm.get('birthdate')?.touched){
+                    <div>
+                      @if(createDataClientForm.get('birthdate')?.errors?.['required']){
+                      <div><small class="text-red-600">Dia de cumpleaños requerido</small></div>
+                      }
+                    </div>
+                  }
+              </div>
+             
+          </div>
+          <div class="mt-5 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ea1712"
+              fill="none">
+              <path
+                d="M5.32171 9.6829C7.73539 5.41196 8.94222 3.27648 10.5983 2.72678C11.5093 2.42437 12.4907 2.42437 13.4017 2.72678C15.0578 3.27648 16.2646 5.41196 18.6783 9.6829C21.092 13.9538 22.2988 16.0893 21.9368 17.8293C21.7376 18.7866 21.2469 19.6548 20.535 20.3097C19.241 21.5 16.8274 21.5 12 21.5C7.17265 21.5 4.75897 21.5 3.46496 20.3097C2.75308 19.6548 2.26239 18.7866 2.06322 17.8293C1.70119 16.0893 2.90803 13.9538 5.32171 9.6829Z"
+                stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <span class="ml-2 text-red-700">Todos los campos marcados con * son obligatorios.</span>
+          </div>
+
+          <!-- Botón e Guardar -->
+          <div class="flex justify-center">
+            <button type="submit"
+              class="bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105">
+              Guardar
+            </button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+}
+
+ @if (modalCreateDireccion) {
+   <section class="modal fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">
+       <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-4 sm:px-8">
+         <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
+           <!-- Botón cerrar -->
+           <button
+             (click)="closeModalDireccion()"
+             class="absolute top-3 right-3 bg-gray-300 text-gray-700 w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition"
+           >
+             &times;
+           </button>
+     
+           <!-- Título + ícono -->
+           <div class="flex items-center justify-center gap-4 text-center mb-6">
+             <img
+               src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbndoZzEzemx0NGxvYnVzeGpodGxnaDh0OW5ob3ZkeWszbzJ6aGtsdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/S7JlIq8ccjl3vg3ykH/giphy.gif"
+               alt="Ícono"
+               class="h-12 w-14"
+             />
+             <h2 class="text-gray-800 text-2xl font-bold">
+               Registrar Dirección
+             </h2>
+           </div>
+     
+           <!-- Formulario -->
+           <form
+             class="grid grid-cols-1 md:grid-cols-2 gap-6"
+             [formGroup]="addressForm"
+             (ngSubmit)="onSubmitdireccion()"
+           >
+             <!-- Nombre -->
+             <div class="col-span-1">
+               <label class="block text-sm font-semibold text-gray-700 mb-1">Calle Principal*</label>
+               <input formControlName="callePrincipal" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                 [ngClass]="{
+                   'border-gray-300 focus:ring-orange-500': !addressForm.get('callePrincipal')?.invalid || !addressForm.get('callePrincipal')?.touched,
+                   'border-red-500 focus:ring-red-500': addressForm.get('callePrincipal')?.invalid && addressForm.get('callePrincipal')?.touched
+                 }" placeholder="Ingrese la calle principal" maxlength="50" />
+               @if (addressForm.get('callePrincipal')?.invalid && addressForm.get('callePrincipal')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('callePrincipal')?.errors?.['required']">Calle principal Requerida</span>
+                   <span *ngIf="addressForm.get('callePrincipal')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+             </div>
+
+             <div class="col-span-1">
+               <label class="block text-sm font-semibold text-gray-700 mb-1">Calle Secundaria*</label>
+               <input formControlName="calleSecundaria" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                 [ngClass]="{
+                   'border-gray-300 focus:ring-orange-500': !addressForm.get('calleSecundaria')?.invalid || !addressForm.get('calleSecundaria')?.touched,
+                   'border-red-500 focus:ring-red-500': addressForm.get('calleSecundaria')?.invalid && addressForm.get('calleSecundaria')?.touched
+                 }" placeholder="Ingrese la calle secundaria" maxlength="50" />
+               @if (addressForm.get('calleSecundaria')?.invalid && addressForm.get('calleSecundaria')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('calleSecundaria')?.errors?.['required']">Calle secundaria Requerida</span>
+                   <span *ngIf="addressForm.get('calleSecundaria')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+             </div>
+
+             <div class="col-span-1">
+               <label class="block text-sm font-semibold text-gray-700 mb-1">Referencia de la calle*</label>
+               <input formControlName="referencia" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                 [ngClass]="{
+                   'border-gray-300 focus:ring-orange-500': !addressForm.get('referencia')?.invalid || !addressForm.get('referencia')?.touched,
+                   'border-red-500 focus:ring-red-500': addressForm.get('referencia')?.invalid && addressForm.get('referencia')?.touched
+                 }" placeholder="Ingrese la referencia" maxlength="50" />
+               @if (addressForm.get('referencia')?.invalid && addressForm.get('referencia')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('referencia')?.errors?.['required']">Referencia de calle obligatoria.</span>
+                   <span *ngIf="addressForm.get('referencia')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+             </div>
+             
+             <div class="col-span-1">
+               <label class="block text-sm font-semibold text-gray-700 mb-1">Numero de Casa*</label>
+               <input formControlName="numero" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                 [ngClass]="{
+                   'border-gray-300 focus:ring-orange-500': !addressForm.get('numero')?.invalid || !addressForm.get('numero')?.touched,
+                   'border-red-500 focus:ring-red-500': addressForm.get('numero')?.invalid && addressForm.get('numero')?.touched
+                 }" placeholder="Ingrese el nombre" maxlength="50" />
+               @if (addressForm.get('numero')?.invalid && addressForm.get('numero')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('numero')?.errors?.['required']">Numero de casa es obligatorio.</span>
+                   <span *ngIf="addressForm.get('numero')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+             </div>
+             <!-- Codigo Postal -->
+             <div class="col-span-1">
+               <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Código Postal *</label>
+               <input formControlName="codigoPostal" type="text"   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                 placeholder="Ingrese el codigo postal" [ngClass]="{
+                   'border-gray-300 focus:ring-orange-500': !addressForm.get('codigoPostal')?.invalid || !addressForm.get('codigoPostal')?.touched,
+                   'border-red-500 focus:ring-red-500': addressForm.get('codigoPostal')?.invalid && addressForm.get('codigoPostal')?.touched
+                 }" />
+                 @if (addressForm.get('codigoPostal')?.invalid && addressForm.get('codigoPostal')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('codigoPostal')?.errors?.['required']">El código postal es obligatorio.</span>
+                   <span *ngIf="addressForm.get('codigoPostal')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+             </div>
+
+<!-- País -->
+<div class="col-span-1">
+  <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 País</label>
+  <select formControlName="pais" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" (change)="loadProvinces()">
+    <option value="">Seleccione país</option>
+    <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+  </select>
+  @if (addressForm.get('pais')?.invalid && addressForm.get('pais')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('pais')?.errors?.['required']">El país es obligatorio.</span>
+                   <span *ngIf="addressForm.get('pais')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+</div>
+
+<!-- Provincia -->
+<div class="col-span-1">
+  <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Provincia</label>
+  <select formControlName="estado" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" (change)="loadCities()">
+    <option value="">Seleccione provincia</option>
+    <option *ngFor="let province of provinces" [value]="province">
+      {{ province.replace('_', ' ') }}
+    </option>
+  </select>
+  @if (addressForm.get('estado')?.invalid && addressForm.get('estado')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('estado')?.errors?.['required']">Provincia es obligatorio.</span>
+                   <span *ngIf="addressForm.get('estado')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+</div>
+
+<!-- Ciudad -->
+<div class="col-span-1">
+  <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Ciudad</label>
+  <select formControlName="ciudad" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+    <option value="">Seleccione ciudad</option>
+    <option *ngFor="let city of cities" [value]="city">
+      {{ city }}
+    </option>
+  </select>
+  @if (addressForm.get('ciudad')?.invalid && addressForm.get('ciudad')?.touched) {
+                 <div class="text-sm text-red-600 mt-1">
+                   <span *ngIf="addressForm.get('ciudad')?.errors?.['required']">Ciudad es obligatorio.</span>
+                   <span *ngIf="addressForm.get('ciudad')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                 </div>
+               }
+</div>
+
+<div class="col-span-1">
+  <div class="flex items-center pt-3"><input type="checkbox" formControlName="activo" class="w-4 h-4 text-black bg-gray-300 border-none rounded-md focus:ring-transparent"><label for="safeAdress" class="block ml-2 text-sm text-gray-900">Save as default address</label></div>
+</div>       
+             <!-- Botón -->
+             <div class="col-span-2 text-center">
+               <button type="submit"
+                 class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200">
+                 Guardar Categoría
+               </button>
+             </div>
+           </form>
+         </div>
+       </div>
+     </section>
+     
+}

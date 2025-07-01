@@ -1,78 +1,113 @@
-<section class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+<section class="p-8 bg-gradient-to-tr from-[#f9fafb] to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
   <!-- Encabezado -->
-  <header class="mb-10 text-center">
-    <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white">
-      Panel de Administración TCG
+  <header class="mb-14 text-center">
+    <h1 class="text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+      📊 Panel Administrativo <span class="text-blue-600">TCG</span>
     </h1>
-    <p class="text-gray-500 dark:text-gray-300 text-lg mt-2">
-      Administra productos, pedidos y usuarios de forma eficiente
+    <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
+      Visualiza estadísticas mientras gestiona tu tienda de manera agíl.
     </p>
   </header>
 
-  <!-- Métricas rápidas -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="ventas">
-      <div class="flex items-center justify-between mb-2">
-        <h2 id="ventas" class="text-sm font-medium text-gray-500 dark:text-gray-300">Ventas Hoy</h2>
-        <span class="text-green-600 dark:text-green-400 text-lg font-semibold">$120.00</span>
+  <!-- Métricas rápidas con íconos -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Ventas Hoy</p>
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">$120.00</h3>
+        </div>
       </div>
-      <progress max="100" value="80" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="pedidos">
-      <div class="flex items-center justify-between mb-2">
-        <h2 id="pedidos" class="text-sm font-medium text-gray-500 dark:text-gray-300">Pedidos Pendientes</h2>
-        <span class="text-yellow-600 dark:text-yellow-400 text-lg font-semibold">5</span>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-yellow-400">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
+          <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 10h11M9 21V3M16 13l5 5m0 0l-5 5m5-5H9" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Pedidos Pendientes</p>
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">5</h3>
+        </div>
       </div>
-      <progress max="10" value="5" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="stock">
-      <div class="flex items-center justify-between mb-2">
-        <h2 id="stock" class="text-sm font-medium text-gray-500 dark:text-gray-300">Stock Bajo</h2>
-        <span class="text-red-600 dark:text-red-400 text-lg font-semibold">8</span>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-red-100 dark:bg-red-900 rounded-full">
+          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 17v-6h13v6m-7 4V9m0 0L5 9m0 0V4m0 0L20 4" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Stock Bajo</p>
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">8</h3>
+        </div>
       </div>
-      <progress max="20" value="8" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition" role="region" aria-labelledby="usuarios">
-      <div class="flex items-center justify-between mb-2">
-        <h2 id="usuarios" class="text-sm font-medium text-gray-500 dark:text-gray-300">Usuarios Registrados</h2>
-        <span class="text-blue-600 dark:text-blue-400 text-lg font-semibold">123</span>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-blue-500">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 0H5a4 4 0 00-4 4v2h5m3-10a4 4 0 100-8 4 4 0 000 8z" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Usuarios</p>
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">123</h3>
+        </div>
       </div>
-      <progress max="200" value="123" class="w-full h-2 rounded bg-gray-200 dark:bg-gray-700"></progress>
     </div>
   </div>
 
-  <!-- Enlaces rápidos -->
+  <!-- Accesos rápidos más modernos -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-productos">
-      <h3 id="gestionar-productos" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Productos</h3>
-      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        Agrega, edita o elimina cartas de tu catálogo.
+    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Productos</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        Añade, edita o elimina productos de tu catálogo con facilidad.
       </p>
-      <a routerLink="/admin/productos" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
-        Ir a Productos
+      <a routerLink="/admin/productos"
+         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
+        📦 Ir a Productos
       </a>
     </article>
 
-    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-pedidos">
-      <h3 id="gestionar-pedidos" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Pedidos</h3>
-      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        Revisa y actualiza los estados de los pedidos.
+    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Pedidos</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        Supervisa y actualiza el estado de los pedidos fácilmente.
       </p>
-      <a routerLink="/admin/pedidos" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
-        Ir a Pedidos
+      <a routerLink="/admin/pedidos"
+         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
+        📬 Ir a Pedidos
       </a>
     </article>
 
-    <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-lg transition" role="region" aria-labelledby="gestionar-usuarios">
-      <h3 id="gestionar-usuarios" class="text-xl font-bold text-gray-700 dark:text-white mb-2">Usuarios</h3>
-      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        Gestiona cuentas, roles y accesos.
+    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Usuarios</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+        Administra cuentas de clientes y personal de la tienda.
       </p>
-      <a routerLink="/admin/usuarios" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline focus:ring-2 focus:ring-blue-400">
-        Ir a Usuarios
+      <a routerLink="/admin/usuarios"
+         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
+        👥 Ir a Usuarios
       </a>
     </article>
   </div>

@@ -119,46 +119,51 @@ export class SignupComponent implements OnInit {
   }
   
   async onSubmit() {
-    if (this.register.valid && this.imageFile) {
-      try {
-        const formData = new FormData();
-        const { confirmPassword, ...formValues } = this.register.value;
-  
-        Object.keys(formValues).forEach((key) => {
-          formData.append(key, formValues[key]);
-        });
-  
-        if (this.imageFile) {
-          formData.append('image', this.imageFile);
-        }
-  
-        await this.authService.signup(formData).subscribe({
-          next: () => {
-            this.toastr.success('Usuario registrado con éxito', 'Éxito', {
-              timeOut: 3000,
-              positionClass: 'toast-top-right',
-            });
-            this.router.navigate(['/auth/login']);
-          },
-          error: (error) => {
-            this.toastr.error(error.error.message, 'Error', {
-              timeOut: 3000,
-              positionClass: 'toast-top-right',
-            });
-          },
-        });
-      } catch (error: any) {}
-    } else {
-      this.toastr.error('Por favor completa todos los campos.', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-right',
-      });
-    }
+  // Primero validamos el formulario
+  if (!this.register.valid) {
+    this.toastr.error('Por favor completa todos los campos del formulario.', 'Formulario incompleto', {
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+    });
+    return;
   }
-  
-  
-  
 
- 
-  
+  // Luego verificamos si hay imagen
+  if (!this.imageFile) {
+    this.toastr.error('Por favor selecciona una imagen.', 'Imagen requerida', {
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+    });
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    const { confirmPassword, ...formValues } = this.register.value;
+
+    Object.keys(formValues).forEach((key) => {
+      formData.append(key, formValues[key]);
+    });
+
+    formData.append('image', this.imageFile);
+
+    await this.authService.signup(formData).subscribe({
+      next: () => {
+        this.toastr.success('Usuario registrado con éxito', 'Éxito', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+        });
+        this.router.navigate(['/auth/login']);
+      },
+      error: (error) => {
+        this.toastr.error(error.error.message, 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-right',
+        });
+      },
+    });
+  } catch (error: any) {
+    console.error('Error en el registro:', error);
+  }
+} 
 }

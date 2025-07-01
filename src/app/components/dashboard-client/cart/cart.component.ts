@@ -9,26 +9,36 @@ import { ToastrService } from 'ngx-toastr';
 import { selectCart } from '../../../core/store/cart/cart.selectors';
 import { Store } from '@ngrx/store';
 import { addToCart, reduceCartItem, removeCartItem } from '../../../core/store/cart/cart.actions';
-import { selectRole } from '../../../core/store/auth/auth.selectors';
-import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { verificarCedula } from '../../../utils/validators/cedula-validator.validator';
+import { Locations, LocationData } from '../client/address/locations';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CartItemComponent, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CartItemComponent, CommonModule, RouterLink],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
 
-  //getaddress = inject(UserStateService).getAddress()
+  private fb = inject(FormBuilder);
   userService = inject(UserService);
   toastrService = inject(ToastrService);
   store = inject(Store);
   cartData$ = this.store.select(selectCart);
+  modalCreateDataClient = false;
+  modalCreateDireccion = false;
+  createDataClientForm!: FormGroup;
+  addressForm!:FormGroup;
   cartService = inject(CartService);
+
+  locationData: LocationData = Locations;
+    countries: string[] = Object.keys(this.locationData);
+    provinces: string[] = [];
+    cities: string[] = [];
   addressData: any[] = [];
   addressLoaded = false;
   data$: any;
@@ -37,6 +47,13 @@ export class CartComponent {
   // Variables booleanas para el template (evitar llamadas repetidas)
   completePersonalData = false;
   anyAddress = false;
+
+  items = [
+  { label: "Masculino", value: "M" },
+  { label: "Femenino", value: "F" },
+];
+ 
+
   constructor(){
 
     this.cartData$.subscribe(data => {
@@ -45,7 +62,15 @@ export class CartComponent {
     });
     this.getAddress();
     this.getUserData();
+    
+    
   }
+
+  validateCedula(control: AbstractControl): { [key: string]: any } | null {
+  const cedula = control.value;
+  const isValid = verificarCedula(cedula);
+  return isValid ? null : { 'cedulaInvalida': true };
+}
 
   getAddress(){
     this.userService.getaddress().subscribe(
@@ -70,10 +95,11 @@ export class CartComponent {
   }
 
   getUserData(){
+    
     this.userService.verifydataUser().subscribe(
       {
         next:(data:any)=>{
-          console.log(data)
+          console.log("Datos del cliente", data)
           this.userData$ = data;
           this.completePersonalData = !!(data?.ci && data?.birthdate && data?.telephone);
         } ,
@@ -194,6 +220,131 @@ hasAnyAddress(): boolean {
         }
       }
     )
+  }
+
+  mostrarModal(){
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    
+    this.createDataClientForm = this.fb.group({
+        ci:['', [Validators.required,this.validateCedula.bind(this)]],
+        birthdate:['', [Validators.required]],
+        telephone:['', [Validators.required]],
+        sexo:['', [Validators.required]],
+        userId:[userId],
+        });
+
+        this.modalCreateDataClient = !this.modalCreateDataClient
+  }
+
+  cerrarModal(){
+    this.modalCreateDataClient = !this.modalCreateDataClient
+  }
+
+  onSubmitcreateclient(){
+    if (this.createDataClientForm.invalid) {
+  this.createDataClientForm.markAllAsTouched(); // <- Esto es clave
+  return;
+}
+// Obtener los valores del formulario
+  const formValues = { ...this.createDataClientForm.value };
+
+  // Convertir la fecha de nacimiento a ISO 8601 si existe
+  if (formValues.birthdate) {
+    // Asegurarse que es una instancia Date, si es string convertirla primero
+    const date = new Date(formValues.birthdate);
+    formValues.birthdate = date.toISOString(); // ← Aquí se convierte a ISO 8601
+  }
+
+  this.userService.createDataUser(formValues).subscribe({
+    next:(data:unknown|any)=>{
+      this.toastrService.success('Datos guardados corerctamente');
+      window.location.reload();
+    },
+    error:(error:unknown|any)=>{
+      this.toastrService.error('Error al guardar los datos')
+    }
+  })
+  }
+  
+  mostrarModaldireccion(){
+    this.modalCreateDireccion = !this.modalCreateDireccion
+    this.addressForm = this.fb.group({
+      callePrincipal:['', Validators.required],
+      calleSecundaria:['',Validators.required],
+      referencia:['',Validators.required],
+      numero:['', Validators.required],
+      codigoPostal:['',Validators.required],
+      ciudad: [{ value: '', disabled: true }, Validators.required],
+  estado: [{ value: '', disabled: true }, Validators.required],
+      pais:['',Validators.required],
+      activo:[false,Validators.required]
+    })
+    this.locationData = Locations;
+      this.countries = Object.keys(this.locationData);
+  }
+
+  closeModalDireccion(){
+    this.modalCreateDireccion = !this.modalCreateDireccion
+  }
+
+  loadProvinces(): void {
+    const selectedCountry = this.addressForm.get('pais')?.value;
+    if (selectedCountry && this.locationData[selectedCountry]) {
+      this.provinces = Object.keys(this.locationData[selectedCountry]);
+      this.addressForm.get('estado')?.reset();
+      this.addressForm.get('estado')?.enable(); // ✅ Habilitar provincia
+      this.cities = [];
+      this.addressForm.get('ciudad')?.reset();
+      this.addressForm.get('ciudad')?.disable(); // ❌ Asegurar ciudad deshabilitada
+    } else {
+      this.provinces = [];
+      this.addressForm.get('estado')?.disable();
+      this.cities = [];
+      this.addressForm.get('ciudad')?.disable();
+    }
+  }
+
+  loadCities(): void {
+    const selectedCountry = this.addressForm.get('pais')?.value;
+    const selectedProvince = this.addressForm.get('estado')?.value;
+  
+    if (
+      selectedCountry &&
+      selectedProvince &&
+      this.locationData[selectedCountry]?.[selectedProvince]
+    ) {
+      this.cities = this.locationData[selectedCountry][selectedProvince];
+      this.addressForm.get('ciudad')?.reset();
+      this.addressForm.get('ciudad')?.enable(); // ✅ Habilitar ciudad
+    } else {
+      this.cities = [];
+      this.addressForm.get('ciudad')?.disable(); // ❌ Deshabilitar si no hay datos válidos
+    }
+  }
+
+  onSubmitdireccion(){
+    if (this.addressForm.invalid) {
+  this.addressForm.markAllAsTouched(); // <- Esto es clave
+  return;
+}
+
+  this.userService.createAddress(this.addressForm.value).subscribe({
+    next: (data) => {
+        console.log(data)
+        this.modalCreateDireccion = false;
+        this.addressForm.reset();
+        this.provinces = [];
+        this.cities = [];
+        this.toastrService.success('Dirección creada correctamente', 'Éxito');
+        window.location.reload()
+      },
+      error: (error) => {
+   
+        this.toastrService.error('Error al crear la dirección')
+      }
+  })
+
   }
 }
 

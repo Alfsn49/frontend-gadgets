@@ -174,7 +174,8 @@ loadCitiesEdit(): void {
         this.getAddress(); // Actualiza la lista de direcciones después de crear una nueva
       },
       error: (error) => {
-        console.error('Error al crear la dirección:', error);
+      
+        this.toastr.error('Error al crear la dirección')
       }
     })
     

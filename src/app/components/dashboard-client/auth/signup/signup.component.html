@@ -15,21 +15,50 @@
               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
               <input type="text" id="name" formControlName="name" placeholder="Tu nombre"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+                @if(register.get('name')?.invalid && register.get('name')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(register.get('name')?.errors?.['required']){
+                      <span>El nombre es obligatorio</span>
+                    }
+                  </div>
+                }
             </div>
             <div>
               <label for="lastname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
               <input type="text" id="lastname" formControlName="lastname" placeholder="Tu apellido"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                @if(register.get('lastname')?.invalid && register.get('lastname')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(register.get('lastname')?.errors?.['required']){
+                      <span>El apellido es obligatorio</span>
+                    }
+                  </div>
+                }
             </div>
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
               <input type="email" id="email" formControlName="email" placeholder="correo@ejemplo.com"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                @if(register.get('email')?.invalid && register.get('email')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(register.get('email')?.errors?.['required']){
+                      <span>El correo electronico es obligatorio</span>
+                    }
+                  </div>
+                }
             </div>
             <div>
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
               <input type="password" id="password" formControlName="password" placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                @if(register.get('password')?.invalid && register.get('password')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(register.get('password')?.errors?.['required']){
+                      <span>La contraseña es obligatorio</span>
+                    }
+                  </div>
+                }
             </div>
             <div>
               <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar contraseña</label>
@@ -51,7 +80,7 @@
             </div>
           </div>
         
-          <div class="flex items-start">
+          <!-- <div class="flex items-start">
             <div class="flex items-center h-5">
               <input id="terms" type="checkbox" formControlName="termsAccepted"
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600">
@@ -61,7 +90,7 @@
                 Acepto los <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Términos y Condiciones</a>
               </label>
             </div>
-          </div>
+          </div> -->
         
           <button type="submit"
             class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
