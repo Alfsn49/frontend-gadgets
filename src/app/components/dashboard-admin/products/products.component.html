@@ -406,7 +406,7 @@
                 class="h-12 w-14"
               />
               <h2 class="text-gray-800 text-2xl font-bold">
-                Registrar Categoría de Producto
+                Registrar Productos
               </h2>
             </div>
       
@@ -419,7 +419,7 @@
               <!-- Nombre -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Nombre *</label>
-                <input formControlName="name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #nameInput (keydown.enter)="handleEnterOrSubmitCreate('nameInput',subCategoryInput)" formControlName="name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   [ngClass]="{
                     'border-gray-300 focus:ring-orange-500': !createForm.get('name')?.invalid || !createForm.get('name')?.touched,
                     'border-red-500 focus:ring-red-500': createForm.get('name')?.invalid && createForm.get('name')?.touched
@@ -427,7 +427,7 @@
                 @if (createForm.get('name')?.invalid && createForm.get('name')?.touched) {
                   <div class="text-sm text-red-600 mt-1">
                     <span *ngIf="createForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
-                    <span *ngIf="createForm.get('name')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                    <span *ngIf="createForm.get('name')?.errors?.['maxlength']">Máximo 100 caracteres permitidos.</span>
                   </div>
                 }
               </div>
@@ -435,31 +435,52 @@
               <!-- Subcategoría -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 SubCategoría *</label>
-                <select formControlName="subCategoryId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                <select #subCategoryInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('subCategoryInput',brandInput)"
+                formControlName="subCategoryId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   (change)="onSelectSubCategory($event)">
                   <option value="" disabled selected>Seleccione una sub categoría</option>
                   <option *ngFor="let subcategory of subCategories" [value]="subcategory.id">{{ subcategory.name }}</option>
                 </select>
+                @if (createForm.get('subCategoryId')?.invalid && createForm.get('subCategoryId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('subCategoryId')?.errors?.['required']">La categoria es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Marca -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Marca *</label>
-                <select formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                <select #brandInput  
+                  (keydown.enter)="handleEnterOrSubmitCreate('brandInput',setInput)"
+                formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   (change)="onSelectBrand($event)">
                   <option value="" disabled selected>Seleccione una marca</option>
                   <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
                 </select>
+                @if (createForm.get('brandId')?.invalid && createForm.get('brandId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('brandId')?.errors?.['required']">La marca es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Set -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Set *</label>
-                <select formControlName="setId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                <select #setInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('setInput',fileInput)"
+                formControlName="setId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" 
                   (change)="onSelectSet($event)" >
                   <option value="" disabled selected>Seleccione un Set</option>
                   <option *ngFor="let set of sets" [value]="set.id">{{ set.name }}</option>
                 </select>
+                @if (createForm.get('setId')?.invalid && createForm.get('setId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('setId')?.errors?.['required']">El set es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Imagen -->
@@ -468,45 +489,84 @@
                 <div class="w-full p-4 border-2 border-dashed border-gray-400 text-center cursor-pointer relative"
                   (dragover)="onDragOver($event)" (drop)="onDrop($event)" (click)="fileInput.click()"
                   [class.border-cyan-500]="isDragging" [class.bg-gray-100]="isDragging">
-                  <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden />
+                  <input #fileInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('fileInput',priceInput)"
+                  type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg" hidden />
                   <p *ngIf="!previewUrl" class="text-gray-600">Arrastra una imagen aquí o haz clic para seleccionar</p>
-                  <img *ngIf="previewUrl" [src]="previewUrl" alt="Previsualización" class="max-w-xs mx-auto mt-4 rounded-lg" />
+                  <img #fileInput *ngIf="previewUrl" [src]="previewUrl" alt="Previsualización" class="max-w-xs mx-auto mt-4 rounded-lg" />
                 </div>
+
               </div>
       
               <!-- Precio -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Precio *</label>
-                <input formControlName="price" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #priceInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('priceInput',stockInput)"
+                formControlName="price" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Ingrese el precio" />
+                @if (createForm.get('price')?.invalid && createForm.get('price')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('price')?.errors?.['required']">El precio es obligatorio.</span>
+                    <span *ngIf="createForm.get('price')?.errors?.['min']">El precio debe ser mayor a 0.</span>
+
+                    <span *ngIf="createForm.get('price')?.errors?.['pattern']">El precio debe ser un número positivo.</span>
+                  </div>
+                  }
               </div>
       
               <!-- Stock -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Stock *</label>
-                <input formControlName="stock" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #stockInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('stockInput',cardCodeInput)" 
+                formControlName="stock" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Cantidad en stock" />
+                @if (createForm.get('stock')?.invalid && (createForm.get('stock')?.touched || createForm.get('stock')?.dirty)) {
+  <div class="text-sm text-red-600 mt-1">
+    <span *ngIf="createForm.get('stock')?.errors?.['required']">El stock es obligatorio.</span>
+    <span *ngIf="createForm.get('stock')?.errors?.['min']">El stock debe ser mayor a 0.</span>
+    <span *ngIf="createForm.get('stock')?.errors?.['pattern']">El stock debe tener numeros enteros</span>
+  </div>
+    
+}
               </div>
       
               <!-- Código -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Código de la carta *</label>
-                <input formControlName="cardCode" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #cardCodeInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('cardCodeInput',descriptionInput)"
+                formControlName="cardCode" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Código" />
+                @if (createForm.get('cardCode')?.invalid && createForm.get('cardCode')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('cardCode')?.errors?.['required']">El código es obligatorio.</span>
+                    </div>
+                  }
               </div>
       
               <!-- Descripción -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Descripción *</label>
-                <textarea formControlName="description" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <textarea #descriptionInput 
+                  (keydown.enter)="handleEnterOrSubmitCreate('descriptionInput',submitInput)"
+                formControlName="description" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Descripción del producto"></textarea>
+                @if (createForm.get('description')?.invalid && createForm.get('description')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('description')?.errors?.['required']">La descripción es obligatoria.</span>
+                  </div>
+                }
               </div>
       
               <!-- Botón -->
               <div class="col-span-2 text-center">
-                <button type="submit"
-                  class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200">
-                  Guardar Categoría
+                <button #submitInput
+                [disabled]="createForm.invalid || isSubmitting"
+                type="submit"
+                  class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {{ isSubmitting ? 'Registrando...' : 'Registrar Producto' }}
                 </button>
               </div>
             </form>
@@ -536,7 +596,7 @@
                 class="h-12 w-14"
               />
               <h2 class="text-gray-800 text-2xl font-bold">
-                Editar de Categoría de Producto
+                Editar de Productos
               </h2>
             </div>
       
@@ -549,15 +609,17 @@
               <!-- Nombre -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Nombre *</label>
-                <input formControlName="name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #nameInput 
+                  (keydown.enter)="handleEnterOrSubmitEdit('nameInput',subCategoryInput)"
+                formControlName="name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   [ngClass]="{
                     'border-gray-300 focus:ring-orange-500': !editForm.get('name')?.invalid || !editForm.get('name')?.touched,
                     'border-red-500 focus:ring-red-500': editForm.get('name')?.invalid && editForm.get('name')?.touched
-                  }" placeholder="Ingrese el nombre" maxlength="50" />
+                  }" placeholder="Ingrese el nombre" maxlength="100" />
                 @if (editForm.get('name')?.invalid && editForm.get('name')?.touched) {
                   <div class="text-sm text-red-600 mt-1">
                     <span *ngIf="createForm.get('name')?.errors?.['required']">El nombre es obligatorio.</span>
-                    <span *ngIf="createForm.get('name')?.errors?.['maxlength']">Máximo 50 caracteres permitidos.</span>
+                    <span *ngIf="createForm.get('name')?.errors?.['maxlength']">Máximo 100 caracteres permitidos.</span>
                   </div>
                 }
               </div>
@@ -565,32 +627,47 @@
               <!-- Subcategoría -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 SubCategoría *</label>
-                <select formControlName="subCategoryId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                <select #subCategoryInput formControlName="subCategoryId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   (change)="onSelectSubCategory($event)">
                   <option value="" disabled selected>Seleccione una sub categoría</option>
                   <option *ngFor="let subcategory of subCategories" [value]="subcategory.id">{{ subcategory.name }}</option>
                 </select>
+                @if (editForm.get('subCategoryId')?.invalid && editForm.get('subCategoryId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('subCategoryId')?.errors?.['required']">La categoria es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Marca -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Marca *</label>
-                <select formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                <select #brandInput formControlName="brandId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   (change)="onSelectBrand($event)">
                   <option value="" disabled selected>Seleccione una marca</option>
                   <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
                 </select>
+                @if (editForm.get('brandId')?.invalid && editForm.get('brandId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('brandId')?.errors?.['required']">La marca es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Set -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Set *</label>
-                <select formControlName="setId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                <select #setInput formControlName="setId" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                 (change)="onSelectSet($event)" 
                   >
                   <option value="" disabled>Seleccione un Set</option>
                   <option *ngFor="let set of sets" [value]="set.id">{{ set.name }}</option>
                 </select>
+                @if (editForm.get('setId')?.invalid && editForm.get('setId')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="createForm.get('setId')?.errors?.['required']">El set es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Imagen -->
@@ -608,36 +685,63 @@
               <!-- Precio -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Precio *</label>
-                <input formControlName="price" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #priceInput formControlName="price" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Ingrese el precio" />
+                  @if (editForm.get('price')?.invalid && editForm.get('price')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="editForm.get('price')?.errors?.['required']">El precio es obligatorio.</span>
+                    <span *ngIf="editForm.get('price')?.errors?.['min']">El precio debe ser mayor a 0.</span>
+
+                    <span *ngIf="editForm.get('price')?.errors?.['pattern']">El precio debe ser un número positivo.</span>
+                  </div>
+                  }
               </div>
       
               <!-- Stock -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Stock *</label>
-                <input formControlName="stock" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #stockInput formControlName="stock" type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Cantidad en stock" />
+                  @if (editForm.get('stock')?.invalid && (editForm.get('stock')?.touched || editForm.get('stock')?.dirty)) {
+  <div class="text-sm text-red-600 mt-1">
+    <span *ngIf="editForm.get('stock')?.errors?.['required']">El stock es obligatorio.</span>
+    <span *ngIf="editForm.get('stock')?.errors?.['min']">El stock debe ser mayor a 0.</span>
+    <span *ngIf="editForm.get('stock')?.errors?.['pattern']">El stock debe tener numeros enteros</span>
+  </div>
+}
               </div>
-      
               <!-- Código -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Código de la carta *</label>
-                <input formControlName="cardCode" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <input #cardInput formControlName="cardCode" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Código" />
+                @if (editForm.get('cardCode')?.invalid && editForm.get('cardCode')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="editForm.get('cardCode')?.errors?.['required']">El código es obligatorio.</span>
+                  </div>
+                }
               </div>
       
               <!-- Descripción -->
               <div class="col-span-1">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">🧑‍💼 Descripción *</label>
-                <textarea formControlName="description" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
+                <textarea #descriptionInput formControlName="description" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:outline-none transition duration-200"
                   placeholder="Descripción del producto"></textarea>
+
+                @if (editForm.get('description')?.invalid && editForm.get('description')?.touched) {
+                  <div class="text-sm text-red-600 mt-1">
+                    <span *ngIf="editForm.get('description')?.errors?.['required']">La descripción es obligatoria.</span>
+                  </div>
+                }
               </div>
       
               <!-- Botón -->
               <div class="col-span-2 text-center">
-                <button type="submit"
-                  class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200">
-                  Guardar Categoría
+                <button #submitInput 
+                [disabled]="editForm.invalid || isSubmitting"
+                type="submit"
+                  class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {{ isSubmitting ? 'Actualizando...' : 'Actualizar Producto' }}
                 </button>
               </div>
             </form>
@@ -692,13 +796,13 @@ class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-5
   </div>
   <h2 class="text-lg font-bold text-red-600 text-center mt-2">Confirmar Eliminación</h2>
   <p class="text-sm text-black mt-3 text-center">
-    ¿Realmente deseas proceder con la eliminación de esta categoria <br><br>
+    ¿Realmente deseas proceder con la eliminación de este producto <br><br>
     <span class="text-black font-semibold">Los datos asociados se perderán.</span>
   </p>
   <div class="flex flex-col space-y-2 mt-5">
-    <button (click)="onSubmitDelete()"
-      class="bg-red-600 text-white font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-red-700">
-      Confirmar Eliminación
+    <button [disabled]="isSubmitting" (click)="onSubmitDelete()"
+      class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+      {{ isSubmitting ? 'Eliminando...' : 'Confirmar Eliminación' }}
     </button>
     <button (click)="closeModalConfirmDelete()"
       class="bg-gray-100 text-gray-700 border border-gray-300 font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-gray-200">

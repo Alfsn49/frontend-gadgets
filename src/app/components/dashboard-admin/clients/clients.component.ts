@@ -208,11 +208,16 @@ export class ClientsComponent {
   }
 
   openModalCreate() {
-
+    this.modalCreate = !this.modalCreate;
+    this.createForm.reset();
+  
   }
 
   closeModalCreate() {
-
+    this.modalCreate = !this.modalCreate;
+    this.createForm.reset();
+    this.previewUrl = null; // Limpiar la vista previa de la imagen
+    this.imageFile = null; // Limpiar el archivo de imagen
   }
 
   onSubmitCreate() {

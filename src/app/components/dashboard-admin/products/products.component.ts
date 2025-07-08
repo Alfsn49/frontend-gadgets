@@ -49,6 +49,7 @@ export class ProductsComponent {
   previewUrl: string | null = null; 
   imageFile: any = null; // Para almacenar temporalmente la imagen seleccionada
   isDragging = false;  
+  isSubmitting = false;
 
  searchText: string = '';
       timeout: any = null;
@@ -57,32 +58,33 @@ export class ProductsComponent {
 
  constructor(){
   this.createForm = this.fb.group({
-    name:[],
-    image:[],
-    cardCode:[],
-    stock:[],
-    price:[],
-    description:[],
-    subCategoryId:[],
-    brandId:[],
+    name:['', [Validators.required, Validators.maxLength(100)]],
+    image:[''],
+    cardCode:['', [Validators.required]],
+    stock:['', [Validators.required, Validators.min(1), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+    price:['', [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+(\.[0-9]{1,2})?$/)]],
+    description:['', [Validators.required]],
+    subCategoryId:['', [Validators.required]],
+    brandId:['', [Validators.required]],
     setId:[{ value: '', disabled: true }],
       
   })
 
   this.editForm = this.fb.group({
-    name:[],
+    name:['', [Validators.required, Validators.maxLength(100)]],
     image:[],
-    cardCode:[],
-    stock:[],
-    price:[],
-    description:[],
-    subCategoryId:[],
-    brandId:[],
-    setId:[],
+    cardCode:['', [Validators.required]],
+    stock:['', [Validators.required, Validators.min(1), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+    price:['', [Validators.required, Validators.min(1), Validators.pattern(/^[0-9]+(\.[0-9]{1,2})?$/)]],
+    description:['', [Validators.required]],
+    subCategoryId:['', [Validators.required]],
+    brandId:['', [Validators.required]],
+    setId:['', [Validators.required]],
       
   })
   this.listProducts();
  }
+
 
  // Cuando un archivo es seleccionado desde el input
  onFileSelected(event: any): void {
@@ -225,7 +227,12 @@ onDragLeave(event: DragEvent): void {
   }
 
   onSubmitCreate() {
-    console.log(this.createForm.value);
+    console.log(this.createForm.valid);
+    if(this.createForm.invalid){
+      this.toastr.error('Formulario inválido', 'Error');
+      return;
+    }
+    this.isSubmitting = true; // Evitar múltiples envíos
     const rawValue = this.createForm.value;
     const subCategoryIdNumber = Number(rawValue.subCategoryId);
     const brandIdNumber = Number(rawValue.brandId);
@@ -244,6 +251,7 @@ onDragLeave(event: DragEvent): void {
     if (this.imageFile) {
       formData.append('image', this.imageFile); // Importante: este nombre debe coincidir con el de @UploadedFile('image')
     }
+
   
     this.productsService.createProduct(formData).subscribe({
       next: (res: any) => {
@@ -253,12 +261,33 @@ onDragLeave(event: DragEvent): void {
         this.createForm.reset();
         this.previewUrl = null;
         this.imageFile = null;
+        this.isSubmitting = false; // Permitir nuevos envíos
       },
       error: (err) => {
-        console.error(err);
+        this.isSubmitting = false; // Permitir nuevos envíos
         this.toastr.error('Error al crear el producto', 'Error');
       }
     });
+  }
+
+  handleEnterOrSubmitCreate(controlName: string, nextElement: HTMLElement) {
+    const control = this.createForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.createForm.valid) {
+          this.onSubmitCreate(); // Enviar formulario
+        } else {
+          this.createForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
   }
   
 
@@ -299,7 +328,11 @@ onDragLeave(event: DragEvent): void {
 
 
   onSubmitEdit(){
-    console.log(this.editForm.value);
+    if(!this.editForm.valid){
+      this.toastr.error('Formulario inválido', 'Error');
+      return;
+    }
+    this.isSubmitting = true; // Evitar múltiples envíos
     const formData = new FormData();
     formData.append('name', this.editForm.value.name);
     formData.append('cardCode', this.editForm.value.cardCode);
@@ -333,12 +366,33 @@ onDragLeave(event: DragEvent): void {
         this.brands = []; // Limpiar las marcas
         this.sets = []; // Limpiar los sets
         this.subCategories = []; // Limpiar las subcategorías
+        this.isSubmitting = false; // Permitir nuevos envíos
       },
       error: (err) => {
-        console.error(err);
+        this.isSubmitting = false; // Permitir nuevos envíos
         this.toastr.error('Error al actualizar el producto', 'Error');
       }
     });
+  }
+
+  handleEnterOrSubmitEdit(controlName: string, nextElement: HTMLElement) {
+    const control = this.editForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.editForm.valid) {
+          this.onSubmitEdit(); // Enviar formulario
+        } else {
+          this.editForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
   }
 
   openModalDelete(id:any){
@@ -361,17 +415,19 @@ onDragLeave(event: DragEvent): void {
   }
 
   onSubmitDelete() {
-    console.log(this.idProducts)
+    this.isSubmitting = true; // Evitar múltiples envíos
     this.productsService.deleteProducts(this.idProducts).subscribe({
       next: (res: any) => {
+        
         this.toastr.success('Producto eliminado correctamente', 'Éxito');
         this.listProducts();
         this.modalConfirmarEliminar = false; // Cerrar el modal de confirmación
         this.modalEliminar = false;
         this.idProducts = null; // Limpiar el ID del producto
+        this.isSubmitting = false; // Permitir nuevos envíos
       },
       error: (err) => {
-        console.error(err);
+        this.isSubmitting = false; // Permitir nuevos envíos
         this.toastr.error('Error al eliminar el producto', 'Error');
       }
     });
