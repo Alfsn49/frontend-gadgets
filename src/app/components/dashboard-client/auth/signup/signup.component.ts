@@ -8,6 +8,7 @@ import { Rol } from '../../../../Dto/rol.dto';
 import { CustomValidators } from '../../../../utils/validation.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import PasswordValidator from '../../../../utils/validators/password-validator.validator';
 
 @Component({
   selector: 'app-signup',
@@ -29,14 +30,15 @@ export class SignupComponent implements OnInit {
   imageUrl: string | null = null; // Para almacenar el URL de la imagen
   previewUrl: string | null = null; 
   imageFile: any = null; // Para almacenar temporalmente la imagen seleccionada
-  isDragging = false;    
+  isDragging = false;
+  isSubmitted = false; // Para controlar el estado del formulario    
   constructor(private fb: FormBuilder) {
     
     this.register = this.fb.group({
       name: ['', Validators.required],
       lastname:['',Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8), PasswordValidator.passwordStrength]],
       confirmPassword:['', Validators.required],
       rolId:["",],
       image:['']
@@ -86,6 +88,25 @@ export class SignupComponent implements OnInit {
     }
   }
 
+  handleEnterOrSubmit(controlName: string, nextElement: HTMLElement) {
+    const control = this.register.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.register.valid) {
+          this.onSubmit(); // Enviar formulario
+        } else {
+          this.register.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
+  }
   // Previsualiza la imagen
   previewImage(file: File): void {
     const reader = new FileReader();
@@ -120,6 +141,7 @@ export class SignupComponent implements OnInit {
   
   async onSubmit() {
   // Primero validamos el formulario
+  this.isSubmitted = true; // Marcar el formulario como enviado
   if (!this.register.valid) {
     this.toastr.error('Por favor completa todos los campos del formulario.', 'Formulario incompleto', {
       timeOut: 3000,
@@ -149,6 +171,7 @@ export class SignupComponent implements OnInit {
 
     await this.authService.signup(formData).subscribe({
       next: () => {
+        this.isSubmitted = false; // Marcar el formulario como enviado
         this.toastr.success('Usuario registrado con éxito', 'Éxito', {
           timeOut: 3000,
           positionClass: 'toast-top-right',
@@ -156,6 +179,7 @@ export class SignupComponent implements OnInit {
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {
+        this.isSubmitted = false; // Marcar el formulario como no enviado en caso de error
         this.toastr.error(error.error.message, 'Error', {
           timeOut: 3000,
           positionClass: 'toast-top-right',

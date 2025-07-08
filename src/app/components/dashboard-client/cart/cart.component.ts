@@ -34,6 +34,7 @@ export class CartComponent {
   createDataClientForm!: FormGroup;
   addressForm!:FormGroup;
   cartService = inject(CartService);
+  isSubmitting = false;
 
   locationData: LocationData = Locations;
     countries: string[] = Object.keys(this.locationData);
@@ -246,6 +247,8 @@ hasAnyAddress(): boolean {
   this.createDataClientForm.markAllAsTouched(); // <- Esto es clave
   return;
 }
+  // Verificar si el formulario ya está enviando
+  this.isSubmitting = true;
 // Obtener los valores del formulario
   const formValues = { ...this.createDataClientForm.value };
 
@@ -256,12 +259,16 @@ hasAnyAddress(): boolean {
     formValues.birthdate = date.toISOString(); // ← Aquí se convierte a ISO 8601
   }
 
+
+
   this.userService.createDataUser(formValues).subscribe({
     next:(data:unknown|any)=>{
+      this.isSubmitting = false; // Restablecer el estado de envío
       this.toastrService.success('Datos guardados corerctamente');
       window.location.reload();
     },
     error:(error:unknown|any)=>{
+      this.isSubmitting = false; // Restablecer el estado de envío
       this.toastrService.error('Error al guardar los datos')
     }
   })
@@ -328,7 +335,7 @@ hasAnyAddress(): boolean {
   this.addressForm.markAllAsTouched(); // <- Esto es clave
   return;
 }
-
+  this.isSubmitting = true; // Evitar envíos múltiples
   this.userService.createAddress(this.addressForm.value).subscribe({
     next: (data) => {
         console.log(data)
@@ -336,15 +343,55 @@ hasAnyAddress(): boolean {
         this.addressForm.reset();
         this.provinces = [];
         this.cities = [];
+        this.isSubmitting = false; // Restablecer el estado de envío
         this.toastrService.success('Dirección creada correctamente', 'Éxito');
         window.location.reload()
       },
       error: (error) => {
-   
+        this.isSubmitting = false; // Restablecer el estado de envío
         this.toastrService.error('Error al crear la dirección')
       }
   })
 
+  }
+  handleEnterOrSubmitDataClient(controlName: string, nextElement: HTMLElement) {
+    const control = this.createDataClientForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.createDataClientForm.valid) {
+          this.onSubmitcreateclient(); // Enviar formulario
+        } else {
+          this.createDataClientForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
+  }
+
+  handleEnterOrSubmitAddress(controlName: string, nextElement: HTMLElement) {
+    const control = this.addressForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.addressForm.valid) {
+          this.onSubmitdireccion(); // Enviar formulario
+        } else {
+          this.addressForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
   }
 }
 

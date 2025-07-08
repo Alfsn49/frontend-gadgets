@@ -25,6 +25,7 @@ export class SetComponent {
   modalEditar = false;
   modalEliminar = false;
   modalConfirmarEliminar = false;
+  isSubmitting = false;
 
   createForm: FormGroup;
   editarForm: FormGroup;
@@ -85,6 +86,7 @@ export class SetComponent {
   openModalCreate() {
     this.modalCreate = true;
     this.listBrands();
+    this.createForm.reset();
   }
 
   closeModalCreate() {
@@ -93,7 +95,9 @@ export class SetComponent {
   }
 
   onSubmitCreate(){
+    if (this.createForm.invalid || this.isSubmitting) return;
 
+    this.isSubmitting = true;
     const rawValue = this.createForm.value;
       const brandIdNumber = Number(rawValue.brandId);
 
@@ -108,9 +112,11 @@ export class SetComponent {
           this.toastr.success('Set creado con exito', 'Exito')
           this.listSets()
           this.closeModalCreate()
+          this.isSubmitting = false;
         },
         error: (err) => {
           this.toastr.error('Error al crear el set', 'Error')
+          this.isSubmitting = false;
         }
       }
     )

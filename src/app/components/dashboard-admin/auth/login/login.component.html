@@ -28,7 +28,19 @@
                                 <input formControlName="email" type="email" id="login-email"
                                     class="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
                                     placeholder="Correo electrónico" />
+
+                                 
                             </div>
+                            @if(loginFormAdmin.get('email')?.invalid && loginFormAdmin.get('email')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(loginFormAdmin.get('email')?.errors?.['required']){
+                      <span>El correo electronico es obligatorio</span>
+                    }
+                    @if(loginFormAdmin.get('email')?.errors?.['email']){
+                      <span>El correo electronico no es válido</span>
+                    }
+                  </div>
+                }
                         </div>
                         <div class="mb-4 flex flex-col pt-4">
                             <div for="password1"
@@ -37,6 +49,7 @@
                                     id="login-password"
                                     class="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
                                     placeholder="Contraseña" />
+                                    
                                 <button type="button" *ngIf="!passwordVisible" (click)="togglePasswordVisibility()"
                                     class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
@@ -66,13 +79,20 @@
                                     </svg>
                                 </button>
                             </div>
+                            @if(loginFormAdmin.get('password')?.invalid && loginFormAdmin.get('password')?.touched){
+                  <div class="text-sm text-red-600 mt-1">
+                    @if(loginFormAdmin.get('password')?.errors?.['required']){
+                      <span>La contraseña es obligatorio</span>
+                    }
+                  </div>
+                }
                         </div>
                         <a [routerLink]="['/signin/retrive-password']"
                             class="mb-6 text-center text-sm font-medium text-gray-700 md:text-left">Olvisate tu
                             contraseña?</a>
-                        <button type="submit"
+                        <button [disabled]="loginFormAdmin.invalid || loginLoading()" type="submit"
                             class="rounded-lg bg-gradient-to-l from-red-600 to-orange-600 px-4 py-2 text-center text-base font-semibold text-white transition-transform duration-300 hover:scale-105 md:w-32">
-                            Empezar
+                            {{ loginLoading() ? 'Ingresando...' : 'Ingresar' }}
                         </button>
                     </form>
                 </div>

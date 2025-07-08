@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { login, loginAdmin } from '../../../../core/store/auth/auth.actions';
 import { AuthService } from '../../../../data-access/auth/auth.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectLoading } from '../../../../core/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,10 @@ export class LoginComponent {
   passwordVisible: boolean = false;
   authService = inject(AuthService);
   store = inject(Store)
+  loginLoading = toSignal(this.store.select(selectLoading),
+  {
+    initialValue: false, 
+  })
   constructor(private fb:FormBuilder){
     this.loginFormAdmin = this.fb.group({
       email:['', [Validators.required, Validators.email]],

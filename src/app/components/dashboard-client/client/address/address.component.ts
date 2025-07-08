@@ -37,7 +37,7 @@ export class AddressComponent {
   editAddressForm: FormGroup;
   userService = inject(UserService);
   toastr = inject(ToastrService);
-
+  isSubmitted = false; // Para controlar el estado del formulario
 
   loadProvinces(): void {
     const selectedCountry = this.addressForm.get('pais')?.value;
@@ -154,6 +154,26 @@ loadCitiesEdit(): void {
     this.bandera = !this.bandera;
   }
 
+  handleEnterOrSubmitRegister(controlName: string, nextElement: HTMLElement) {
+    const control = this.addressForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.addressForm.valid) {
+          this.onSubmit(); // Enviar formulario
+        } else {
+          this.addressForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
+  }
+
   openModal(data:any){
     console.log(data)  
     this.dialog.open(EditAddressComponent,{
@@ -163,18 +183,26 @@ loadCitiesEdit(): void {
 
   onSubmit(){
     console.log(this.addressForm.value);
+    this.isSubmitted = true; // Marcar el formulario como enviado
+    if(!this.addressForm.valid) {
+      this.isSubmitted = false; // Marcar el formulario como no enviado si hay errores
+      this.toastr.error('Por favor, completa todos los campos requeridos', 'Error');
+      return;
+    }
     this.userService.createAddress(this.addressForm.value).subscribe({
       next: (data) => {
+        
         console.log(data)
         this.modalCreate = false;
         this.addressForm.reset();
         this.provinces = [];
         this.cities = [];
+        this.isSubmitted = false; // Marcar el formulario como no enviado después de enviar
         this.toastr.success('Dirección creada correctamente', 'Éxito');
         this.getAddress(); // Actualiza la lista de direcciones después de crear una nueva
       },
       error: (error) => {
-      
+        this.isSubmitted = false; // Marcar el formulario como no enviado en caso de error
         this.toastr.error('Error al crear la dirección')
       }
     })
@@ -245,6 +273,7 @@ loadCitiesEdit(): void {
 
     onSubmitEdit() {
       console.log(this.editAddressForm.value)
+      this.isSubmitted = true; // Marcar el formulario como enviado
       this.userService.editAddress(this.editAddressForm.value).subscribe(
         {
           next: (data) => {
@@ -253,15 +282,38 @@ loadCitiesEdit(): void {
             this.editAddressForm.reset();
             this.provinces = [];
             this.cities = [];
+            this.isSubmitted = false; // Marcar el formulario como no enviado después de enviar
             this.toastr.success('Dirección editada correctamente', 'Éxito');
             this.getAddress(); // Actualiza la lista de direcciones después de editar
           },
           error: (error) => {
+            this.isSubmitted = false; // Marcar el formulario como no enviado en caso de error
+            this.toastr.error('Error al editar la dirección');
             console.error('Error al editar la dirección:', error);
           }
         }
       )
     }
+
+    handleEnterOrSubmitEdit(controlName: string, nextElement: HTMLElement) {
+    const control = this.editAddressForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.addressForm.valid) {
+          this.onSubmit(); // Enviar formulario
+        } else {
+          this.addressForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
+  }
 
   openModalDelete(data:any){
     this.modalDelete = true;

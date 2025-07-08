@@ -10,6 +10,8 @@ import { login } from '../../../../core/store/auth/auth.actions';
 import { AuthState } from '../../../../core/store/auth/auth.reducer';
 import { Observable } from 'rxjs';
 import {CloudinaryModule} from '@cloudinary/ng';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectLoading } from '../../../../core/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,10 @@ export class LoginComponent implements OnInit{
   private toastr = inject(ToastrService)
   private router = inject(Router)
   private store = inject(Store)
+  loginLoading = toSignal(this.store.select(selectLoading),
+{
+  initialValue: false, 
+})
 
   img!: CloudinaryModule
   myWidget!: any;
@@ -55,49 +61,32 @@ export class LoginComponent implements OnInit{
   openWidget(){
     this.myWidget.open();
   }
+  handleEnterOrSubmit(controlName: string, nextElement: HTMLElement) {
+  const control = this.loginForm.get(controlName);
+
+  if (!control) return;
+
+  control.markAsTouched();
+
+  if (control.valid) {
+    if (nextElement.tagName.toLowerCase() === 'button') {
+      if (this.loginForm.valid) {
+        this.onSubmit(); // Enviar formulario
+      } else {
+        this.loginForm.markAllAsTouched(); // Mostrar errores
+      }
+    } else {
+      nextElement.focus(); // Enfocar el siguiente campo
+    }
+  }
+}
+
   onSubmit(){
     console.log('Formulario valido: ', this.loginForm.valid);
     if(this.loginForm.valid){
       const form = this.loginForm.value;
       this.store.dispatch(login({email: form.email, password: form.password}));
-      // this.loginService.login(form).subscribe(
-      //   {
-      //     next:(data:unknown|any) => {
-      //       console.log(data)
-      //       const user ={
-      //         id:data.user.id,
-      //         nombre: data.user.name,
-      //         apellido: data.user.lastname,
-      //         rol: data.user.rol
-      //       }
-      //       console.log(user)
-            
-      //       localStorage.setItem('User', JSON.stringify(user));
-      //       localStorage.setItem('token', data.backendTokens.accessToken);
-      //       localStorage.setItem('refreshToken', data.backendTokens.refreshToken);
-      //       // console.log('Respuesta del servidor: ', data  );
-      //       this.loginService.loggedInSignal.set(true);
-            
-            
-            
-      //       this.toastr.success('Inicio de sesión exitoso', 'Exitoso', {
-      //         timeOut: 3000,
-      //         positionClass: 'toast-top-right'
-      //       });
-            
-      //       // Usamos un retraso para recargar después de que el mensaje se muestra
-      //       setTimeout(() => {
-      //         this.router.navigate(['/']).then(() => {
-      //           window.location.reload();
-      //         })
-      //       }, 3000); // El tiempo coincide con el `timeOut` del mensaje
-      //       },
-      //     error: (error:unknown|any) => {
-      //       //console.log('Error en la peticion: ', error);
-      //       this.toastr.error('Error',error.error.message)
-      //     }
-      //   }
-      // )
+      
     }
   }
 }

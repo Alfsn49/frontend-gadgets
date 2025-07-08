@@ -17,7 +17,7 @@ getProducts(page: number, limit: number, filters: any = {}): Observable<any> {
   };
 
   if (filters.category) {
-    params.categoryId = filters.category;
+    params.category = filters.category;
   }
 
   if (filters.minPrice !== null) {

@@ -6,6 +6,12 @@ export const ADMIN_ROUTES:Routes = [{
     loadComponent:()=> import('./dashboard-admin.component').then((m)=>m.DashboardAdminComponent),
     
     children:[
+        // 👉 Redirección por defecto
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
         {
             path:'home',
             loadComponent:()=> import('./home/home.component').then((m)=>m.HomeComponent),

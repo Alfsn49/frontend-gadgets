@@ -37,7 +37,7 @@ export class ProfileComponent {
  previewUrl: string | null = null;
  imageFile: any = null; // Para almacenar temporalmente la imagen seleccionada
  isDragging = false;
-
+ isSubmitted = false; // Para controlar el estado del formulario
 
  items = [
   { label: "Masculino", value: "M" },
@@ -61,9 +61,9 @@ export class ProfileComponent {
     lastname: ['', [Validators.required]],
     email:['', [Validators.required, Validators.email]],
     image:[''],
-    ci:[''],
-    birthdate:[''],
-    telephone:[''],
+    ci:['',[Validators.required,this.validateCedula.bind(this)]],
+    birthdate:['', [Validators.required]],
+    telephone:['', [Validators.required]],
   });
  }
  validateCedula(control: AbstractControl): { [key: string]: any } | null {
@@ -149,15 +149,25 @@ onDragLeave(event: DragEvent): void {
 
  dataclientcreate(){
   console.log(this.createDataClientForm.value)
+  if(!this.createDataClientForm.valid) {
+    this.toastr.error('Por favor completa todos los campos del formulario.', 'Formulario incompleto', {
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+    });
+    return;
+  }
+  this.isSubmitted = true; // Marcar el formulario como enviado
 
   this.ServiceUser.createDataUser(this.createDataClientForm.value).subscribe({
     next:(data:unknown|any)=>{
       console.log(data)
       this.toastr.success('Datos guardados correctamente')
+      this.isSubmitted = false; // Marcar el formulario como no enviado
       window.location.reload();
     },
     error:(error:unknown|any)=>{
       console.error('Error al guardar los datos', error);
+      this.isSubmitted = false; // Marcar el formulario como no enviado en caso de error
       this.toastr.error('Error al guardar los datos')
     }
   }
@@ -195,9 +205,22 @@ onDragLeave(event: DragEvent): void {
   }
   cerrarModalEditProfile(){
     this.modalEditProfile = false;
+    this.previewUrl = null; // Limpiar la vista previa al cerrar el modal
+    this.imageFile = null; // Limpiar el archivo de imagen al cerrar el modal
+    this.profileEditForm.reset(); // Limpiar el formulario al cerrar el modal
   }
 
   async onSubmit(){
+
+    if(!this.profileEditForm.valid ) {
+      this.toastr.error('Por favor completa todos los campos del formulario.', 'Formulario incompleto', {
+        timeOut: 3000,
+        positionClass: 'toast-top-right',
+      });
+      return;
+    }
+
+    this.isSubmitted = true; // Marcar el formulario como enviado
     console.log(this.profileEditForm.value)
     const formData = new FormData();
     formData.append('name', this.profileEditForm.value.name);
@@ -224,15 +247,54 @@ this.ServiceUser.editProfile(formData)
     .subscribe({
       next: (data: unknown | any) => {
         console.log(data);
+        
         this.toastr.success('Perfil actualizado con éxito');
         setTimeout(() => window.location.reload(), 500); // Pequeño delay para el mensaje
+        this.isSubmitted = false; // Marcar el formulario como enviado
       },
       error: (error: unknown | any) => {
+        this.isSubmitted = false; // Marcar el formulario como no enviado en caso de error
         console.error('Error al actualizar el perfil:', error);
         this.toastr.error('Error al actualizar el perfil');
       } 
     });
  
     //this.dialogRef.close(this.profileEditForm.value);
+  }
+  handleEnterOrSubmit(controlName: string, nextElement: HTMLElement) {
+    const control = this.createDataClientForm.get(controlName);
+
+    if (!control) return;
+    
+    control.markAsTouched();
+
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.createDataClientForm.valid) {
+          this.dataclientcreate(); // Enviar formulario
+        } else {
+          this.createDataClientForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
+  }
+  handleEnterOrSubmitProfile(controlName: string, nextElement: HTMLElement) {
+    const control = this.profileEditForm.get(controlName);
+    
+    if (!control) return;
+    control.markAsTouched();
+    if (control.valid) {
+      if (nextElement.tagName.toLowerCase() === 'button') {
+        if (this.profileEditForm.valid) {
+          this.onSubmit(); // Enviar formulario
+        } else {
+          this.profileEditForm.markAllAsTouched(); // Mostrar errores
+        }
+      } else {
+        nextElement.focus(); // Enfocar el siguiente campo
+      }
+    }
   }
 }

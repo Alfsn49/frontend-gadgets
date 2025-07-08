@@ -26,6 +26,7 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
     modalEditar = false;
     modalEliminar = false;
     modalConfirmarEliminar = false;
+    isSubmitting = false;
 
     fb = inject(FormBuilder)
   catalogService = inject(CatalogService)
@@ -85,6 +86,7 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
     openModalCreate() {
       this.modalCreate = true;
       this.listCategories();
+      this.createForm.reset();
     }
   
     closeModalCreate() {
@@ -94,6 +96,11 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
 
     onSubmitCreate() {
       console.log(this.createForm.value);
+      if( this.createForm.invalid) {
+        this.toastr.error('Formulario inválido', 'Error');
+        return;
+      };
+      this.isSubmitting = true;
       const rawValue = this.createForm.value;
       const categoryIdNumber = Number(rawValue.categoryId);
       const payload = {
@@ -102,13 +109,15 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
       };
       this.catalogService.createSubCategory(payload).subscribe({
         next: (res: any) => {
+        
           this.toastr.success('Subcategoría creada', 'Éxito');
-          this.createForm.reset();
           this.closeModalCreate();
+          this.isSubmitting = false;
           this.listSubCategories();
         },
         error: (err) => {
           console.log(err);
+          this.isSubmitting = false;
           this.toastr.error('Error al crear la subcategoría', 'Error');
         }
       });
@@ -116,10 +125,12 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
 
     openModalEdit(data: any) {
       this.modalEditar = true;
+      this.listCategories();
       this.idSubCategory = data.id;
       this.editarForm.patchValue({
         name: data.name,
         categoryId: data.categoryId,
+        
       });
     }
   
@@ -127,6 +138,34 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
       this.modalEditar = false;
       this.editarForm.reset();
       this.idSubCategory = null;
+    }
+
+    onSubmitEdit() {
+      if (this.editarForm.invalid){
+        this.toastr.error('Formulario inválido', 'Error');
+        return;
+      };
+      this.isSubmitting = true;
+      const rawValue = this.editarForm.value;
+      const categoryIdNumber = Number(rawValue.categoryId);
+      const payload = {
+        ...rawValue,
+        categoryId: categoryIdNumber
+      };
+      this.catalogService.updateSubCategory(this.idSubCategory, payload).subscribe({
+        next: (res) => {
+
+          this.toastr.success('Subcategoría actualizada', 'Éxito');
+          this.closeModalEdit();
+          this.isSubmitting = false;
+          this.listSubCategories();
+        },
+        error: (err) => {
+          console.log(err);
+          this.isSubmitting = false;
+          this.toastr.error('Error al actualizar la subcategoría', 'Error');
+        }
+      });
     }
 
     openModalDelete(id: any) {
@@ -145,6 +184,26 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
   
     closeModalConfirmDelete() {
       this.modalConfirmarEliminar = false;
+    }
+
+    onDeleteSubCategory() {
+    
+      this.isSubmitting = true;
+
+      this.catalogService.deleteSubCategory(this.idSubCategory).subscribe({
+        next: (res) => {
+          this.toastr.success('Subcategoría eliminada', 'Éxito');
+          this.closeModalDelete();
+          this.closeModalConfirmDelete();
+          this.isSubmitting = false;
+          this.listSubCategories();
+        },
+        error: (err) => {
+          console.log(err);
+          this.isSubmitting = false;
+          this.toastr.error('Error al eliminar la subcategoría', 'Error');
+        }
+      });
     }
   
     onSelectCategory(event: any) {
