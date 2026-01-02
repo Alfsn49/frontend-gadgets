@@ -41,9 +41,9 @@ export class ProductCardComponent {
   add(event: Event){
     event.preventDefault(); // ← esto evita el redireccionamiento
     console.log(this.isAuthenticated)
-    if(this.isAuthenticated != null){
+    if(this.isAuthenticated){
     console.log("funciona")
-   
+    
     console.log(this.product())
     const cartItem = {
       product_id: this.product().id,  // Accedemos al ID a través de product.product

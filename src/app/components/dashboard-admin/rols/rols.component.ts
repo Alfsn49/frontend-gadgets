@@ -50,6 +50,7 @@ export class RolsComponent {
   modalEditar = false;
   modalEliminar = false;
   modalConfirmarEliminar = false;
+  isSubmitting = false;
 
   fb = inject(FormBuilder);
   authService = inject(AuthService);
@@ -105,14 +106,17 @@ export class RolsComponent {
   }
 
   onSubmitCreate() {
+    this.isSubmitting = true;
     this.authService.createRol(this.createForm.value).subscribe({
       next: (res: any) => {
+        this.isSubmitting = false;
         this.toastr.success('Rol creado correctamente', 'Exito');
         this.listRols();
         this.closeModalCreate();
       },
       error: (err) => {
         console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error al crear el rol', 'Error');
       },
     });

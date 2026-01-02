@@ -1,6 +1,6 @@
 
  <section>
-  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+  <div class="mx-auto max-w-screen-xl px-4 py-2 sm:px-6 sm:py-12 lg:px-8">
     <header>
       <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Lista de productos</h2>
 
@@ -45,13 +45,47 @@
 
 
 
-    <div class="mt-8" *ngIf="products.length > 0">
-  <p class="text-sm text-gray-500">Mostrando <span>{{ products.length }}</span> productos</p>
+   <!-- Info de productos -->
+<div class="mt-8" *ngIf="products.length > 0">
+  <p class="text-sm text-gray-500">
+    Mostrando <span>{{ products.length }}</span> productos
+  </p>
 </div>
-    
-    <div class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" *ngIf="products.length > 0; else noProducts">
-  <app-product-card *ngFor="let product of products" [product]="product" (addToCart)="addToCart($event)"></app-product-card>
-</div>
+
+<ng-container *ngIf="status$ | async as status">
+  <!-- Loader -->
+  <div *ngIf="status === 'loading'" class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div *ngFor="let _ of [1,2,3,4,5,6,7,8]" class="p-4 border rounded shadow animate-pulse">
+      <div class="bg-gray-300 h-40 w-full mb-4"></div>
+      <div class="bg-gray-300 h-4 w-3/4 mb-2"></div>
+      <div class="bg-gray-300 h-4 w-1/2"></div>
+    </div>
+  </div>
+
+  <!-- Lista de productos -->
+  <div *ngIf="status === 'success'">
+    <div *ngIf="products.length > 0; else noProducts" 
+         class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <app-product-card *ngFor="let product of products"
+                        [product]="product"
+                        (addToCart)="addToCart($event)">
+      </app-product-card>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="status === 'error'" class="text-center text-red-500 mt-8">
+    Ocurrió un error al cargar los productos.
+  </div>
+</ng-container>
+
+<!-- Template cuando no hay productos -->
+<ng-template #noProducts>
+  <div class="text-center text-gray-500 mt-8">
+    No hay productos disponibles con los filtros seleccionados.
+  </div>
+</ng-template>
+
 
 <ng-template #noProducts>
   <p class="text-center text-gray-500 mt-8">No hay productos para mostrar.</p>

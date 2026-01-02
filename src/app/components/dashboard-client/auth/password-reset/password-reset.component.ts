@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import PasswordValidator from '../../../../utils/validators/password-validator.validator';
 import { AuthService } from '../../../../data-access/auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -15,11 +16,12 @@ import { AuthService } from '../../../../data-access/auth/auth.service';
 export class PasswordResetComponent implements OnInit{
 
   route = inject(ActivatedRoute)
-  router = inject(Router)
   private fb = inject(FormBuilder)
   resetPasswordForm!: FormGroup;
   token=''
   private authService = inject(AuthService)
+  private toastr = inject(ToastrService)
+  private router = inject(Router)
 
   ngOnInit(): void {
     
@@ -54,9 +56,20 @@ export class PasswordResetComponent implements OnInit{
     const {confirmPassword, ...data} = formValues;
 
     console.log(data)
-    this.authService.resertPassword(data, this.token).subscribe((data)=>{
+    this.authService.resertPassword(data, this.token).subscribe(
+      {
+        next: (data:any)=>{
       console.log(data)
-    })
+      this.toastr.success('Exitoso',data.message)
+      setTimeout(()=>{
+        this.router.navigate(['/'])
+      })
+    },
+    error : (error:any) =>{
+      this.toastr.error("Error", "Error al cambiar la contraseña")
+    }
+      }
+    )
   }
 
 }

@@ -10,13 +10,10 @@ export const loginAdmin = createAction(
     props<{ email: string; password: string }>()
 )
 
-
 export const loginAdminSuccess = createAction(
     '[Auth] Login Admin Success',
     props<any>()
 )
-
-
 
 export const loginSuccess = createAction(
     '[Auth] Login Success',
@@ -39,4 +36,7 @@ export const logoutAdmin = createAction(
 export const refreshTokenErr = createAction(
     '[Auth] Refresh Token'
 )
+
+// Agrega esta acción junto con las demás
+export const resetLoginState = createAction('[Auth] Reset Login State');
 

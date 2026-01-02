@@ -26,6 +26,13 @@ export class UserService extends HttpService {
     return this.http.get(this.api + `user/getProfile/${userId}`,);
   }
 
+  profileAdmin():Observable<any>{
+    const userdata = localStorage.getItem('User');
+    const userId = userdata ? JSON.parse(userdata).id : null;
+    console.log(userId)
+    return this.http.get(this.api + `user/getProfileAdmin/${userId}`,);
+  }
+
   editProfile(data:any){
     const userdata = localStorage.getItem('User');
     const userId = userdata ? JSON.parse(userdata).id : null;

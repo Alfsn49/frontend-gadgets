@@ -1,13 +1,13 @@
 // src/app/state/products.reducer.ts
 
 import { createReducer, on } from '@ngrx/store';
-import { loadProductsSuccess, loadProductsFailure, changePage, setFilters } from './products.actions';
+import { loadProducts,loadProductsSuccess, loadProductsFailure, changePage, setFilters } from './products.actions';
 
 
 export interface ProductState {
   products: any[];
   total: number;
-  status: 'loading' | 'success' | 'error';
+  status: 'loading' | 'success' | 'error' | 'idle';
   totalPages: number;
   page: number;
   selectedCategory: number | null;
@@ -18,7 +18,7 @@ export interface ProductState {
 export const initialState: ProductState = {
   products: [],
   total: 0,
-  status: 'loading',
+  status: 'idle',
   page: 1,
   totalPages: 1,
   selectedCategory: null,
@@ -28,15 +28,19 @@ export const initialState: ProductState = {
 
 export const productReducer = createReducer(
   initialState,
+  on(loadProducts, (state) => ({
+    ...state,
+    status: 'loading' as const
+  })),
   on(loadProductsSuccess, (state, { products, total, page, totalPages }) => ({
     ...state,
     products,
     total,
     page,
     totalPages,
-    status: 'success' as 'success',
+    status: 'success' as const,
   })),
-  on(loadProductsFailure, (state, { error }) => ({
+   on(loadProductsFailure, (state) => ({
     ...state,
     products: [],
     total: 0,
@@ -45,7 +49,7 @@ export const productReducer = createReducer(
     selectedCategory: null,
     selectedSubCategory: null,
     selectedBrand: null,
-    status: 'error' as 'error',
+    status: 'error' as const,
   })),
   on(changePage, (state, { page }) => ({
     ...state,

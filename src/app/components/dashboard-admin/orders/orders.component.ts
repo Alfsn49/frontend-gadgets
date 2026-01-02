@@ -94,6 +94,7 @@ export class OrdersComponent {
       this.editarForm.patchValue({
         estado: estadoBooleano
       });
+      this.idOrder = order.id
       console.log(order);
     }
 
@@ -109,6 +110,17 @@ export class OrdersComponent {
   };
 
   console.log('Datos a enviar:', dataAEnviar);
+
+    this.catalogService.updateStatus(this.idOrder, dataAEnviar).subscribe({
+      next:(data:any)=>{
+        console.log(data)
+        this.modalEditar = false;
+        this.toastr.success("Se actualizo el estado")
+      },error:(error:any)=>{
+        console.log(error)
+      }
+    })
+
     }
 
     closeModalEdit(){

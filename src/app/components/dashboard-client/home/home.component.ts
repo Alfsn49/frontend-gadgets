@@ -14,6 +14,8 @@ import { CarouselComponent } from '../../../ui/carousel/carousel.component';
 export class HomeComponent {
 
   
-
+public throwTestError(): void {
+  throw new Error("Sentry Test Error");
+}
 
 }

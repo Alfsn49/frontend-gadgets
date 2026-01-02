@@ -17,76 +17,98 @@
     </div>
   </div>
   }@else {
-  <div class="px-4 py-5 sm:px-6">
-    <h3 class="text-lg leading-6 font-medium text-gray-900">
-      Perfil de usuario
-    </h3>
-    <p class="mt-1 max-w-2xl text-sm text-gray-500">
-      Aqui esta la información de su cuenta
-    </p>
-  </div>
-  <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-    <dl class="sm:divide-y sm:divide-gray-200">
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Nombre
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().nombre}}
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Apellido
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().apellido}}
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Correo Electronico
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().email}}
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Imagen:</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          <img class="h-auto max-w-lg rounded-lg" [src]="userService.users().image" width="200px"
-            alt="image description">
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Telefono
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().telefono}}
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Cédula
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().cedula}}
-        </dd>
-      </div>
-      <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">
-          Fecha de nacimiento
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-          {{userService.users().birthdate }}
-        </dd>
-      </div>
-    </dl>
-  </div>
-  <div class="px-4"><Button
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      (click)="mostrarModalEditProfile()">Editar</Button></div>
+    <section>
+  <!-- Loader -->
+  @if (userService.status() === 'loading') {
+    <div class="flex justify-center items-center h-64">
+      <div class="w-10 h-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+  } @else if (userService.status() === 'error') {
+    <div class="text-center text-red-600 py-10">
+      Error al cargar los datos del perfil.
+    </div>
+  } @else {
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Perfil de usuario
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        Aquí está la información de su cuenta
+      </p>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+      <dl class="sm:divide-y sm:divide-gray-200">
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Nombre</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().nombre }}
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Apellido</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().apellido }}
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Correo Electrónico</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().email }}
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Imagen</dt>
+          <dd class="mt-1 sm:col-span-2">
+            <img
+              class="h-auto max-w-lg rounded-lg"
+              [src]="userService.users().image"
+              width="200"
+              alt="Imagen de usuario"
+            />
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Teléfono</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().telefono }}
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Cédula</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().cedula }}
+          </dd>
+        </div>
+
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Fecha de nacimiento</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ userService.users().birthdate }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="px-4">
+      <button
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300
+               font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2
+               dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        (click)="mostrarModalEditProfile()"
+      >
+        Editar
+      </button>
+    </div>
+  }
+</section>
+
+  
   }
 
 </div>

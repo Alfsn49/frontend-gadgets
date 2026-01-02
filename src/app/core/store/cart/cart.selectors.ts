@@ -4,13 +4,22 @@ import { CartState } from "./cart.reducer";
 export const selectCartState = createFeatureSelector<CartState>('cart');
 
 export const selectCart = createSelector(
-    selectCartState,
-    (state: CartState) => state.cart || []
-)
+  selectCartState,
+  (state) => state?.cart
+);
 
+
+export const selectCartItems = createSelector(
+  selectCart,
+  (cart) => cart?.items || []
+);
 
 export const selectCartLoaded = createSelector(
-    selectCartState,
-    (state: CartState) => state.loaded
-  );
+  selectCartState,
+  (state) => state.loaded
+);
 
+export const selectCartStatus = createSelector(
+  selectCartState,
+  (state) => state.status
+)

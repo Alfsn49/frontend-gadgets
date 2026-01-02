@@ -46,6 +46,7 @@ export class CategoriesComponent {
   modalEditar = false;
   modalEliminar = false;
   modalConfirmarEliminar = false;
+  isSubmitting = false;
 
   fb = inject(FormBuilder);
   catalogService = inject(CatalogService);
@@ -130,22 +131,25 @@ export class CategoriesComponent {
       this.toastr.error('Error', 'Formulario inválido');
       return;
     }
+    this.isSubmitting = true;
     this.catalogService.createCategory(this.createForm.value).subscribe({
       next: (res: any) => {
         this.toastr.success('Categoría creada correctamente', 'Éxito');
         this.modalCreate = false;
         this.createForm.reset();
-        console.log(res);
+        this.isSubmitting = false;
         this.listCategories();
       },
       error: (err: any) => {
         console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error', 'Error al crear la categoría');
       },
     });
   }
 
   onSubmitEdit() {
+    this.isSubmitting = true;
     this.catalogService
       .editCategory(this.idCategory, this.editarForm.value)
       .subscribe({
@@ -153,26 +157,31 @@ export class CategoriesComponent {
           this.toastr.success('Categoría editada correctamente', 'Éxito');
           this.modalEditar = false;
           this.editarForm.reset();
+          this.isSubmitting = false;
           this.listCategories();
         },
         error: (err: any) => {
           console.log(err);
+          this.isSubmitting = false;
           this.toastr.error('Error', 'Error al editar la categoría');
         },
       });
   }
 
   onSubmitDelete() {
+    this.isSubmitting = true;
     this.catalogService.deleteCategory(this.idCategory).subscribe({
       next: (res: any) => {
         console.log(res);
         this.toastr.success('Categoría eliminada correctamente', 'Éxito');
         this.modalConfirmarEliminar = false;
         this.modalEliminar = false;
+        this.isSubmitting = false;
         this.listCategories();
       },
       error: (err: any) => {
         console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error', 'Error al eliminar la categoría');
       },
     });

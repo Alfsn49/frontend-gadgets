@@ -12,7 +12,7 @@ import { logout } from '../../core/store/auth/auth.actions';
 import { FormControl, FormsModule } from '@angular/forms';
 import { ProductsService } from '../../data-access/content/products.service';
 import { loadCart, removeCartItem } from '../../core/store/cart/cart.actions';
-import { selectCart, selectCartLoaded } from '../../core/store/cart/cart.selectors';
+import { selectCart, selectCartLoaded, selectCartStatus } from '../../core/store/cart/cart.selectors';
 import { CartState } from '../../core/store/cart/cart.reducer';
 import { selectRole } from '../../core/store/auth/auth.selectors';
 
@@ -51,8 +51,9 @@ export class NavbarComponent {
   showResults = false;
   private searchSubject = new Subject<string>();
   data$: Cart | any = null;
-  cartData$ = this.store.select(selectCart);
-  cartLoaded$ = this.store.select(selectCartLoaded);
+  idProducto: any;
+  
+  cartStatus$ = this.store.select(selectCartStatus);
   isSidebarOpen: boolean = true;
   isMobileMenuOpen = false;
   router = inject(Router);
@@ -60,28 +61,89 @@ export class NavbarComponent {
   productService = inject(ProductsService);
   cart$!: Observable<any>;
   rol$:any
+
+  modalEliminar:boolean = false;
+ 
   myrol:string = '';
 
   public authService = inject(AuthService);
 
+  // constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState, cart: CartState }>) {
+    
+  //   this.rol$ = this.store.select(selectRole).subscribe((role) => {
+  //     console.log('Rol del usuario:', role);
+  //     this.myrol = role;
+  //   });
+
+  //   console.log("Autenticado", this.myrol)
+  //   this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
+  //   // SOLUCIÓN: Verificar autenticación ANTES de cargar el carrito
+  //   this.isAuthenticated$.subscribe(isAuthenticated => {
+  //     if (isAuthenticated && this.myrol !== 'Administrador') {
+  //       console.log('Usuario autenticado, cargando carrito...');
+  //       this.store.dispatch(loadCart());
+  //     } else {
+  //       console.log('No se carga carrito - Usuario no autenticado o es administrador');
+  //     }
+  //   });
+    
+  //  if(this.myrol !== 'Administrador' || this.myrol !== undefined){
+    
+
+  //   this.store.dispatch(loadCart());
+  //   this.cart$ = this.store.select(selectCart);
+  //   this.cart$.subscribe((data)=>{
+  //     this.data$ = data;
+  //     console.log("Datos del carrito:", data)
+  //   })
+  //   // this.cart$ = this.store.select(state => state.cart.cart); 
+  //   // this.cartData$.subscribe((data:Cart) => {
+  //   //   this.data$ = data;
+  //   //   console.log('Datos del carrito:', data);
+  //   // });
+  //  }else{
+    
+  //  }
+  //   initFlowbite();
+    
+
+  //   // Suscripción para manejar el valor del formulario
+  //   this.searchControl.valueChanges.pipe(
+  //     debounceTime(300),
+  //     distinctUntilChanged(),
+  //     map((query) => query ?? ''),  // Reemplaza null por una cadena vacía
+  //     switchMap((query: string) => this.productService.searchProducts(query))
+  //   )
+  //   .subscribe((results) => {
+  //     this.results = results;
+  //     this.searchResults = results;
+  //   });
+  // }
   constructor(private elementRef: ElementRef, private store: Store<{ auth: AuthState, cart: CartState }>) {
+    
     this.rol$ = this.store.select(selectRole).subscribe((role) => {
       console.log('Rol del usuario:', role);
       this.myrol = role;
     });
 
-   if(this.myrol !== 'Administrador'){
+    console.log("Autenticado", this.myrol)
     this.isAuthenticated$ = this.store.select(state => state.auth.isAuthenticated);
-    this.cartData$ = this.store.select(selectCart);
-    this.cartLoaded$ = this.store.select(selectCartLoaded);
-    this.cart$ = this.store.select(state => state.cart.cart); 
-    this.cartData$.subscribe((data:Cart) => {
+    // SOLUCIÓN: Verificar autenticación ANTES de cargar el carrito
+    this.isAuthenticated$.subscribe(isAuthenticated => {
+      if (isAuthenticated && this.myrol !== 'Administrador') {
+        console.log('Usuario autenticado, cargando carrito...');
+        this.store.dispatch(loadCart());
+        this.cart$ = this.store.select(selectCart);
+    this.cart$.subscribe((data)=>{
       this.data$ = data;
-      console.log('Datos del carrito:', data);
+      console.log("Datos del carrito:", data)
+    })
+      } else {
+        console.log('No se carga carrito - Usuario no autenticado o es administrador');
+      }
     });
-   }else{
+
     
-   }
     initFlowbite();
     
 
@@ -121,7 +183,9 @@ export class NavbarComponent {
 
   onRemoveItem(id: number) {
     console.log(id);
-    this.store.dispatch(removeCartItem({product_id:id}))
+    this.modalEliminar = true
+    this.idProducto = id
+    // this.store.dispatch(removeCartItem({product_id:id}))
   }
 
   logout() {
@@ -180,4 +244,16 @@ navigateToProduct(productId: string) {
   closeSearch() {
     this.showResults = false;
   }
+  reloadCart(){
+      
+    }
+
+    closeModalDelete(){
+      this.modalEliminar = false;
+    }
+
+    openModalConfirmDelete(){
+      this.store.dispatch(removeCartItem({product_id:this.idProducto}))
+      this.closeModalDelete();
+    }
 }

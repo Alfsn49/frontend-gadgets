@@ -148,9 +148,9 @@
                     <div class="flex justify-end">
                       <button
                         type="submit"
-                        [disabled]="createForm.invalid"
+                        [disabled]="createForm.invalid || isSubmitting"
                         class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                        Guardar
+                        {{isSubmitting ? 'Guardando...' : 'Guardar'}}
                       </button>
                     </div>
                   </form>
@@ -214,9 +214,9 @@
                 <div class="flex justify-end">
                   <button
                     type="submit"
-                    [disabled]="editarForm.invalid"
+                    [disabled]="editarForm.invalid || isSubmitting"
                     class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                    Guardar
+                    {{isSubmitting ? 'Actualizando...' : 'Actualizar'}}
                   </button>
                 </div>
               </form>
@@ -277,9 +277,9 @@
       <span class="text-black font-semibold">Los datos asociados se perderán.</span>
     </p>
     <div class="flex flex-col space-y-2 mt-5">
-      <button (click)="onSubmitDelete()"
+      <button (click)="onSubmitDelete()" [disabled]="isSubmitting"
         class="bg-red-600 text-white font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-red-700">
-        Confirmar Eliminación
+        {{ isSubmitting ? 'Eliminando...' : 'Confirmar Eliminación'}}
       </button>
       <button (click)="closeModalConfirmDelete()"
         class="bg-gray-100 text-gray-700 border border-gray-300 font-medium rounded-lg px-4 py-2 transition transform hover:scale-105 hover:bg-gray-200">

@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { UserStateService } from '../../../../data-access/users/user-state.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../../data-access/users/user.service';
@@ -38,6 +38,7 @@ export class AddressComponent {
   userService = inject(UserService);
   toastr = inject(ToastrService);
   isSubmitted = false; // Para controlar el estado del formulario
+  isLoading = signal(true)
 
   loadProvinces(): void {
     const selectedCountry = this.addressForm.get('pais')?.value;
@@ -137,13 +138,16 @@ loadCitiesEdit(): void {
   }
 
   getAddress(){
+    this.isLoading.set(true)
     this.userService.getaddress().subscribe(
       {
         next: (data) => {
           console.log(data)
+          this.isLoading.set(false)
           this.getaddress = data;
         },
         error: (error) => {
+          this.isLoading.set(false)
           console.error('Error al obtener la dirección:', error);
         }
       }

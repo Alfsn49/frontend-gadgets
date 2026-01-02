@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { login, loginSuccess, loginFailure, logout, refreshTokenErr, loginAdminSuccess, loginAdmin, logoutAdmin } from "./auth.actions";
+import { login, loginSuccess, loginFailure, logout, refreshTokenErr, loginAdminSuccess, loginAdmin, logoutAdmin, resetLoginState } from "./auth.actions";
 
 
 export interface AuthState{
@@ -7,6 +7,7 @@ export interface AuthState{
     token:string | null;
     refreshToken:string | null;
     isAuthenticated:boolean;
+    status: 'loading' | 'success' | 'error'| 'idle';
     error:any | null;
     loading: any | null;
 }
@@ -14,8 +15,9 @@ export interface AuthState{
 export const initialState: AuthState = {
     user: JSON.parse(localStorage.getItem('User') || 'null'),
     token:localStorage.getItem('token'),
-  refreshToken: localStorage.getItem('refreshToken'),
-    isAuthenticated: JSON.parse(localStorage.getItem('isAuthenticated') || "null"), // Si hay token, está autenticado
+    refreshToken: localStorage.getItem('refreshToken'),
+    isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+    status: 'idle',
     error: null,
     loading: false
 }
@@ -26,7 +28,8 @@ export const authReducer = createReducer(
         return {
             ...state,
             loading: true,
-            error: null
+            error: null,
+            status: 'loading' as const
         }
     }),
     on(loginSuccess,(state,{user, token, refreshToken})=>{
@@ -37,6 +40,7 @@ export const authReducer = createReducer(
             refreshToken,
             isAuthenticated:true,
             loading:false,
+            status: 'success' as const,
             error:null
         }
     }),
@@ -44,7 +48,8 @@ export const authReducer = createReducer(
         return {
             ...state,
             loading: true,
-            error: null
+            error: null,
+            status: 'loading' as const
         }
     }),
     on(loginAdminSuccess,(state,{user, token, refreshToken})=>{
@@ -54,6 +59,7 @@ export const authReducer = createReducer(
             token,
             refreshToken,
             isAuthenticated:true,
+            status: 'success' as const,
             loading:false,
             error:null
         }
@@ -63,7 +69,8 @@ export const authReducer = createReducer(
             ...state,
             error,
             isAuthenticated:false,
-            loading:false
+            loading:false,
+            status: 'error' as const,
         }
     }),
     on(logout, (state) =>({
@@ -74,6 +81,7 @@ export const authReducer = createReducer(
         refreshToken: null,
         isAuthenticated: false,
         error: null,
+        status: 'idle' as const
     })),
     on(
         logoutAdmin,(state)=>({
@@ -92,6 +100,13 @@ export const authReducer = createReducer(
         isAuthenticated:false,
         user:null,
         token:null,
+    })),
+    // Agrega esta nueva acción para resetear el estado de login
+    on(resetLoginState, (state) => ({
+        ...state,
+        status: 'idle' as const,
+        error: null,
+        loading: false
     }))
     
 )

@@ -9,4 +9,11 @@ export class OrdersService extends HttpService{
   listOrders(){
     return this.http.get(this.api + 'order/findAll');
   }
+
+  updateStatus(id:any, data:any){
+    return this.http.patch(this.api + `order/updateState/${id}`, data)
+  }
+
+  
+
 }

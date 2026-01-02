@@ -1,8 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER,ApplicationConfig,ErrorHandler, provideZoneChangeDetection, isDevMode, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
-
+import { Router } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { refreshInterceptor } from './interceptors/refresh.interceptor';
@@ -18,6 +18,7 @@ import { productReducer } from './data-access/content/products/state/products.re
 import { ProductsEffects } from './data-access/content/products/state/products.effects';
 import { cartReducer } from './core/store/cart/cart.reducer';
 import { CartEffects } from './core/store/cart/cart.effects';
+import * as Sentry from "@sentry/angular";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,6 +36,20 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     importProvidersFrom(
       [BrowserAnimationsModule]
-    ), provideAnimationsAsync()
+    ), provideAnimationsAsync(),
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler(),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
 ],
 };

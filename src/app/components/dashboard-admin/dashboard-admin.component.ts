@@ -4,6 +4,8 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { logoutAdmin } from '../../core/store/auth/auth.actions';
+import { ReportService } from '../../data-access/reports/report.service';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -20,9 +22,28 @@ export class DashboardAdminComponent {
   isAssignDropdownOpen = false;
   isUserDropdownOpen = false;
 
+  dataDashboard:any =[];
+
   private toastr = inject(ToastrService);
   private router = inject(Router);
   private store = inject(Store)
+  private report = inject(ReportService)
+  constructor(){
+    
+  }
+
+  getData(){
+    this.report.getDashboard().subscribe({
+      next:(data:any)=>{
+        console.log(data)
+        this.dataDashboard = data;
+      },
+      error:(error:any)=>{
+        console.log(error)
+      }
+    })
+  }
+
   toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
     localStorage.setItem('sidebarState', JSON.stringify(this.isSidebarOpen));

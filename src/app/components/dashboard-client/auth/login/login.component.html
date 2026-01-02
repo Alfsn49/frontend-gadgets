@@ -26,8 +26,12 @@
       placeholder="name@flowbite.com"
       required
     />
+    <div>
+
+    </div>
     <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)">
-      <p class="text-red-600">Email no es válido</p>
+      <p *ngIf="loginForm.get('email')?.errors?.['required']" class="text-red-600">Email es obligatorio</p>
+      <p *ngIf="loginForm.get('email')?.errors?.['email']" class="text-red-600">Email no es válido</p>
     </div>
   </div>
 
@@ -56,21 +60,68 @@
       <a routerLink="/forget-password">¿Se te olvidó la contraseña?</a>
     </label>
   </div>
-
+  
   <button
     #submitButton
     type="submit"
-    [disabled]="loginForm.invalid || loginLoading()"
+    [disabled]="loginForm.invalid || (statusLogin | async) === 'loading' || (statusLogin | async) === 'success'"
     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
            font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center
-           dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-  >
-    {{ loginLoading() ? 'Ingresando...' : 'Ingresar' }}
-  </button>
+           dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+           disabled:bg-blue-400 disabled:cursor-not-allowed disabled:dark:bg-blue-500"
+>
+    @if ((statusLogin | async) === 'loading') {
+        <div class="flex items-center justify-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Ingresando...
+        </div>
+    } @else if ((statusLogin | async) === 'success') {
+        <div class="flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            ¡Éxito!
+        </div>
+    } @else {
+        Ingresar
+    }
+</button>
+
+@if(statusLogin | async; as loginStatus){
+    @switch (loginStatus) {
+        @case('loading'){
+            <!-- Estado de carga - el botón ya muestra el spinner -->
+        }
+
+        @case('success'){
+            <div class="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                ¡Login exitoso! Redirigiendo...
+            </div>
+        }
+
+        @case('error'){
+            <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                Error en el login. Por favor intenta nuevamente.
+            </div>
+            
+            <!-- Botón para resetear el estado si necesitas -->
+            <button 
+                (click)="resetLoginState()"
+                class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+            >
+                Intentar nuevamente
+            </button>
+        }
+    }
+}
 </form>
 
       </div>
     </div>
   </div>
+  {{statusLogin | async }}
 </section>
 

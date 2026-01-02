@@ -1,18 +1,19 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsDetailStateService } from '../../../../../data-access/content/products-detail-state.service';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { CartStateService } from '../../../../../data-access/cart/cart-state.service';
 import { ProductsService } from '../../../../../data-access/content/products.service';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { addToCart } from '../../../../../core/store/cart/cart.actions';
 import { ToastrService } from 'ngx-toastr';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe,ReactiveFormsModule,CommonModule,FormsModule],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -24,7 +25,9 @@ export class ProductDetailComponent {
   products:any = "";
   toastr = inject(ToastrService);
   isAuthenticated$: Observable<boolean>;
-  
+  // 👇 Nueva variable para controlar la cantidad seleccionada
+  quantity: number = 1;
+
     isAuthenticated: boolean = false;
     store = inject(Store);
   
@@ -49,18 +52,36 @@ export class ProductDetailComponent {
       }
     })
   }
-  addToCart($event: Event) {
-    if(this.isAuthenticated != null){
-      console.log("funciona")
+  // 👇 Métodos para controlar cantidad
+  increaseQuantity() {
+    if (this.quantity < (this.products.stock || 99)) {
+      this.quantity++;
+    }
+  }
 
-      const cartItem ={
-        product_id: this.products.id,  // Accedemos al ID a través de product.product
-      quantity: 1                     // Cantidad a añadir
-      }
+  decreaseQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  onQuantityInput() {
+    if (this.quantity < 1) this.quantity = 1;
+    if (this.products.stock && this.quantity > this.products.stock)
+      this.quantity = this.products.stock;
+  }
+
+  addToCart($event: Event) {
+    if (this.isAuthenticated) {
+      const cartItem = {
+        product_id: this.products.id,
+        quantity: this.quantity  // 👈 cantidad elegida por el usuario
+      };
+
       this.store.dispatch(addToCart({ product_id: cartItem.product_id, quantity: cartItem.quantity }));
-    }else{
+
+    } else {
       this.toastr.info('Debes iniciar sesión para agregar productos al carrito', 'Login requerido');
     }
-
   }
 }

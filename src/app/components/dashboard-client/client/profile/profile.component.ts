@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { UserStateService } from '../../../../data-access/users/user-state.service';
 import { AbstractControl, Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
@@ -27,6 +27,7 @@ export class ProfileComponent {
  createDataClientForm: FormGroup;
  profileEditForm:FormGroup;
  loading: boolean = false;
+ isloading = signal(true);
  activeForm = false;
  modalCreateDataClient = false;
  modalEditProfile = false;
@@ -73,9 +74,11 @@ export class ProfileComponent {
 }
 
 getProfile(){
+  this.isloading.set(true)
   this.ServiceUser.profile().subscribe({
     next:(data:unknown|any)=>{
       console.log(data)
+      this.isloading.set(false)
       this.profileEditForm.patchValue({
         name: data.nombre,
         lastname: data.apellido,
@@ -88,6 +91,7 @@ getProfile(){
       this.previewUrl = data.image;
     },
     error:(error:unknown|any)=>{
+      this.isloading.set(false)
       console.error('Error al obtener los datos del perfil', error);
     }
   })

@@ -1,1 +1,92 @@
-<p>reports works!</p>
+<div class="min-h-screen bg-gray-50 text-gray-800 p-6">
+  <h1 class="text-2xl font-bold mb-6">📊 Panel de Reportes</h1>
+
+  <!-- =======================
+       RESUMEN GENERAL
+  ======================= -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
+      <h3 class="text-xs text-gray-500">Ingresos Totales</h3>
+      <p class="mt-2 text-2xl font-bold">
+        ${{ salesSummary?.totalRevenue || 0 }}
+      </p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
+      <h3 class="text-xs text-gray-500">Órdenes Totales</h3>
+      <p class="mt-2 text-2xl font-bold">{{ salesSummary?.totalOrders || 0 }}</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
+      <h3 class="text-xs text-gray-500">Nuevos Clientes</h3>
+      <p class="mt-2 text-2xl font-bold">{{ newClients?.count || 0 }}</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
+      <h3 class="text-xs text-gray-500">Productos Vendidos</h3>
+      <p class="mt-2 text-2xl font-bold">
+        {{ salesSummary?.totalProductsSold || 0 }}
+      </p>
+    </div>
+  </section>
+
+  <!-- =======================
+       VENTAS POR MES
+  ======================= -->
+  <section class="bg-white rounded-2xl p-5 shadow mb-8">
+    <h2 class="text-lg font-semibold mb-3">📅 Ventas por Mes</h2>
+    <ul class="text-sm text-gray-700">
+      <li *ngFor="let item of salesByMonth">
+        {{ item.month }}: ${{ item.total }}
+      </li>
+    </ul>
+  </section>
+
+  <!-- =======================
+       TOP PRODUCTOS
+  ======================= -->
+  <section class="bg-white rounded-2xl p-5 shadow mb-8">
+    <h2 class="text-lg font-semibold mb-3">🏆 Top Productos Vendidos</h2>
+    <ul class="text-sm text-gray-700">
+      <li *ngFor="let p of topProducts">
+        {{ p.name }} — {{ p.units_sold }} unidades
+      </li>
+    </ul>
+  </section>
+
+  <!-- =======================
+       INGRESOS POR CATEGORÍA
+  ======================= -->
+  <section class="bg-white rounded-2xl p-5 shadow mb-8">
+    <h2 class="text-lg font-semibold mb-3">📦 Ingresos por Categoría</h2>
+    <ul class="text-sm text-gray-700">
+      <li *ngFor="let c of revenueByCategory">
+        {{ c.category }}: ${{ c.total }}
+      </li>
+    </ul>
+  </section>
+
+  <!-- =======================
+       ÓRDENES POR ESTADO
+  ======================= -->
+  <section class="bg-white rounded-2xl p-5 shadow mb-8">
+    <h2 class="text-lg font-semibold mb-3">📋 Órdenes por Estado</h2>
+    <ul class="text-sm text-gray-700">
+      <li *ngFor="let o of ordersByStatus">
+        {{ o.estado }}: {{ o.total }}
+      </li>
+    </ul>
+  </section>
+
+  <!-- =======================
+       PRODUCTOS CON BAJO STOCK
+  ======================= -->
+  <section class="bg-white rounded-2xl p-5 shadow mb-8">
+    <h2 class="text-lg font-semibold mb-3">⚠️ Productos con Bajo Stock</h2>
+    <ul class="text-sm text-gray-700">
+      <li *ngFor="let p of lowStock">
+        {{ p.name }} — Stock: {{ p.stock }}
+      </li>
+    </ul>
+  </section>
+</div>

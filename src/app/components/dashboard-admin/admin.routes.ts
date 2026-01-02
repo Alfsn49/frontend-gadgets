@@ -46,6 +46,9 @@ export const ADMIN_ROUTES:Routes = [{
         },{
            path:"reportaje",
            loadComponent:()=> import('./reports/reports.component').then((m)=>m.ReportsComponent) 
+        },{
+            path:"perfil",
+            loadComponent:()=>import('./auth/profile/profile.component').then((m)=>m.ProfileComponent)
         }
     ]
 }]

@@ -27,6 +27,8 @@
     "@ngrx/entity": "^18.1.1",
     "@ngrx/store": "^18.1.1",
     "@ngrx/store-devtools": "^18.1.1",
+    "@sentry/angular": "^9.40.0",
+    "@sentry/tracing": "^7.120.3",
     "angular-datatables": "^18.0.0",
     "datatables.net": "^2.2.2",
     "datatables.net-dt": "^2.2.2",

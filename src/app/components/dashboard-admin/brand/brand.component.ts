@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
@@ -27,6 +27,8 @@ export class BrandComponent {
     modalEliminar = false;
     modalConfirmarEliminar = false;
 
+    isSubmitting = false;
+
     fb = inject(FormBuilder)
   catalogService = inject(CatalogService)
  toastr = inject(ToastrService)
@@ -43,7 +45,7 @@ export class BrandComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor() {
     this.createForm = this.fb.group({
-      name: [''],
+      name: ['', Validators.required],
     });
     this.editarForm = this.fb.group({
       name: [''],
@@ -81,15 +83,18 @@ export class BrandComponent {
       return;
     }
 
+    this.isSubmitting = true;
+
     this.catalogService.createBrand(this.createForm.value).subscribe({
       next: (res: any) => {
         this.toastr.success('Marca creada', 'Éxito');
         this.createForm.reset();
         this.listBrands();
+        this.isSubmitting = false;
         this.closeModalCreate();
       },
       error: (err) => {
-        console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error al crear la marca', 'Error');
       }
     });
@@ -115,15 +120,19 @@ export class BrandComponent {
       return;
     }
 
+    this.isSubmitting = true;
+
     this.catalogService.editBrand(this.idBrand, this.editarForm.value).subscribe({
       next: (res: any) => {
         this.toastr.success('Marca editada', 'Éxito');
         this.editarForm.reset();
         this.listBrands();
+        this.isSubmitting = false;
         this.closeModalEdit();
       },
       error: (err) => {
         console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error al editar la marca', 'Error');
       }
     });
@@ -148,15 +157,18 @@ export class BrandComponent {
   }
   
   onSubmitDelete(){
+    this.isSubmitting = true;
     this.catalogService.deleteBrand(this.idBrand).subscribe({
       next: (res: any) => {
         this.toastr.success('Marca eliminada', 'Éxito');
         this.listBrands();
         this.closeModalDelete();
         this.closeModalConfirmDelete();
+        this.isSubmitting = false;
       },
       error: (err) => {
         console.log(err);
+        this.isSubmitting = false;
         this.toastr.error('Error al eliminar la marca', 'Error');
       }
     });

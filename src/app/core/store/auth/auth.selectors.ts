@@ -25,7 +25,10 @@ export const selectLoading = createSelector(
     state => state.loading
 )
 
-
+export const selectStatus = createSelector(
+    selectAuthState,
+    state => state.status
+)
 
 export const selectRole = createSelector(
     selectAuthState,

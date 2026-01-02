@@ -6,12 +6,12 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { Cloudinary, CloudinaryImage } from '@cloudinary/url-gen/index';
 import { Store } from '@ngrx/store';
-import { login } from '../../../../core/store/auth/auth.actions';
+import { login,resetLoginState } from '../../../../core/store/auth/auth.actions';
 import { AuthState } from '../../../../core/store/auth/auth.reducer';
 import { Observable } from 'rxjs';
 import {CloudinaryModule} from '@cloudinary/ng';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectLoading } from '../../../../core/store/auth/auth.selectors';
+import { selectLoading, selectStatus } from '../../../../core/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit{
   private toastr = inject(ToastrService)
   private router = inject(Router)
   private store = inject(Store)
+  statusLogin = this.store.select(selectStatus);
   loginLoading = toSignal(this.store.select(selectLoading),
 {
   initialValue: false, 
@@ -71,7 +72,7 @@ export class LoginComponent implements OnInit{
   if (control.valid) {
     if (nextElement.tagName.toLowerCase() === 'button') {
       if (this.loginForm.valid) {
-        this.onSubmit(); // Enviar formulario
+        nextElement.focus();
       } else {
         this.loginForm.markAllAsTouched(); // Mostrar errores
       }
@@ -82,11 +83,16 @@ export class LoginComponent implements OnInit{
 }
 
   onSubmit(){
-    console.log('Formulario valido: ', this.loginForm.valid);
+    
     if(this.loginForm.valid){
       const form = this.loginForm.value;
       this.store.dispatch(login({email: form.email, password: form.password}));
       
     }
+  }
+  // Método para resetear el estado cuando hay error
+  resetLoginState() {
+    this.store.dispatch(resetLoginState());
+    this.loginForm.reset();
   }
 }

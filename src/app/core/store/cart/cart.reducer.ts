@@ -28,101 +28,101 @@ export interface CartState {
   };
 
 export const cartReducer = createReducer(
-    initialState,
-    on(loadCart, (state)=>{
-        return{
-            ...state,
-            loaded: true,
-        }
-    }),
-    on(loadCartSuccess, (state, { cart }) => 
-       {return {
-        ...state,
-        carta:cart,
-        loaded: true,
-        error: null,
-      }}),
-    on(loadCartFailure, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: false,
-        }
-    }),
-    on(addToCart, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: true,
-        }
-    }),
-    on(addToCartSuccess, (state, { cart }) => ({
-        ...state,
-        cartInfo: cart || state, // Mantiene el existente si no viene nuevo
-        cart: cart,
-        loaded: true,
-      })),
-    
-      on(addToCartFailure, (state, {error}) => ({
-        ...state,
-        
-        error: error
-      })),
-    on(updateCartItem, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: true,
-        }
-    }),
-    on(updateCartItemSuccess, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: true,
-        }
-    }),
-    on(updateCartItemFailure, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: false,
-        }
-    }),
-    on(reduceCartItem, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: true,
-        }
-    }),
-    on(reduceCartItemSuccess, (state, { cart }) => ({
-        ...state,
-        cartInfo: cart || state, // Mantiene el existente si no viene nuevo
-        cart: cart,
-       
-      })),
-      on(reduceCartItemFailure, (state, {error}) => ({
-        ...state,
-        
-        error: error
-      })),
-    on(removeCartItem, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: true,
-        }
-    }),
-    on(removeCartItemSuccess, (state, { cart }) => ({
-        ...state,
-        cart: cart
-      })),
-    on(removeCartItemFailure, (state, data)=>{
-        return{
-            ...state,
-            data,
-            loaded: false,
-        }
-    }),
-)
+  initialState,
+
+  // === Load Cart ===
+  on(loadCart, (state) => ({
+    ...state,
+    loaded: false,
+    status: 'loading' as const,
+  })),
+
+  on(loadCartSuccess, (state, { cart }) => ({
+    ...state,
+    cart,
+    loaded: true,
+    error: null,
+    status: 'success' as const,
+  })),
+
+  on(loadCartFailure, (state, { error }) => ({
+    ...state,
+    loaded: false,
+    error,
+    status: 'error' as const,
+  })),
+
+  // === Add ===
+  on(addToCart, (state) => ({
+    ...state,
+    status: 'loading' as const,
+  })),
+
+  on(addToCartSuccess, (state, { cart }) => ({
+    ...state,
+    cart,
+    loaded: true,
+    status: 'success' as const,
+  })),
+
+  on(addToCartFailure, (state, { error }) => ({
+    ...state,
+    error,
+    status: 'error' as const,
+  })),
+
+  // === Update ===
+  on(updateCartItem, (state) => ({
+    ...state,
+    status: 'loading' as const,
+  })),
+
+  on(updateCartItemSuccess, (state, data) => ({
+    ...state,
+    data,
+    loaded: true,
+    status: 'success' as const,
+  })),
+
+  on(updateCartItemFailure, (state, error) => ({
+    ...state,
+    error,
+    status: 'error' as const,
+  })),
+
+  // === Reduce ===
+  on(reduceCartItem, (state) => ({
+    ...state,
+    status: 'loading' as const,
+  })),
+
+  on(reduceCartItemSuccess, (state, { cart }) => ({
+    ...state,
+    cart,
+    status: 'success' as const,
+  })),
+
+  on(reduceCartItemFailure, (state, { error }) => ({
+    ...state,
+    error,
+    status: 'error' as const,
+  })),
+
+  // === Remove ===
+  on(removeCartItem, (state) => ({
+    ...state,
+    status: 'loading' as const,
+  })),
+
+  on(removeCartItemSuccess, (state, { cart }) => ({
+    ...state,
+    cart,
+    status: 'success' as const,
+  })),
+
+  on(removeCartItemFailure, (state, { error }) => ({
+    ...state,
+    error,
+    status: 'error' as const,
+  }))
+);

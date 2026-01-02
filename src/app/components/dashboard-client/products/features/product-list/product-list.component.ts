@@ -8,7 +8,7 @@
   import { Store } from '@ngrx/store';
   import { loadProducts } from '../../../../../data-access/content/products/state/products.actions';
 import { combineLatest, debounceTime, map, Observable, Subject } from 'rxjs';
-import { selectAllProducts, selectFilters, selectPage, selectTotalPages } from '../../../../../data-access/content/products/state/products.selectors';
+import { selectAllProducts, selectFilters, selectPage, selectProductStatus, selectTotalPages } from '../../../../../data-access/content/products/state/products.selectors';
 import { addToCart } from '../../../../../core/store/cart/cart.actions';
 import { FormsModule } from '@angular/forms';
   @Component({
@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     private store = inject(Store);
     
     products: Product[] = [];
+    status$ = this.store.select(selectProductStatus);
     page$ = this.store.select(selectPage);
     totalPages$ = this.store.select(selectTotalPages);
     pageData$ = combineLatest([this.page$, this.totalPages$]).pipe(
@@ -55,7 +56,7 @@ import { FormsModule } from '@angular/forms';
 
 
     constructor(){
-      
+      console.log('Carga de productos',this.status$)
       this.loadCategories();
       this.loadBrands();
       this.store.dispatch(loadProducts({ page: this.initialPage, limit:this.limit, filters: this.filters }));
@@ -70,7 +71,7 @@ import { FormsModule } from '@angular/forms';
         this.page = page;
         this.totalPages = totalPages;
       });
-
+      
     this.page$ = this.store.select(selectPage);
     this.filters$ = this.store.select(selectFilters);
     console.log('Dispatching loadProducts()');  
@@ -128,5 +129,6 @@ import { FormsModule } from '@angular/forms';
     
       this.store.dispatch(loadProducts({ page: newPage, limit: this.limit }));
     }
+    
 
   }
