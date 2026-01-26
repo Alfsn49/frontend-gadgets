@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { loadCart, loadCartFailure, loadCartSuccess, addToCart, addToCartFailure, addToCartSuccess, updateCartItem, updateCartItemFailure, updateCartItemSuccess, removeCartItem, removeCartItemFailure, removeCartItemSuccess, reduceCartItem, reduceCartItemSuccess, reduceCartItemFailure } from "./cart.actions";
+import { loadCart, loadCartFailure, loadCartSuccess, addToCart, addToCartFailure, addToCartSuccess, updateCartItem, updateCartItemFailure, updateCartItemSuccess, removeCartItem, removeCartItemFailure, removeCartItemSuccess, reduceCartItem, reduceCartItemSuccess, reduceCartItemFailure,clearCart, refreshCart, cartCompleted  } from "./cart.actions";
 import { state } from "@angular/animations";
 // Función para cargar el carrito desde localStorage
 const loadInitialCartState = () => {
@@ -30,8 +30,8 @@ export interface CartState {
 export const cartReducer = createReducer(
   initialState,
 
-  // === Load Cart ===
-  on(loadCart, (state) => ({
+   // === Load Cart ===
+  on(loadCart, refreshCart, (state) => ({ // 👈 refreshCart también
     ...state,
     loaded: false,
     status: 'loading' as const,
@@ -42,6 +42,19 @@ export const cartReducer = createReducer(
     cart,
     loaded: true,
     error: null,
+    status: 'success' as const,
+  })),
+
+  // === Clear Cart ===
+  on(clearCart, cartCompleted, (state) => ({ // 👈 Nuevas acciones
+    ...state,
+    cart: {
+      id: null,
+      user_id: null,
+      total: 0,
+      completed: true,
+      items: []
+    },
     status: 'success' as const,
   })),
 

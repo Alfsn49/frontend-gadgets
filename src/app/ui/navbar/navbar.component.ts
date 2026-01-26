@@ -49,10 +49,11 @@ export class NavbarComponent {
   searchQuery: string = '';
   searchResults: any = [];
   showResults = false;
+showMobileMenu: boolean = false;
   private searchSubject = new Subject<string>();
   data$: Cart | any = null;
   idProducto: any;
-  
+  showMobileSearch:any;
   cartStatus$ = this.store.select(selectCartStatus);
   isSidebarOpen: boolean = true;
   isMobileMenuOpen = false;
@@ -185,7 +186,7 @@ export class NavbarComponent {
     console.log(id);
     this.modalEliminar = true
     this.idProducto = id
-    // this.store.dispatch(removeCartItem({product_id:id}))
+    this.store.dispatch(removeCartItem({product_id:id}))
   }
 
   logout() {
@@ -256,4 +257,40 @@ navigateToProduct(productId: string) {
       this.store.dispatch(removeCartItem({product_id:this.idProducto}))
       this.closeModalDelete();
     }
+    
+// Método para alternar búsqueda móvil
+toggleMobileSearch(): void {
+  this.showMobileSearch = !this.showMobileSearch;
+  // Si abrimos la búsqueda móvil, cerramos el menú móvil
+  if (this.showMobileSearch) {
+    this.showMobileMenu = false;
+  }
+}
+
+
+
+// Método para cerrar menú móvil (al hacer clic en enlace)
+closeMobileMenu(): void {
+  this.showMobileMenu = false;
+}
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: Event): void {
+  const target = event.target as HTMLElement;
+  
+  // Cerrar dropdown de cuenta si se hace clic fuera
+  if (this.showDropAccount && !target.closest('.relative > button') && !target.closest('.absolute')) {
+    this.showDropAccount = false;
+  }
+  
+  // Cerrar dropdown del carrito si se hace clic fuera
+  if (this.showCartDropdown && !target.closest('.relative > button') && !target.closest('.absolute')) {
+    this.showCartDropdown = false;
+  }
+  
+  // Cerrar resultados de búsqueda si se hace clic fuera
+  if (this.showResults && !target.closest('.relative input') && !target.closest('.absolute')) {
+    this.showResults = false;
+  }
+}
+
 }

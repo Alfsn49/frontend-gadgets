@@ -1,20 +1,118 @@
+<!-- home.component.html - Versión sin duplicados -->
+<app-carousel></app-carousel>
 
-
-
-    <app-carousel></app-carousel>
-
-    <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-8">
-        <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Gadget's Store</h1>
-        <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">Encuentra tus cartas necesarios para tu baraja o accesorios que cuiden tus cartas sin necesidad de buscar en varios lugares, aqui te ofrecemos todo a precio adquisible y con garantia</p>
-        <div class="flex flex-col space-y-4s sm:flex-row sm:justify-center sm:space-y-0">
-            <a href="/products" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
-                Ir a ver productos
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
-            <a href="#" class="py-3 px-5 sm:ms-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                Learn more
-            </a>  
-        </div>
+<!-- Hero Section -->
+<section class="py-12 px-4 mx-auto max-w-6xl">
+  <div class="text-center mb-12">
+    <!-- Etiqueta discreta -->
+    <div class="inline-block px-4 py-1.5 mb-4 text-sm font-medium text-blue-700 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
+      🃏 Especialistas en TCG
     </div>
+    
+    <h1 class="mb-6 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl">
+      Gadget's <span class="text-blue-600 dark:text-blue-400">TCG Store</span>
+    </h1>
+    
+    <p class="mb-8 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      Una tienda dedicada a los Trading Card Games. Ofrecemos cartas coleccionables, 
+      accesorios y todo lo necesario para duelistas y coleccionistas.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="/products"
+         class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+        Explorar Catálogo
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+      
+      <a href="#features"
+         class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+        Conoce Nuestro Enfoque
+      </a>
+    </div>
+  </div>
+
+  <!-- Características principales -->
+  <div id="features" class="mt-16">
+    <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">Nuestra Propuesta</h2>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Calidad -->
+      <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-300">
+        <div class="absolute -top-4 left-6">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-4">Productos Verificados</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+          Nos enfocamos en ofrecer cartas auténticas y en buen estado, revisando cada producto antes de su venta.
+        </p>
+      </div>
+
+      <!-- Variedad -->
+      <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-300">
+        <div class="absolute -top-4 left-6">
+          <div class="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
+            <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-4">Selección Cuidada</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+          Trabajamos con las principales marcas de TCG para ofrecer una variedad equilibrada de productos.
+        </p>
+      </div>
+
+      <!-- Atención -->
+      <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-300">
+        <div class="absolute -top-4 left-6">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+            <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-4">Enfoque en Duelistas</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+          Entendemos las necesidades de los jugadores y nos especializamos en productos para TCG.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marcas que trabajamos -->
+  <div class="mt-16">
+    <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">Marcas Disponibles</h2>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+      <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+        <div class="text-blue-600 dark:text-blue-400 font-bold text-sm mb-1">YU-GI-OH!</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Konami</div>
+      </div>
+      
+      <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+        <div class="text-red-600 dark:text-red-400 font-bold text-sm mb-1">POKÉMON</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">TCG</div>
+      </div>
+      
+      <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+        <div class="text-orange-600 dark:text-orange-400 font-bold text-sm mb-1">MAGIC</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Wizards</div>
+      </div>
+      
+      <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg text-center border border-gray-200 dark:border-gray-700">
+        <div class="text-blue-500 dark:text-blue-300 font-bold text-sm mb-1">DIGIMON</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Bandai</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Separador sutil -->
+<div class="mt-16 border-t border-gray-100 dark:border-gray-800"></div>

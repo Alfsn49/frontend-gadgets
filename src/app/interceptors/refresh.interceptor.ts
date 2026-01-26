@@ -56,19 +56,19 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
               if (userData) {
                 try {
                   const user = JSON.parse(userData);
-                  rol = user.rol; // Asegúrate de que la propiedad sea 'rol'
+                  rol = user.role; // Asegúrate de que la propiedad sea 'rol'
                 } catch (e) {
                   console.error('Error al parsear el usuario:', e);
                 }
               }
-              
+
               authService.logout();
               // Redirige según el rol
-    if (rol === 'Administrador') {
-      router.navigate(['/admin/login']);
-    } else {
-      router.navigate(['/auth/login']);
-    }
+              if (rol === 'Administrador') {
+                router.navigate(['/admin/login']);
+              } else {
+                router.navigate(['/auth/login']);
+              }
             }
             return throwError(() => refreshErr);
           }),

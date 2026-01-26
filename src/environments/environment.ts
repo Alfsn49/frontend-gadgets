@@ -1,5 +1,5 @@
 export const environment = {
-    api: 'https://backend-gadgets-2c8u.onrender.com/',
+    api: 'https://backend-gadgets-production.up.railway.app/',
     // api: 'http://localhost:10000/',
    
 };

@@ -17,6 +17,9 @@ import {
   reduceCartItem,
   reduceCartItemSuccess,
   reduceCartItemFailure,
+  clearCart,
+  refreshCart,
+  cartCompleted
 } from './cart.actions';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -29,12 +32,20 @@ export class CartEffects {
     private toastr: ToastrService,
   ) {}
 
-  /** 🛒 Cargar carrito */
+   /** 🛒 Cargar carrito - MODIFICADO */
   loadCart$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadCart),
+      ofType(loadCart, refreshCart), // 👈 También responde a refreshCart
       mergeMap(() => {
         const localData = this.cartService.loadCartFromLocalStorage();
+
+        // ✅ VERIFICAR SI EL CARRITO ESTÁ COMPLETADO
+        if (localData?.completed) {
+          // Si el carrito en localStorage está completado, forzar recarga del backend
+          console.log('🔄 Carrito completado en localStorage, forzando recarga del backend');
+          this.cartService.clearCartFromLocalStorage(); // Limpiar localStorage
+          return this.loadFromBackend();
+        }
 
         if (
           localData &&
@@ -42,46 +53,69 @@ export class CartEffects {
           localData.items.length > 0 &&
           !localData.completed
         ) {
-          console.log("Datos del carrito del effect", localData)
+          console.log("📦 Usando carrito de localStorage:", localData);
           return of(loadCartSuccess({ cart: localData }));
         } else {
-          return this.cartService.getCart().pipe(
-            map((response) => {
-              console.log('🧾 Respuesta del backend:', response);
-              const cartResponse =
-                response || {
-                  id: null,
-                  user_id: null,
-                  total: 0,
-                  completed: true,
-                  items: [],
-                };
-              this.cartService.saveCartToLocalStorage(cartResponse);
-              return loadCartSuccess({ cart: cartResponse });
-            }),
-            catchError((error) => {
-              console.error('❌ Error al cargar el carrito:', error);
-              if (error?.status === 404) {
-                // Carrito vacío
-                return of(
-                  loadCartSuccess({
-                    cart: {
-                      id: null,
-                      user_id: null,
-                      total: 0,
-                      completed: true,
-                      items: [],
-                    },
-                  }),
-                );
-              }
-              return of(loadCartFailure({ error }));
-            }),
-          );
+          // Cargar del backend
+          return this.loadFromBackend();
         }
       }),
     ),
   );
+
+  /** 🔄 Método privado para cargar desde backend */
+  private loadFromBackend() {
+    return this.cartService.getCart().pipe(
+      map((response) => {
+        console.log('🧾 Respuesta del backend:', response);
+        const cartResponse = response || {
+          id: null,
+          user_id: null,
+          total: 0,
+          completed: true,
+          items: [],
+        };
+        this.cartService.saveCartToLocalStorage(cartResponse);
+        return loadCartSuccess({ cart: cartResponse });
+      }),
+      catchError((error) => {
+        console.error('❌ Error al cargar el carrito:', error);
+        if (error?.status === 404) {
+          return of(
+            loadCartSuccess({
+              cart: {
+                id: null,
+                user_id: null,
+                total: 0,
+                completed: true,
+                items: [],
+              },
+            }),
+          );
+        }
+        return of(loadCartFailure({ error }));
+      }),
+    );
+  }
+
+  /** 🆑 Limpiar carrito (ej: después de compra) */
+  clearCart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(clearCart, cartCompleted), // 👈 También para cartCompleted
+      tap(() => {
+        console.log('🗑️ Limpiando carrito del localStorage');
+        this.cartService.clearCartFromLocalStorage();
+      }),
+      mergeMap(() => {
+        // Después de limpiar, cargar un carrito nuevo del backend
+        return this.cartService.getCart().pipe(
+          map((cart) => loadCartSuccess({ cart })),
+          catchError((error) => of(loadCartFailure({ error })))
+        );
+      })
+    )
+  );
+
 
   /** ➕ Agregar producto al carrito */
   addToCart$ = createEffect(() =>

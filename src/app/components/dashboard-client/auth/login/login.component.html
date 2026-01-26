@@ -1,127 +1,267 @@
-<section class="bg-gray-50 dark:bg-gray-900 ">
-  <div class="flex flex-col items-center  md:h-screen lg:py-0">
-    <!-- Logo centrado desde carpeta assets -->
-    <div class="flex items-center mb-6 py-10">
-      <img class="h-20 w-auto" src="assets/TEXTO.png" alt="Logo de la app">
-    </div>
-    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Iniciar Sesión
-        </h1>
-        <form class="max-w-sm mx-auto" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Correo Electrónico
-    </label>
-    <input
-      #emailInput
-      type="email"
-      formControlName="email"
-      (keydown.enter)="handleEnterOrSubmit('email', passwordInput)"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-             focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      placeholder="name@flowbite.com"
-      required
-    />
-    <div>
-
-    </div>
-    <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)">
-      <p *ngIf="loginForm.get('email')?.errors?.['required']" class="text-red-600">Email es obligatorio</p>
-      <p *ngIf="loginForm.get('email')?.errors?.['email']" class="text-red-600">Email no es válido</p>
-    </div>
-  </div>
-
-  <div class="mb-5">
-    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-      Contraseña
-    </label>
-    <input
-      #passwordInput
-      type="password"
-      formControlName="password"
-      (keydown.enter)="handleEnterOrSubmit('password', submitButton)"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-             focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-             dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      required
-    />
-    <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)">
-      <p class="text-red-600">Contraseña es requerida</p>
-    </div>
-  </div>
-
-  <div class="flex items-start mb-5">
-    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 hover:text-blue-500">
-      <a routerLink="/forget-password">¿Se te olvidó la contraseña?</a>
-    </label>
-  </div>
+<section class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <!-- Elementos decorativos -->
+  <div class="absolute top-0 left-0 w-72 h-72 bg-indigo-100 dark:bg-indigo-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+  <div class="absolute bottom-0 right-0 w-72 h-72 bg-purple-100 dark:bg-purple-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
   
-  <button
-    #submitButton
-    type="submit"
-    [disabled]="loginForm.invalid || (statusLogin | async) === 'loading' || (statusLogin | async) === 'success'"
-    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
-           font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center
-           dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
-           disabled:bg-blue-400 disabled:cursor-not-allowed disabled:dark:bg-blue-500"
->
-    @if ((statusLogin | async) === 'loading') {
-        <div class="flex items-center justify-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Ingresando...
+  <div class="flex flex-col items-center justify-center min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    
+    <!-- Logo mejorado -->
+    <div class="mb-8 sm:mb-12">
+      <div class="relative">
+        <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur-xl opacity-20 animate-pulse"></div>
+        <div class="relative">
+          <img 
+            class="h-24 w-auto sm:h-28 md:h-32 transform hover:scale-105 transition-transform duration-300" 
+            src="assets/TEXTO.png" 
+            alt="Gadget's TCG Store"
+          >
         </div>
-    } @else if ((statusLogin | async) === 'success') {
-        <div class="flex items-center justify-center">
-            <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            ¡Éxito!
+      </div>
+      <p class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Tu portal al universo de los Trading Card Games
+      </p>
+    </div>
+
+    <!-- Tarjeta de login -->
+    <div class="w-full max-w-md">
+      <div class="relative group">
+        <!-- Efecto de borde gradiente -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+        
+        <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+          
+          <!-- Header decorativo -->
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+          
+          <div class="p-8 space-y-8">
+            <!-- Título -->
+            <div class="text-center">
+              <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Bienvenido de vuelta
+              </h1>
+              <p class="text-gray-600 dark:text-gray-400">
+                Accede a tu cuenta de Gadget's TCG
+              </p>
+            </div>
+
+            <!-- Formulario -->
+            <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              
+              <!-- Campo Email -->
+              <div class="space-y-2">
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                    </svg>
+                    Correo Electrónico
+                  </span>
+                </label>
+                <div class="relative">
+                  <input
+                    #emailInput
+                    type="email"
+                    formControlName="email"
+                    (keydown.enter)="handleEnterOrSubmit('email', passwordInput)"
+                    class="w-full px-4 py-3 pl-11 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    placeholder="duelista@example.com"
+                    required
+                  />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)" class="space-y-1">
+                  <p *ngIf="loginForm.get('email')?.errors?.['required']" class="text-sm text-red-500 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    El email es obligatorio
+                  </p>
+                  <p *ngIf="loginForm.get('email')?.errors?.['email']" class="text-sm text-red-500 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    Por favor ingresa un email válido
+                  </p>
+                </div>
+              </div>
+
+              <!-- Campo Contraseña -->
+              <div class="space-y-2">
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Contraseña
+                  </span>
+                </label>
+                <div class="relative">
+                  <input
+                    #passwordInput
+                    type="password"
+                    formControlName="password"
+                    (keydown.enter)="handleEnterOrSubmit('password', submitButton)"
+                    class="w-full px-4 py-3 pl-11 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    placeholder="••••••••"
+                    required
+                  />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="space-y-1">
+                  <p class="text-sm text-red-500 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    La contraseña es requerida
+                  </p>
+                </div>
+              </div>
+
+              <!-- Opciones adicionales -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                  <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                    Recordarme
+                  </label>
+                </div>
+                <a routerLink="/forget-password" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+
+              <!-- Botón de submit -->
+              <button
+                #submitButton
+                type="submit"
+                [disabled]="loginForm.invalid || (statusLogin | async) === 'loading' || (statusLogin | async) === 'success'"
+                class="w-full relative px-6 py-3.5 text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
+              >
+                <div class="relative flex items-center justify-center">
+                  @if ((statusLogin | async) === 'loading') {
+                    <div class="flex items-center gap-2">
+                      <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Ingresando...</span>
+                    </div>
+                  } @else if ((statusLogin | async) === 'success') {
+                    <div class="flex items-center gap-2">
+                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span>¡Éxito!</span>
+                    </div>
+                  } @else {
+                    <span>Ingresar a mi cuenta</span>
+                  }
+                </div>
+              </button>
+
+              <!-- Mensajes de estado -->
+              @if(statusLogin | async; as loginStatus){
+                @switch (loginStatus) {
+                  @case('success'){
+                    <div class="p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800">
+                      <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-green-800 dark:text-green-300 font-medium">
+                          ¡Login exitoso! Redirigiendo...
+                        </span>
+                      </div>
+                    </div>
+                  }
+                  @case('error'){
+                    <div class="p-4 rounded-lg bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-800">
+                      <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-red-800 dark:text-red-300 font-medium">
+                          Error en el login
+                        </span>
+                      </div>
+                      <p class="text-sm text-red-700 dark:text-red-400 mb-3">
+                        Credenciales incorrectas. Por favor verifica tus datos.
+                      </p>
+                      <button 
+                        (click)="resetLoginState()"
+                        class="w-full px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-600 to-pink-600 rounded-lg hover:from-red-700 hover:to-pink-700 transition-colors duration-200"
+                      >
+                        Intentar nuevamente
+                      </button>
+                    </div>
+                  }
+                }
+              }
+
+              <!-- Separador -->
+              <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                  <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                  <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                    ¿Primera vez en Gadget's?
+                  </span>
+                </div>
+              </div>
+
+              <!-- Registro -->
+              <div class="text-center">
+                <a routerLink="/register" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200 shadow-sm">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                  </svg>
+                  Crear una cuenta nueva
+                </a>
+              </div>
+
+            </form>
+
+            <!-- Información de seguridad -->
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <p class="text-xs text-center text-gray-500 dark:text-gray-400">
+                <svg class="inline-block w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                Tu información está protegida con encriptación de nivel bancario
+              </p>
+            </div>
+
+          </div>
         </div>
-    } @else {
-        Ingresar
-    }
-</button>
+      </div>
+    </div>
 
-@if(statusLogin | async; as loginStatus){
-    @switch (loginStatus) {
-        @case('loading'){
-            <!-- Estado de carga - el botón ya muestra el spinner -->
-        }
-
-        @case('success'){
-            <div class="mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-                ¡Login exitoso! Redirigiendo...
-            </div>
-        }
-
-        @case('error'){
-            <div class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                Error en el login. Por favor intenta nuevamente.
-            </div>
-            
-            <!-- Botón para resetear el estado si necesitas -->
-            <button 
-                (click)="resetLoginState()"
-                class="mt-2 text-sm text-blue-600 hover:text-blue-800"
-            >
-                Intentar nuevamente
-            </button>
-        }
-    }
-}
-</form>
-
+    <!-- Footer -->
+    <div class="mt-8 text-center">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        © 2024 Gadget's TCG Store. Todos los derechos reservados.
+      </p>
+      <div class="mt-2 flex justify-center space-x-4">
+        <a href="#" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+          Términos
+        </a>
+        <a href="#" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+          Privacidad
+        </a>
+        <a href="#" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+          Ayuda
+        </a>
       </div>
     </div>
   </div>
-  {{statusLogin | async }}
 </section>
-

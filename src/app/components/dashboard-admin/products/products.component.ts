@@ -21,17 +21,23 @@ import { CatalogService } from '../core/services/catalog.service';
 export class ProductsComponent {
   displayedColumns: string[] = ['id', 'name','image','cardCode','stock','price','description','categoria','subCategoria', 'marca','set','actions'];
 
+  // Solo agregas ESTAS 2 propiedades al principio de tu clase:
+  activeProducts: any[] = [];
+  deletedProducts: any[] = [];
+
   dataSource= new MatTableDataSource<any>([]);
       sortedData: any[] = [];
       modalCreate = false;
     modalEditar = false;
     modalEliminar = false;
     modalConfirmarEliminar = false;
+    modalRestaurar = false;
  createForm: FormGroup;
  editForm: FormGroup;
 
   products: any = [];
   idProducts: any = null;
+  productData:any = null;
 
   categories: any = [];
   brands: any = [];
@@ -149,6 +155,11 @@ onDragLeave(event: DragEvent): void {
     {
       next: (res) => {
         this.products = res;
+        // ESTA ES LA ÚNICA MODIFICACIÓN EN TODO EL TS:
+          this.activeProducts = this.products.filter((p: any) => !p.isDeleted);
+          this.deletedProducts = this.products.filter((p: any) => p.isDeleted);
+
+          
         this.feedDataSource(this.products);
       },
       error: (err) => {
@@ -432,6 +443,34 @@ onDragLeave(event: DragEvent): void {
       }
     });
     
+  }
+
+  openModalRestaurar(producto:any){
+    this.modalRestaurar = true;
+    this.productData = producto;
+    this.idProducts = producto.id;
+  }
+
+  closeModalRestaurar(){
+    this.modalRestaurar = false;
+    this.idProducts = null
+  }
+
+  // Agrega este método NUEVO al final de tu clase (no modifica los existentes):
+  restoreProduct() {
+    this.isSubmitting = true; // Activar loading
+    this.productsService.restoreProduct(this.idProducts).subscribe({
+      next:(data:any)=>{
+        this.toastr.success("Producto Restaurado Correctamente");
+        this.listProducts();
+        this.closeModalRestaurar();
+        this.isSubmitting = false; // Desactivar loading
+      },
+      error:(err:any)=>{
+        this.toastr.error("Error en restaurar los productos")
+        this.isSubmitting = false; // Desactivar loading
+      }
+    })
   }
 
  feedDataSource(data: any) {

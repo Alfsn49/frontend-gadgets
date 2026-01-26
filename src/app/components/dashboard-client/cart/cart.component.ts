@@ -35,7 +35,11 @@ export class CartComponent {
   addressForm!:FormGroup;
   cartService = inject(CartService);
   isSubmitting = false;
-
+  // Agrega estas propiedades
+subtotal: number = 0;
+iva: number = 0;
+ivaPercentage: number = 15; // 15% de IVA
+total: number = 0;
   locationData: LocationData = Locations;
     countries: string[] = Object.keys(this.locationData);
     provinces: string[] = [];
@@ -54,12 +58,33 @@ export class CartComponent {
   { label: "Femenino", value: "F" },
 ];
  
+// Método para calcular los totales
+calcularTotales() {
+  if (!this.data$?.items || this.data$?.items.length === 0) {
+    this.subtotal = 0;
+    this.iva = 0;
+    this.total = 0;
+    return;
+  }
+
+  // Calcular subtotal (suma de todos los productos)
+  this.subtotal = this.data$?.items.reduce((sum: number, item: any) => {
+    return sum + (item.unit_price * item.quantity);
+  }, 0);
+
+  // Calcular IVA (15% del subtotal)
+  this.iva = this.subtotal * (this.ivaPercentage / 100);
+
+  // Calcular total (subtotal + IVA)
+  this.total = this.subtotal + this.iva;
+}
 
   constructor(){
 
     this.cartData$.subscribe(data => {
       console.log('Datos del carrito:', data.items);
       this.data$ = data;
+      this.calcularTotales(); // Calcular totales con IVA
     });
     this.getAddress();
     this.getUserData();
@@ -117,6 +142,7 @@ export class CartComponent {
     console.log(id.product_id)
     const product_id = id.product_id; // Accedemos al ID a través de id.product
     this.store.dispatch(removeCartItem({product_id:product_id}))
+    this.calcularTotales(); // Calcular totales con IVA
     
   }
 
@@ -133,6 +159,7 @@ export class CartComponent {
     //   product:product.product,
     //   quantity:-1
     // })
+    this.calcularTotales(); // Calcular totales con IVA
   }
 
   onIncrease(product:any){
@@ -148,6 +175,7 @@ export class CartComponent {
     //   product:product.product,
     //   quantity:1
     // })
+    this.calcularTotales(); // Calcular totales con IVA
   }
 
   selectAddress(idAddress:string){

@@ -1,103 +1,293 @@
-
- <section>
+<section>
   <div class="mx-auto max-w-screen-xl px-4 py-2 sm:px-6 sm:py-12 lg:px-8">
     <header>
       <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Lista de productos</h2>
-
       <p class="mt-4 max-w-md text-gray-500">
         ¿Buscas alguna carta que necesites para mejorar tu baraja?, aqui lo podras encontrar.
       </p>
     </header>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-
-  <select [ngModel]="filters.category" (ngModelChange)="onFilterChange('category', $event)" class="p-2 border rounded">
-    <option value="">Todas las categorías</option>
-    <option *ngFor="let c of categories" [value]="c.name">{{ c.name }}</option>
-  </select>
-
-  <select [ngModel]="filters.sort" (ngModelChange)="onFilterChange('sort', $event)" class="p-2 border rounded">
-  <option value="">Ordenar por</option>
-  <option value="name_asc">Nombre A-Z</option>
-  <option value="name_desc">Nombre Z-A</option>
-  <option value="price_asc">Precio menor a mayor</option>
-  <option value="price_desc">Precio mayor a menor</option>
-</select>
-
-  <input
-    type="number"
-    placeholder="Precio mínimo"
-    [ngModel]="filters.minPrice"
-    (ngModelChange)="onFilterChange('minPrice', $event)"
-    class="p-2 border rounded"
-  />
-
-  <input
-    type="number"
-    placeholder="Precio máximo"
-    [ngModel]="filters.maxPrice"
-    (ngModelChange)="onFilterChange('maxPrice', $event)"
-    class="p-2 border rounded"
-  />
-
-</div>
-
-
-
-
-   <!-- Info de productos -->
-<div class="mt-8" *ngIf="products.length > 0">
-  <p class="text-sm text-gray-500">
-    Mostrando <span>{{ products.length }}</span> productos
-  </p>
-</div>
-
-<ng-container *ngIf="status$ | async as status">
-  <!-- Loader -->
-  <div *ngIf="status === 'loading'" class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-    <div *ngFor="let _ of [1,2,3,4,5,6,7,8]" class="p-4 border rounded shadow animate-pulse">
-      <div class="bg-gray-300 h-40 w-full mb-4"></div>
-      <div class="bg-gray-300 h-4 w-3/4 mb-2"></div>
-      <div class="bg-gray-300 h-4 w-1/2"></div>
+    <!-- Botón para mostrar/ocultar filtros -->
+    <div class="mt-6">
+      <button (click)="toggleFilters()" 
+              class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+        </svg>
+        Filtros
+        <span *ngIf="hasActiveFilters()" class="ml-2 px-2 py-0.5 bg-white text-blue-600 text-xs font-semibold rounded-full">
+          {{ getActiveFiltersCount() }}
+        </span>
+        <svg class="w-4 h-4 ml-2 transition-transform duration-200" 
+             [class.rotate-180]="showFilters" 
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+      
+      <!-- Mostrar filtros activos si los hay -->
+      <div *ngIf="hasActiveFilters() && !showFilters" class="mt-3">
+        <div class="flex flex-wrap gap-2">
+          <span *ngIf="filters.category" class="px-3 py-1.5 bg-blue-100 text-blue-800 text-sm rounded-full flex items-center">
+            Categoría: {{filters.category}}
+            <button (click)="removeFilter('category')" class="ml-2 text-blue-600 hover:text-blue-800">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </span>
+          <span *ngIf="filters.minPrice !== null" class="px-3 py-1.5 bg-green-100 text-green-800 text-sm rounded-full flex items-center">
+            Mín: ${{filters.minPrice}}
+            <button (click)="removeFilter('minPrice')" class="ml-2 text-green-600 hover:text-green-800">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </span>
+          <span *ngIf="filters.maxPrice !== null" class="px-3 py-1.5 bg-green-100 text-green-800 text-sm rounded-full flex items-center">
+            Máx: ${{filters.maxPrice}}
+            <button (click)="removeFilter('maxPrice')" class="ml-2 text-green-600 hover:text-green-800">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </span>
+          <span *ngIf="filters.sort" class="px-3 py-1.5 bg-purple-100 text-purple-800 text-sm rounded-full flex items-center">
+            {{ getSortLabel(filters.sort) }}
+            <button (click)="removeFilter('sort')" class="ml-2 text-purple-600 hover:text-purple-800">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Lista de productos -->
-  <div *ngIf="status === 'success'">
-    <div *ngIf="products.length > 0; else noProducts" 
-         class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <app-product-card *ngFor="let product of products"
-                        [product]="product"
-                        (addToCart)="addToCart($event)">
-      </app-product-card>
+    <!-- Contenedor de filtros (desplegable) -->
+    <div *ngIf="showFilters" 
+         class="mt-4 p-6 border border-blue-200 rounded-xl bg-gradient-to-br from-blue-50 to-white shadow-lg animate-fade-in">
+      
+      <!-- Título del panel de filtros -->
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-semibold text-gray-800">
+          <svg class="w-5 h-5 inline mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+          </svg>
+          Filtros de búsqueda
+        </h3>
+        <button (click)="toggleFilters()" class="text-gray-500 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Grid de filtros -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Categoría -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            Categoría
+          </label>
+          <select [ngModel]="tempFilters.category" 
+                  (ngModelChange)="onFilterChange('category', $event)" 
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-blue-400">
+            <option value="">Todas las categorías</option>
+            <option *ngFor="let c of categories" [value]="c.name">{{ c.name }}</option>
+          </select>
+        </div>
+
+        <!-- Ordenar por -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
+            </svg>
+            Ordenar por
+          </label>
+          <select [ngModel]="tempFilters.sort" 
+                  (ngModelChange)="onFilterChange('sort', $event)" 
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-blue-400">
+            <option value="">Por defecto</option>
+            <option value="name_asc">Nombre A-Z</option>
+            <option value="name_desc">Nombre Z-A</option>
+            <option value="price_asc">Precio: menor a mayor</option>
+            <option value="price_desc">Precio: mayor a menor</option>
+          </select>
+        </div>
+
+        <!-- Precio mínimo -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Precio mínimo
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-500">$</span>
+            <input
+              type="number"
+              placeholder="0.00"
+              [ngModel]="tempFilters.minPrice"
+              (ngModelChange)="onFilterChange('minPrice', $event)"
+              class="w-full p-3 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all hover:border-green-400"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+
+        <!-- Precio máximo -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Precio máximo
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-3 text-gray-500">$</span>
+            <input
+              type="number"
+              placeholder="9999.99"
+              [ngModel]="tempFilters.maxPrice"
+              (ngModelChange)="onFilterChange('maxPrice', $event)"
+              class="w-full p-3 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all hover:border-green-400"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+        
+        <!-- Info de filtros aplicados -->
+        <div class="text-sm text-gray-600">
+          <div *ngIf="hasActiveFilters()" class="flex items-center">
+            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>
+              <span class="font-medium">{{ getActiveFiltersCount() }}</span> filtro(s) aplicado(s)
+            </span>
+          </div>
+          <div *ngIf="!hasActiveFilters()" class="flex items-center">
+            <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Sin filtros aplicados</span>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex flex-wrap gap-3">
+          <!-- Botón Cancelar -->
+          <button (click)="cancelFiltersAndClose()" 
+                  [disabled]="!filtersHaveChanged"
+                  class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Cancelar
+          </button>
+
+          <!-- Botón Restablecer -->
+          <button (click)="resetFilters()" 
+                  class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Restablecer
+          </button>
+
+          <!-- Botón Aplicar -->
+          <button (click)="applyFiltersAndClose()" 
+                  [disabled]="isApplyingFilters || !filtersHaveChanged"
+                  class="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center shadow-md">
+            <svg *ngIf="isApplyingFilters" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg *ngIf="!isApplyingFilters" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>{{ isApplyingFilters ? 'Aplicando...' : 'Aplicar filtros' }}</span>
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Error -->
-  <div *ngIf="status === 'error'" class="text-center text-red-500 mt-8">
-    Ocurrió un error al cargar los productos.
-  </div>
-</ng-container>
+    <!-- Info de productos -->
+    <div class="mt-8" *ngIf="products.length > 0">
+      <p class="text-sm text-gray-500">
+        Mostrando <span class="font-semibold">{{ products.length }}</span> productos
+        <span *ngIf="page > 1" class="text-gray-400"> (Página {{ page }})</span>
+      </p>
+    </div>
 
-<!-- Template cuando no hay productos -->
-<ng-template #noProducts>
-  <div class="text-center text-gray-500 mt-8">
-    No hay productos disponibles con los filtros seleccionados.
-  </div>
-</ng-template>
+    <ng-container *ngIf="status$ | async as status">
+      <!-- Loader -->
+      <div *ngIf="status === 'loading'" class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div *ngFor="let _ of [1,2,3,4,5,6,7,8]" class="p-4 border rounded shadow animate-pulse">
+          <div class="bg-gray-300 h-40 w-full mb-4"></div>
+          <div class="bg-gray-300 h-4 w-3/4 mb-2"></div>
+          <div class="bg-gray-300 h-4 w-1/2"></div>
+        </div>
+      </div>
 
+      <!-- Lista de productos -->
+      <div *ngIf="status === 'success'">
+        <div *ngIf="products.length > 0; else noProducts" 
+             class="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <app-product-card *ngFor="let product of products"
+                            [product]="product"
+                            (addToCart)="addToCart($event)">
+          </app-product-card>
+        </div>
+      </div>
 
-<ng-template #noProducts>
-  <p class="text-center text-gray-500 mt-8">No hay productos para mostrar.</p>
-</ng-template>
+      <!-- Error -->
+      <div *ngIf="status === 'error'" class="text-center text-red-500 mt-8">
+        Ocurrió un error al cargar los productos.
+      </div>
+    </ng-container>
+
+    <!-- Template cuando no hay productos -->
+    <ng-template #noProducts>
+      <div class="text-center mt-12 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200">
+        <svg class="w-20 h-20 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No se encontraron productos</h3>
+        <p class="text-gray-500 mb-6">Intenta ajustar los filtros o vuelve más tarde.</p>
+        <button (click)="resetFilters()" 
+                class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Restablecer filtros
+        </button>
+      </div>
+    </ng-template>
     
+    <!-- Paginación -->
     <ol class="mt-8 flex justify-center gap-1 text-xs font-medium" >
       @if(pageData$ | async; as pageData){
         <li>
           <button
           (click)="changePage(pageData.page  - 1)"
           [disabled]="pageData.page  === 1"
-            class="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100"
+            class="inline-flex size-8 items-center justify-center rounded-lg border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span class="sr-only">Prev Page</span>
             <svg
@@ -118,20 +308,20 @@
         <li *ngFor="let i of [].constructor(pageData.totalPages); let index = index">
           <button
             (click)="changePage(index + 1)"
-            [class.bg-black]="index + 1 === pageData.page"
+            [class.bg-blue-600]="index + 1 === pageData.page"
             [class.text-white]="index + 1 === pageData.page"
-            class="block size-8 rounded-sm border border-gray-100 text-center leading-8"
+            [class.font-semibold]="index + 1 === pageData.page"
+            class="block size-8 rounded-lg border border-gray-200 text-center leading-8 hover:bg-blue-50 hover:border-blue-300 transition-colors"
           >
             {{ index + 1 }}
           </button>
         </li>
     
-    
         <li>
           <button
           (click)="changePage(pageData.page + 1)"
           [disabled]="pageData.page === pageData.totalPages"
-            class="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100"
+            class="inline-flex size-8 items-center justify-center rounded-lg border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span class="sr-only">Next Page</span>
             <svg
@@ -152,6 +342,3 @@
     </ol>
   </div>
 </section>
-
-
-

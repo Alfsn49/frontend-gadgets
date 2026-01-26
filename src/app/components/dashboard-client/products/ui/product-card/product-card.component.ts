@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../data-access/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
@@ -55,4 +55,25 @@ export class ProductCardComponent {
       this.toastr.info('Debes iniciar sesión para agregar productos al carrito', 'Login requerido');
     }
   }
+stockPercentage = computed(() => {
+  const stock = this.product().stock;
+  if (stock === 0) return 0;
+  return Math.min((stock / 25) * 100, 100);
+});
+
+stockBarClass = computed(() => {
+  const stock = this.product().stock;
+  if (stock <= 3) return 'bg-gradient-to-r from-red-500 to-red-600';
+  if (stock <= 8) return 'bg-gradient-to-r from-orange-500 to-amber-500';
+  if (stock <= 15) return 'bg-gradient-to-r from-yellow-500 to-yellow-400';
+  return 'bg-gradient-to-r from-green-500 to-emerald-500';
+});
+
+
+// Método opcional para notificar disponibilidad
+notifyWhenAvailable() {
+  // Lógica para notificar al usuario cuando el producto esté disponible
+  console.log('Notificar cuando esté disponible:', this.product().id);
+  // Podrías abrir un modal o enviar una solicitud al backend
+}
 }

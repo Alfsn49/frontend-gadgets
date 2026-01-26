@@ -22,4 +22,8 @@ export class ProductsService extends HttpService{
   deleteProducts(id: number): Observable<any> {
     return this.http.delete(this.api + 'product/delete-product/' + id);
   }
+
+  restoreProduct(id:number):Observable<any>{
+    return this.http.get(this.api + 'product/restore-product/' + id)
+  }
 }

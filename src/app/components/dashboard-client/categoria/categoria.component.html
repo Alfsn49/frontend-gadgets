@@ -1,43 +1,330 @@
-<section class="bg-white py-10 antialiased dark:bg-gray-900">
-  <div class="mx-auto max-w-screen-xl px-4 md:px-6">
-    <!-- Encabezado -->
-    <div class="mb-8 flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Categorías</h2>
+<!-- categoria.component.html -->
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+  
+  <!-- ==================== -->
+  <!-- SECCIÓN 1: HERO -->
+  <!-- ==================== -->
+  <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-800">
+    <div class="absolute inset-0 bg-black/10"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div class="text-center">
+        <!-- Badge destacado -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
+          <svg class="w-5 h-5 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span class="text-sm font-medium text-white">Colecciones Exclusivas</span>
+        </div>
+        
+        <!-- Título principal -->
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+          Explora Nuestro
+          <span class="block mt-2 bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+            Catálogo Premium
+          </span>
+        </h1>
+        
+        <!-- Descripción -->
+        <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+          Descubre las mejores cartas y accesorios para tu colección. 
+          Productos seleccionados para verdaderos coleccionistas.
+        </p>
+      </div>
     </div>
-
-    <!-- Contenido en dos columnas -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-      
-      <!-- Categorías -->
-      <div>
-        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Explora nuestras categorías</h3>
-        <ul class="grid sm:grid-cols-2 gap-4">
-          <li>
-            <a href="#" class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition">
-              <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z" />
-              </svg>
-              <span class="text-sm font-medium text-gray-900 dark:text-white">TCG - Pokémon</span>
-            </a>
-          </li>
-          <!-- Puedes duplicar li para más -->
-        </ul>
-      </div>
-
-      <!-- Marcas -->
-      <div>
-        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Nuestras marcas aliadas</h3>
-        <ul class="grid sm:grid-cols-2 gap-4">
-          <li>
-            <a href="#" class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition">
-              <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 15v5m-3 0h6M4 11h16M5 15h14a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1Z" />
-              </svg>
-              <span class="text-sm font-medium text-gray-900 dark:text-white">Konami</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+    
+    <!-- Onda decorativa -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg class="w-full h-12 text-gray-50 dark:text-gray-900" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"/>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"/>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"/>
+      </svg>
     </div>
   </div>
-</section>
+
+  <!-- ==================== -->
+  <!-- SECCIÓN 2: ESTADO DE CARGA -->
+  <!-- ==================== -->
+  @if(isLoading) {
+    <div class="py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          @for(i of [1,2,3]; track i) {
+            <div class="animate-pulse">
+              <div class="bg-gray-200 dark:bg-gray-800 rounded-2xl h-80"></div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ==================== -->
+  <!-- SECCIÓN 3: CONTENIDO PRINCIPAL -->
+  <!-- ==================== -->
+  @if(!isLoading && categories?.data?.length > 0) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      
+      <!-- ==================== -->
+      <!-- 3.1 BARRA DE ESTADÍSTICAS -->
+      <!-- ==================== -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        
+        <!-- Estadística 1: Total de Categorías -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-4">
+            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+              <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-gray-900 dark:text-white">{{categories.summary.totalCategories}}</div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Categorías Totales</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadística 2: Categorías con Productos -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-4">
+            <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
+              <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-gray-900 dark:text-white">{{categories.summary.categoriesWithProducts}}</div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Con Productos</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadística 3: Total de Productos -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-4">
+            <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
+              <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-gray-900 dark:text-white">{{categories.summary.totalProducts}}</div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Productos Totales</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== -->
+      <!-- 3.2 TÍTULO DE LAS CATEGORÍAS -->
+      <!-- ==================== -->
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Nuestras 
+          <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Categorías
+          </span>
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Selecciona una categoría para explorar todos los productos disponibles
+        </p>
+      </div>
+
+      <!-- ==================== -->
+      <!-- 3.3 GRID DE CATEGORÍAS -->
+      <!-- ==================== -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        @for(category of categories.data; track category.id) {
+          <!-- Card de Categoría -->
+          <div 
+            class="group relative overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer"
+            [class]="getCategoryGradient(category.id)"
+            (click)="navigateToCategory(category)"
+          >
+            <!-- Patrón de fondo decorativo -->
+            <div class="absolute inset-0 opacity-10">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -mr-16 -mt-16"></div>
+              <div class="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full -ml-24 -mb-24"></div>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="relative z-10 p-8 md:p-10 text-white">
+              
+              <!-- Encabezado: Icono, nombre y contador -->
+              <div class="flex justify-between items-start mb-8">
+                <!-- Lado izquierdo: Icono y nombre -->
+                <div class="flex items-center gap-4">
+                  <div class="p-3 bg-white/20 backdrop-blur-sm rounded-2xl">
+                    @if(category.id === 1) {
+                      <!-- Icono para Cartas -->
+                      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                      </svg>
+                    } @else {
+                      <!-- Icono para Accesorios -->
+                      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                      </svg>
+                    }
+                  </div>
+                  <div>
+                    <h3 class="text-2xl md:text-3xl font-bold">{{category.name}}</h3>
+                    <!-- Indicador de estado -->
+                    <div class="flex items-center gap-2 mt-1">
+                      <div class="w-2 h-2 rounded-full" [class]="category.hasProducts ? 'bg-green-400 animate-pulse' : 'bg-gray-400'"></div>
+                      <span class="text-sm opacity-90">
+                        {{category.hasProducts ? 'Disponible' : 'Próximamente'}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Lado derecho: Contador de productos -->
+                <div class="text-right">
+                  <div class="text-4xl font-bold">{{category.productCount}}</div>
+                  <div class="text-sm opacity-80">
+                    {{category.productCount === 1 ? 'producto' : 'productos'}}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subcategorías (si existen) -->
+              @if(category.subCategories.length > 0) {
+                <div class="mb-8">
+                  <p class="text-sm opacity-90 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                    Tipos disponibles
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    @for(subCat of category.subCategories; track subCat.id) {
+                      <span class="px-4 py-2 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+                        {{subCat.name}}
+                      </span>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Marcas (si existen) -->
+              @if(category.brands.length > 0) {
+                <div class="mb-10">
+                  <p class="text-sm opacity-90 mb-3 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    Marcas destacadas
+                  </p>
+                  <div class="flex items-center gap-3">
+                    @for(brand of category.brands; track brand.id) {
+                      <div class="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-xl backdrop-blur-sm">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                          <span class="text-xs font-bold">{{brand.name.charAt(0)}}</span>
+                        </div>
+                        <span class="text-sm">{{brand.name}}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Botón de acción -->
+              <div class="flex items-center justify-between">
+                <span class="text-lg font-medium">
+                  @if(category.hasProducts) {
+                    Ver todos los productos
+                  } @else {
+                    Disponible próximamente
+                  }
+                </span>
+                @if(category.hasProducts) {
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm opacity-80">Explorar</span>
+                    <svg class="w-6 h-6 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Overlay al hacer hover -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        }
+      </div>
+
+      
+    </div>
+  }
+
+  <!-- ==================== -->
+  <!-- SECCIÓN 4: ESTADO VACÍO -->
+  <!-- ==================== -->
+  @if(!isLoading && (!categories?.data || categories.data.length === 0)) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-700 rounded-full mb-8">
+        <svg class="w-12 h-12 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        No hay categorías disponibles
+      </h3>
+      <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8">
+        Estamos trabajando para añadir nuevas categorías. Por favor, revisa más tarde.
+      </p>
+      <button 
+        (click)="getCategories()"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg transition-all duration-300"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- ==================== -->
+  <!-- SECCIÓN 5: ESTADO DE ERROR -->
+  <!-- ==================== -->
+  @if(error) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 rounded-full mb-8">
+        <svg class="w-12 h-12 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Error al cargar categorías
+      </h3>
+      <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8">
+        {{error}}
+      </p>
+      <button 
+        (click)="getCategories()"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium hover:shadow-lg transition-all duration-300"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- ==================== -->
+  <!-- SECCIÓN 6: ONDA INFERIOR -->
+  <!-- ==================== -->
+  <div class="mt-20">
+    <svg class="w-full h-20 text-gray-50 dark:text-gray-900" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"/>
+      <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"/>
+      <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"/>
+    </svg>
+  </div>
+</div>

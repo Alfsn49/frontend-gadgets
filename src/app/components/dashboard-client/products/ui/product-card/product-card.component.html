@@ -1,51 +1,128 @@
+<ul>
+  <li
+    class="group relative bg-white rounded-xl shadow-sm hover:shadow-lg
+           transition-all duration-300 overflow-hidden border border-gray-100
+           flex flex-col h-full
+           min-h-[500px] sm:min-h-[520px] lg:min-h-[560px]"
+  >
 
-<ul >
-    <li>
-      <a  class="group block overflow-hidden">
-        <img
-          [src]="product().image"
-          alt=""
-          class="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[350px]"
-        />
+    <!-- Ribbon AGOTADO -->
+    <div *ngIf="product().stock === 0" class="absolute -top-2 -right-2 z-20">
+      <div
+        class="bg-gradient-to-r from-red-600 to-red-700 text-white text-[11px] font-extrabold
+               px-4 py-2 rounded shadow-xl rotate-3 tracking-wider uppercase">
+        AGOTADO
+      </div>
+    </div>
 
-        <div class="relative bg-white pt-3">
-            <a [routerLink]="['/product', product().id]">
-              <h3 class="text-sm text-gray-700 group-hover:underline group-hover:underline-offset-4 overflow-hidden text-ellipsis line-clamp-2">
-                {{ product().name }}
-              </h3>
-            </a>
-          
-            <div class="mt-2 flex items-center justify-between">
-              <span class="sr-only"> Regular Price </span>
-          
-              <span class="tracking-wider text-gray-900 font-medium">
-                {{ product().price }} $
-              </span>
-          
-              <button (click)="add($event)" 
-        class="p-2 bg-slate-500 hover:bg-slate-600 rounded-md shadow-md transition">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24"
-       width="20"
-       height="20"
-       class="text-white cursor-pointer hover:text-yellow-300 transition"
-       fill="none">
-    <path d="M8 16H15.2632C19.7508 16 20.4333 13.1808 21.261 9.06908C21.4998 7.88311 21.6192 7.29013 21.3321 6.89507C21.045 6.5 20.4947 6.5 19.3941 6.5H6"
-          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-    <path d="M8 16L5.37873 3.51493C5.15615 2.62459 4.35618 2 3.43845 2H2.5"
-          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-    <path d="M8.88 16H8.46857C7.10522 16 6 17.1513 6 18.5714C6 18.8081 6.1842 19 6.41143 19H17.5"
-          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    <circle cx="10.5" cy="20.5" r="1.5" stroke="currentColor" stroke-width="1.5" />
-    <circle cx="17.5" cy="20.5" r="1.5" stroke="currentColor" stroke-width="1.5" />
-  </svg>
-</button>
+    <!-- Ribbon STOCK BAJO -->
+    <div *ngIf="product().stock > 0 && product().stock <= 5" class="absolute top-3 right-3 z-20">
+      <div
+        class="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold
+               px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 animate-pulse">
+        <span>Últimas {{ product().stock }}</span>
+      </div>
+    </div>
 
+    <!-- Imagen -->
+    <div class="relative h-60 sm:h-64 lg:h-72 overflow-hidden bg-gray-50">
+      <img
+        [src]="product().image"
+        [alt]="product().name"
+        class="w-full h-full object-contain p-4
+               group-hover:scale-105 transition-transform duration-500"
+      />
+
+      <!-- Overlay AGOTADO -->
+      <div *ngIf="product().stock === 0"
+           class="absolute inset-0 bg-white/80 backdrop-blur flex items-center justify-center">
+        <span class="text-red-700 font-bold text-lg">AGOTADO</span>
+      </div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="p-4 lg:p-5 flex flex-col flex-1">
+
+      <!-- Nombre -->
+      <div class="mb-3 min-h-[44px]">
+        <a [routerLink]="['/product', product().id]">
+          <h3
+            class="text-sm lg:text-base font-semibold text-gray-900
+                   leading-snug line-clamp-2">
+            {{ product().name }}
+          </h3>
+        </a>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-auto">
+
+        <!-- Precio + botón CORREGIDO -->
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <span class="text-xl lg:text-2xl font-bold text-gray-900">
+              ${{ product().price | number:'1.2-2' }}
+            </span>
+            <div *ngIf="product().price > 100" class="text-xs text-gray-500">
+              Envío gratis
             </div>
           </div>
-          
-      </a>
-    </li>
-  </ul>
 
+          <!-- Botón con icono completo -->
+          <button
+            [disabled]="product().stock === 0"
+            (click)="product().stock > 0 ? add($event) : null"
+            class="p-2.5 bg-gradient-to-r from-slate-700 to-slate-800
+                   rounded-xl shadow transition-all duration-200
+                   hover:scale-105 active:scale-95
+                   disabled:opacity-50 disabled:cursor-not-allowed">
+            
+            <svg
+              [class]="product().stock === 0 ? 
+                'w-5 h-5 text-gray-400' : 
+                'w-5 h-5 text-white hover:text-amber-300 transition-colors'"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              
+              <!-- Icono de carrito para stock disponible -->
+              <path *ngIf="product().stock > 0" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="1.5"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              
+              <!-- Icono de reloj para stock agotado -->
+              <path *ngIf="product().stock === 0" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="1.5"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </button>
+        </div>
 
+        <!-- Stock -->
+        <div class="mt-3 min-h-[36px]">
+          <div *ngIf="product().stock > 0">
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-gray-600">Disponible:</span>
+              <span class="font-semibold text-amber-600">
+                {{ product().stock }} unid.
+              </span>
+            </div>
+
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+              <div
+                class="h-1.5 rounded-full transition-all duration-300"
+                [class]="stockBarClass()"
+                [style.width]="stockPercentage() + '%'">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </li>
+</ul>

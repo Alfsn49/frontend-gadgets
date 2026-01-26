@@ -1,0 +1,23 @@
+/* Agregar esto en tu archivo CSS global */
+:root {
+  --twitter: #1DA1F2;
+  --discord: #5865F2;
+  --instagram: #E1306C;
+  --youtube: #FF0000;
+}
+
+.twitter { color: var(--twitter); }
+.border-twitter { border-color: var(--twitter); }
+.bg-twitter { background-color: var(--twitter); }
+
+.discord { color: var(--discord); }
+.border-discord { border-color: var(--discord); }
+.bg-discord { background-color: var(--discord); }
+
+.instagram { color: var(--instagram); }
+.border-instagram { border-color: var(--instagram); }
+.bg-instagram { background-color: var(--instagram); }
+
+.youtube { color: var(--youtube); }
+.border-youtube { border-color: var(--youtube); }
+.bg-youtube { background-color: var(--youtube); }

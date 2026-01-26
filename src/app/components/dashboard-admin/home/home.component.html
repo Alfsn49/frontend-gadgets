@@ -1,114 +1,337 @@
-<section class="p-8 bg-gradient-to-tr from-[#f9fafb] to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
-  <!-- Encabezado -->
-  <header class="mb-14 text-center">
-    <h1 class="text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-      📊 Panel Administrativo <span class="text-blue-600">TCG</span>
-    </h1>
-    <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
-      Visualiza estadísticas mientras gestiona tu tienda de manera agíl.
-    </p>
+<!-- dashboard-home.component.html -->
+<section class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 md:p-6 lg:p-8">
+  <!-- Encabezado mejorado -->
+  <header class="mb-10 md:mb-12">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
+          📊 Dashboard Administrativo
+        </h1>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-lg text-gray-600 dark:text-gray-300">
+            Bienvenido, <span class="font-semibold text-gray-800 dark:text-white">Administrador</span>
+          </span>
+          <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        </div>
+      </div>
+      
+      <!-- Fecha y estadísticas rápidas -->
+      <div class="flex flex-col items-end">
+        <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+          {{ currentDate | date:'EEEE, d MMMM y' }}
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+            🔄 Actualizado ahora
+          </div>
+          <button (click)="refreshData()" 
+                  class="p-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filtros rápidos -->
+    <div class="flex flex-wrap items-center gap-4 mb-6">
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-gray-600 dark:text-gray-400">Período:</span>
+        <select class="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm">
+          <option>Hoy</option>
+          <option selected>Esta semana</option>
+          <option>Este mes</option>
+          <option>Este trimestre</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-gray-600 dark:text-gray-400">Vista:</span>
+        <select class="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm">
+          <option selected>Resumen general</option>
+          <option>Detalle por categoría</option>
+          <option>Comparativa mensual</option>
+        </select>
+      </div>
+    </div>
   </header>
 
-  <!-- Métricas rápidas con íconos -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-green-500">
-      <div class="flex items-center gap-4">
-        <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-          </svg>
+  <!-- Métricas principales con diseño mejorado -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+    <!-- Ventas Hoy -->
+    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full -translate-y-8 translate-x-8"></div>
+      <div class="p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-xl bg-gradient-to-r from-green-500/20 to-emerald-500/20">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="text-xs font-medium px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+            +12.5%
+          </div>
         </div>
-        <div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Ventas Hoy</p>
-          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">{{dataDashboard?.comprasHoy}}</h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-yellow-400">
-      <div class="flex items-center gap-4">
-        <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
-          <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M3 10h11M9 21V3M16 13l5 5m0 0l-5 5m5-5H9" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Pedidos Pendientes</p>
-          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">{{dataDashboard?.pendientes}}</h3>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Ventas Hoy</p>
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-1">{{dataDashboard?.comprasHoy || 0}}</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          {{ dataDashboard?.comprasHoy || 0 > 0 ? 'En aumento' : 'Sin ventas' }} hoy
+        </p>
+        <div class="mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+          <div class="bg-gradient-to-r from-green-500 to-emerald-600 h-1.5 rounded-full" 
+               [style.width]="(dataDashboard?.comprasHoy || 0) > 50 ? '100%' : ((dataDashboard?.comprasHoy || 0) * 2) + '%'">
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-red-500">
-      <div class="flex items-center gap-4">
-        <div class="p-3 bg-red-100 dark:bg-red-900 rounded-full">
-          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9 17v-6h13v6m-7 4V9m0 0L5 9m0 0V4m0 0L20 4" />
-          </svg>
+    <!-- Pedidos Pendientes -->
+    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-yellow-500/10 rounded-full -translate-y-8 translate-x-8"></div>
+      <div class="p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-xl bg-gradient-to-r from-yellow-500/20 to-amber-500/20">
+            <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <div class="text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
+            {{ (dataDashboard?.pendientes || 0) > 5 ? '⚠️ Alta' : 'Normal' }}
+          </div>
         </div>
-        <div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Stock Bajo</p>
-          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">{{dataDashboard?.bajoStock}}</h3>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Pedidos Pendientes</p>
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-1">{{dataDashboard?.pendientes || 0}}</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          {{ (dataDashboard?.pendientes || 0) > 0 ? 'Requieren atención' : 'Todo al día' }}
+        </p>
+        <div class="mt-4 flex items-center gap-2">
+          <a routerLink="/admin/dashboard/orders" 
+             class="text-xs font-medium text-yellow-600 dark:text-yellow-400 hover:underline">
+            Ver pendientes →
+          </a>
         </div>
       </div>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border-t-4 border-blue-500">
-      <div class="flex items-center gap-4">
-        <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 0H5a4 4 0 00-4 4v2h5m3-10a4 4 0 100-8 4 4 0 000 8z" />
-          </svg>
+    <!-- Stock Bajo -->
+    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-red-500/10 rounded-full -translate-y-8 translate-x-8"></div>
+      <div class="p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20">
+            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div *ngIf="dataDashboard?.bajoStock > 0" 
+               class="text-xs font-medium px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+            Crítico
+          </div>
         </div>
-        <div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Usuarios</p>
-          <h3 class="text-2xl font-bold text-gray-800 dark:text-white">12</h3>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Stock Bajo</p>
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-1">{{dataDashboard?.bajoStock || 0}}</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          {{ dataDashboard?.bajoStock > 0 ? 'Productos con stock mínimo' : 'Stock óptimo' }}
+        </p>
+        <div class="mt-4 flex items-center gap-2">
+          <a routerLink="/admin/dashboard/products" 
+             class="text-xs font-medium text-red-600 dark:text-red-400 hover:underline">
+            Revisar stock →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usuarios Activos -->
+    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full -translate-y-8 translate-x-8"></div>
+      <div class="p-6 relative">
+        <div class="flex items-center justify-between mb-4">
+          <div class="p-3 rounded-xl bg-gradient-to-r from-blue-500/20 to-indigo-500/20">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 0H5a4 4 0 00-4 4v2h5m3-10a4 4 0 100-8 4 4 0 000 8z"/>
+            </svg>
+          </div>
+          <div class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+            +3 nuevos
+          </div>
+        </div>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Usuarios Activos</p>
+        <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-1">{{dataDashboard?.usuariosActivos || 12}}</h3>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          {{ dataDashboard?.usuariosActivos > 0 ? 'Activos este mes' : 'Sin usuarios' }}
+        </p>
+        <div class="mt-4 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+          <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-1.5 rounded-full" 
+               [style.width]="(dataDashboard?.usuariosActivos || 0) > 100 ? '100%' : ((dataDashboard?.usuariosActivos || 0) * 0.8) + '%'">
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Accesos rápidos más modernos -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Productos</h3>
-      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-        Añade, edita o elimina productos de tu catálogo con facilidad.
-      </p>
-      <a routerLink="/admin/dashboard/products"
-         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
-        📦 Ir a Productos
-      </a>
-    </article>
+  <!-- Sección principal: Accesos rápidos -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+    <!-- Accesos rápidos -->
+    <div class="lg:col-span-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Gestión de Productos -->
+        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="p-6 relative">
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+              </div>
+              <span class="text-xs font-medium px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">
+                {{ dataDashboard?.totalProductos || 0 }} productos
+              </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Gestión de Productos</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+              Administra tu catálogo completo: añade nuevos productos, actualiza precios, controla inventario y gestiona categorías.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a routerLink="/admin/dashboard/products"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium rounded-lg transition-all shadow hover:shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Gestionar
+              </a>
+              <a routerLink="/admin/dashboard/categories"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all">
+                Categorías
+              </a>
+            </div>
+          </div>
+        </div>
 
-    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Pedidos</h3>
-      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-        Supervisa y actualiza el estado de los pedidos fácilmente.
-      </p>
-      <a routerLink="/admin/dashboard/orders"
-         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
-        📬 Ir a Pedidos
-      </a>
-    </article>
+        <!-- Gestión de Pedidos -->
+        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="p-6 relative">
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                {{ dataDashboard?.totalPedidos || 0 }} pedidos
+              </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Gestión de Pedidos</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+              Supervisa todos los pedidos en tiempo real, actualiza estados de envío y gestiona devoluciones o reembolsos.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a routerLink="/admin/dashboard/orders"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-lg transition-all shadow hover:shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                Ver Pedidos
+              </a>
+              <a routerLink="/admin/dashboard/reportaje"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all">
+                Reportes
+              </a>
+            </div>
+          </div>
+        </div>
 
-    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-200 dark:border-gray-700">
-      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Usuarios</h3>
-      <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
-        Administra cuentas de clientes y personal de la tienda.
-      </p>
-      <a routerLink="/admin/dashboard/clients"
-         class="inline-flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition">
-        👥 Ir a Usuarios
-      </a>
-    </article>
+        <!-- Gestión de Clientes -->
+        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="p-6 relative">
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="text-xs font-medium px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                {{ dataDashboard?.usuarios || 12 }} clientes
+              </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Gestión de Clientes</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+              Administra la base de clientes, gestiona perfiles, historial de compras y comunicación con usuarios.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a routerLink="/admin/dashboard/clients"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium rounded-lg transition-all shadow hover:shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1m-6 0H5a4 4 0 00-4 4v2h5m3-10a4 4 0 100-8 4 4 0 000 8z"/>
+                </svg>
+                Ver Clientes
+              </a>
+              <a routerLink="/admin/dashboard/roles"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all">
+                Roles
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="p-6 relative">
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <span class="text-xs font-medium px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
+                Reportes
+              </span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Estadísticas & Reportes</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+              Accede a informes detallados, métricas de ventas, análisis de clientes y tendencias de productos.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <a routerLink="/admin/dashboard/reportaje"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium rounded-lg transition-all shadow hover:shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6M5 15l7-7 7 7"/>
+                </svg>
+                Ver Reportes
+              </a>
+              <button (click)="exportReport()"
+                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all">
+                Exportar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- Pie de página -->
+  <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="text-sm text-gray-600 dark:text-gray-400">
+        <p>© 2024 TCG Admin Panel. Todos los derechos reservados.</p>
+        <p class="mt-1">Versión 2.1.0 • Última actualización: {{ currentDate | date:'medium' }}</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          Documentación
+        </a>
+        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          Soporte
+        </a>
+        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          Configuración
+        </a>
+      </div>
+    </div>
+  </footer>
 </section>

@@ -10,6 +10,10 @@ export class ReportService extends HttpService{
     return this.http.get(`${this.api}reports/dashboard-data`);
   }
 
+  getReportsDashboard(year:any){
+    return this.http.get(`${this.api}reports/dashboard-reports?year=${year}`);
+  }
+
   getSalesSummary() {
     return this.http.get(`${this.api}reports/sales-summary`);
   }

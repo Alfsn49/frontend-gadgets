@@ -23,7 +23,7 @@ export class ProfileComponent {
  private fb = inject(FormBuilder);
  userService = inject(UserStateService).loadUsers();
  private ServiceUser = inject(UserService);
-
+  fechaActual:any
  createDataClientForm: FormGroup;
  profileEditForm:FormGroup;
  loading: boolean = false;
@@ -301,4 +301,11 @@ this.ServiceUser.editProfile(formData)
       }
     }
   }
+  recargarPerfil(){
+
+  }
+  cambiarFoto(){
+
+  }
+  exportarDatos(){}
 }

@@ -1,19 +1,14 @@
 <section class="px-4 md:px-8 lg:px-16">
-  <div
-    class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6"
-  >
+  <!-- TODO TU ENCABEZADO ACTUAL SE MANTIENE INTACTO -->
+  <div class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
     <img
       src="https://amkt.ppg.br/wp-content/uploads/2019/01/Gif.gif"
       alt="Ícono"
       class="w-16 h-16 justify-center rounded-full md:w-60 md:h-60 lg:w-24 lg:h-24"
     />
   </div>
-  <div
-    class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6"
-  >
-    <h1
-      class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-4xl md:text-4xl lg:text-5xl"
-    >
+  <div class="mt-10 text-center flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
+    <h1 class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 sm:text-4xl md:text-4xl lg:text-5xl">
       Gestión de Productos
     </h1>
   </div>
@@ -23,48 +18,39 @@
       (click)="openModalCreate()"
       class="flex items-center justify-center bg-orange-400 text-white py-3 px-6 rounded-2xl hover:bg-orange-500 text-sm md:text-base lg:text-lg shadow-md"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
-        fill="none"
-        class="mr-2"
-      >
-        <path
-          d="M12 8V16M16 12L8 12"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="1.5"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" class="mr-2">
+        <path d="M12 8V16M16 12L8 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
       </svg>
       Agregar
     </button>
   </div>
 
-  <div class="mt-8 overflow-x-auto">
+  <!-- SECCIÓN 1: PRODUCTOS ACTIVOS (tu tabla original intacta) -->
+  <div class="mt-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-green-700">
+        📦 Productos Activos 
+        <span class="ml-2 bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">
+          {{ activeProducts.length }}
+        </span>
+      </h2>
+    </div>
+
+    <!-- TODO TU BÚSQUEDA Y TABLA ORIGINAL SE MANTIENEN -->
     <div class="text-search">
       <mat-form-field class="example-full-width">
-        <mat-label>Productos a Buscar</mat-label>
+        <mat-label>Buscar productos activos</mat-label>
         <input
           matInput
           placeholder="Ej. Yu-gi-oh!"
-          value="Yu-gi-oh"
           [(ngModel)]="searchText"
           (keyup)="onInputChange()"
         />
       </mat-form-field>
     </div>
 
-    <div class="mt-6 overflow-x-auto border rounded-xl shadow-md">
+    <div class="mt-6 overflow-x-auto border rounded-xl shadow-md border-green-300">
       <table
         matSort
         (matSortChange)="sortData($event)"
@@ -72,33 +58,18 @@
         [dataSource]="dataSource"
         class="w-full min-w-max text-sm text-left rtl:text-right text-gray-500 dark:text-gray-900 border border-dark-900 mat-elevation-z8"
       >
-        <!-- ID Column -->
+        <!-- TODO TUS COLUMNAS ORIGINALES SE MANTIENEN -->
         <ng-container matColumnDef="id">
-          <th
-            mat-sort-header="id"
-            mat-header-cell
-            *matHeaderCellDef
-            class="px-6 py-3 bg-white border-b border-orange-500"
-          >
+          <th mat-sort-header="id" mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-green-500">
             id
           </th>
-          <td
-            mat-cell
-            *matCellDef="let productos"
-            class="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap"
-          >
-            <a
-              [routerLink]="[
-                '/admin/dashboard/specific/education-programs',
-                productos.id,
-              ]"
-              class="text-orange-500 text-base hover:underline"
-            >
+          <td mat-cell *matCellDef="let productos" class="px-6 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+            <a [routerLink]="['/admin/dashboard/specific/education-programs', productos.id]" 
+               class="text-green-600 text-base hover:underline">
               {{ productos.id }}
             </a>
           </td>
         </ng-container>
-
         <!-- Nombre Column -->
         <ng-container matColumnDef="name">
           <th
@@ -285,103 +256,109 @@
           </td>
         </ng-container>
 
-        <!-- Acciones Column -->
+        <!-- ... TODAS TUS OTRAS COLUMNAS ORIGINALES SE MANTIENEN ... -->
+
         <ng-container matColumnDef="actions">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="px-6 py-3 bg-white border-b border-orange-500 items-center"
-          >
+          <th mat-header-cell *matHeaderCellDef class="px-6 py-3 bg-white border-b border-green-500 items-center">
             Acciones
           </th>
           <td mat-cell *matCellDef="let productos" class="">
-            <!-- Botón editar -->
-            <button
-              (click)="openModalEdit(productos)"
-              class="p-2 bg-sky-200 rounded-xl hover:bg-sky-400 transition relative group"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                color="#000000"
-                fill="none"
-              >
-                <path
-                  d="M16.9459 3.17305C17.5332 2.58578 17.8268 2.29215 18.1521 2.15173C18.6208 1.94942 19.1521 1.94942 19.6208 2.15173C19.946 2.29215 20.2397 2.58578 20.8269 3.17305C21.4142 3.76032 21.7079 4.05395 21.8483 4.37925C22.0506 4.8479 22.0506 5.37924 21.8483 5.84789C21.7079 6.17319 21.4142 6.46682 20.8269 7.05409L15.8054 12.0757C14.5682 13.3129 13.9496 13.9315 13.1748 14.298C12.4 14.6645 11.5294 14.7504 9.78823 14.9222L9 15L9.07778 14.2118C9.24958 12.4706 9.33549 11.6 9.70201 10.8252C10.0685 10.0504 10.6871 9.43183 11.9243 8.19464L16.9459 3.17305Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M6 15H3.75C2.7835 15 2 15.7835 2 16.75C2 17.7165 2.7835 18.5 3.75 18.5H13.25C14.2165 18.5 15 19.2835 15 20.25C15 21.2165 14.2165 22 13.25 22H11"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+            <!-- TUS BOTONES ORIGINALES -->
+            <button (click)="openModalEdit(productos)" class="p-2 bg-sky-200 rounded-xl hover:bg-sky-400 transition relative group">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+                <path d="M16.9459 3.17305C17.5332 2.58578 17.8268 2.29215 18.1521 2.15173C18.6208 1.94942 19.1521 1.94942 19.6208 2.15173C19.946 2.29215 20.2397 2.58578 20.8269 3.17305C21.4142 3.76032 21.7079 4.05395 21.8483 4.37925C22.0506 4.8479 22.0506 5.37924 21.8483 5.84789C21.7079 6.17319 21.4142 6.46682 20.8269 7.05409L15.8054 12.0757C14.5682 13.3129 13.9496 13.9315 13.1748 14.298C12.4 14.6645 11.5294 14.7504 9.78823 14.9222L9 15L9.07778 14.2118C9.24958 12.4706 9.33549 11.6 9.70201 10.8252C10.0685 10.0504 10.6871 9.43183 11.9243 8.19464L16.9459 3.17305Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M6 15H3.75C2.7835 15 2 15.7835 2 16.75C2 17.7165 2.7835 18.5 3.75 18.5H13.25C14.2165 18.5 15 19.2835 15 20.25C15 21.2165 14.2165 22 13.25 22H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <div
-                class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
-              >
+              <div class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2">
                 Editar
               </div>
             </button>
-            <button
-              (click)="openModalDelete(productos.id)"
-              class="p-2 bg-red-200 rounded-xl hover:bg-red-400 transition relative group"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                color="#000000"
-                fill="none"
-              >
-                <path
-                  d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
+            <button (click)="openModalDelete(productos.id)" class="p-2 bg-red-200 rounded-xl hover:bg-red-400 transition relative group">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+                <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
-              <div
-                class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2"
-              >
+              <div class="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-1 left-1/2 transform -translate-x-1/2">
                 Eliminar
               </div>
             </button>
           </td>
         </ng-container>
 
-        <!-- Header y Row -->
-        <tr
-          mat-header-row
-          *matHeaderRowDef="displayedColumns"
-          class="bg-white text-black-200"
-        ></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="bg-white border-b border-orange-500 hover:bg-orange-300"
-        ></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-white text-black-200"></tr>
+        <!-- En tu tabla de productos activos -->
+<tr mat-row *matRowDef="let row; columns: displayedColumns" 
+    [hidden]="row.isDeleted"
+    class="bg-white border-b border-green-500 hover:bg-green-50">
+</tr>
       </table>
     </div>
+    
     <div class="flex justify-end mt-4">
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
-        showFirstLastButtons
-        aria-label="Select page of periodic elements"
-      >
-      </mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: PRODUCTOS ELIMINADOS (NUEVA - NO AFECTA A LA ANTERIOR) -->
+  <div class="mt-12">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-red-700">
+        🗑️ Productos Eliminados
+        <span class="ml-2 bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full">
+          {{ deletedProducts.length }}
+        </span>
+      </h2>
+    </div>
+
+    <!-- Tabla simple para productos eliminados -->
+    <div class="mt-6 overflow-x-auto border rounded-xl shadow-md border-red-300 bg-red-50">
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-red-100">
+          <tr>
+            <th scope="col" class="px-6 py-3">ID</th>
+            <th scope="col" class="px-6 py-3">Nombre</th>
+            <th scope="col" class="px-6 py-3">Imagen</th>
+            <th scope="col" class="px-6 py-3">Stock</th>
+            <th scope="col" class="px-6 py-3">Precio</th>
+            <th scope="col" class="px-6 py-3">Eliminado</th>
+            <th scope="col" class="px-6 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Usamos *ngFor simple en lugar de mat-table -->
+          <tr *ngFor="let producto of deletedProducts" 
+              class="bg-white border-b border-red-200 hover:bg-red-50">
+            <td class="px-6 py-4 font-medium text-gray-900">{{ producto.id }}</td>
+            <td class="px-6 py-4">{{ producto.name }}</td>
+            <td class="px-6 py-4">
+              <img [src]="producto.image" alt="{{ producto.name }}" 
+                   class="w-16 h-16 object-cover rounded-md opacity-70">
+            </td>
+            <td class="px-6 py-4">{{ producto.stock }}</td>
+            <td class="px-6 py-4">${{ producto.price }}</td>
+            <td class="px-6 py-4 text-sm">
+              {{ producto.deletedAt | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td class="px-6 py-4">
+              <button (click)="openModalRestaurar(producto)" 
+                      class="p-2 bg-green-200 rounded-lg hover:bg-green-300 transition flex items-center"
+                      title="Restaurar producto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Restaurar
+              </button>
+            </td>
+          </tr>
+          
+          <!-- Mensaje si no hay productos eliminados -->
+          <tr *ngIf="deletedProducts.length === 0">
+            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+              No hay productos eliminados
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -810,5 +787,70 @@ class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-5
     </button>
   </div>
 </div>
+</section>
+}
+
+@if(modalRestaurar){
+  <!-- Modal Restaurar Producto -->
+<section 
+  *ngIf="modalRestaurar"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  
+  <div class="bg-white p-6 rounded-xl shadow-2xl max-w-xs md:max-w-sm w-full relative border border-green-200">
+    
+    <!-- Botón cerrar -->
+    <button (click)="closeModalRestaurar()"
+      class="absolute top-3 right-3 bg-gray-100 text-gray-600 hover:bg-gray-200 w-8 h-8 flex items-center justify-center rounded-full transition">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Icono y título -->
+    <div class="flex flex-col items-center text-center mb-5">
+      <div class="mb-4 p-3 bg-green-50 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+        </svg>
+      </div>
+      
+      <h2 class="text-xl font-bold text-gray-800">Restaurar Producto</h2>
+      <p class="text-sm text-gray-500 mt-1">Nombre: {{ productData.name }}</p>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="text-center mb-6">
+      <p class="text-gray-700">
+        ¿Estás seguro de restaurar este producto?
+      </p>
+      <p class="text-sm text-gray-500 mt-2">
+        El producto volverá a estar disponible en tu inventario.
+      </p>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex flex-col space-y-3">
+      <button 
+        (click)="restoreProduct()"
+        [disabled]="isSubmitting"
+        class="flex items-center justify-center bg-green-600 text-white font-medium rounded-lg px-4 py-3 transition hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed">
+        
+        <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        
+        <span>{{ isSubmitting ? 'Restaurando...' : 'Confirmar Restauración' }}</span>
+      </button>
+      
+      <button 
+        (click)="closeModalRestaurar()"
+        [disabled]="isSubmitting"
+        class="bg-white text-gray-700 border border-gray-300 font-medium rounded-lg px-4 py-3 transition hover:bg-gray-50 disabled:opacity-50">
+        Cancelar
+      </button>
+    </div>
+  </div>
 </section>
 }

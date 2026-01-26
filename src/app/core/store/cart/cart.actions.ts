@@ -34,3 +34,8 @@ export const updateCartItemFailure = createAction('[Cart] Update Cart Item Failu
 export const removeCartItem = createAction('[Cart] Remove Cart Item', props<{ product_id: any }>());
 export const removeCartItemSuccess = createAction('[Cart] Remove Cart Item Success',  props<{ cart?: any; }>());
 export const removeCartItemFailure = createAction('[Cart] Remove Cart Item Failure', props<{ error: any }>());
+
+// cart.actions.ts - Agrega estas acciones
+export const clearCart = createAction('[Cart] Clear Cart');
+export const refreshCart = createAction('[Cart] Refresh Cart');
+export const cartCompleted = createAction('[Cart] Cart Completed');

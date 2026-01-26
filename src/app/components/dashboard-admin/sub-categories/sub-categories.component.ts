@@ -59,6 +59,7 @@ displayedColumns: string[] = ['id', 'name','subCategoria', 'actions'];
       this.catalogService.getCategories().subscribe(
         {
           next: (res) => {
+            console.log(res)
             this.categories = res;
           },
           error: (err) => {

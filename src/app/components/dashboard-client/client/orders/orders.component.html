@@ -1,50 +1,543 @@
-<div class="p-6 max-w-7xl mx-auto">
-  <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Mis pedidos</h1>
-
-  @if(isLoading()){
-      <div class="flex justify-center items-center h-64">
-      <div class="w-10 h-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-    </div>
-  }@else {
-
-  <ng-container *ngIf="orders.length > 0; else sinOrdenes">
-    <div *ngFor="let order of orders" class="mb-10 border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-      <!-- Encabezado por fecha -->
-      <div class="bg-gray-100 px-6 py-4 border-b border-gray-300 flex justify-between items-center">
-        <h2 class="text-lg font-semibold text-gray-700">
-          Pedido realizado el {{ order.fecha | date:'longDate' }}
-        </h2>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header de la sección -->
+    <div class="mb-10 text-center">
+      <div class="relative inline-block">
+        <h1 class="text-4xl font-bold text-gray-900 mb-3 relative">
+          Mis pedidos
+          <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></span>
+        </h1>
       </div>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Revisa el historial y estado de todos tus pedidos realizados
+      </p>
+    </div>
 
-      <!-- Lista de productos -->
-      <div *ngFor="let producto of order.productos" class="flex flex-col md:flex-row gap-4 p-6 border-b last:border-none border-gray-200">
-        <!-- Imagen -->
-        <div class="flex-shrink-0 w-full md:w-40 h-40 overflow-hidden rounded-lg border border-gray-200">
-          <img [src]="producto.imagen" alt="Imagen del producto" class="object-cover w-full h-full">
+    <!-- Estado de carga -->
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <div class="relative mb-8">
+          <div class="w-24 h-24 rounded-full border-[6px] border-gray-100">
+            <div class="w-full h-full rounded-full border-[6px] border-transparent border-t-blue-500 animate-spin"></div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+              <svg class="w-8 h-8 text-blue-400 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
         </div>
-
-        <!-- Detalles del producto -->
-        <div class="flex-1 space-y-2">
-          <h3 class="text-lg font-semibold text-gray-800">{{ producto.nombre }}</h3>
-          <p class="text-sm text-gray-600">
-            <span class="font-medium">Cantidad:</span> {{ producto.cantidad }}
-          </p>
-          <p class="text-sm text-gray-600">
-            <span class="font-medium">Precio unitario:</span> ${{ producto.precio }}
-          </p>
-          <p class="text-sm text-gray-600">
-            <span class="font-medium">Total pagado:</span> <span class="text-green-600 font-semibold">${{ producto.precio * producto.cantidad }}</span>
-          </p>
-        </div>
+        <p class="text-gray-600 text-xl font-medium">Cargando tus pedidos...</p>
+        <p class="text-gray-500 text-sm mt-2">Estamos preparando la información</p>
       </div>
+    } 
+    @else {
+      <!-- Lista de pedidos -->
+      @if (orders && orders.length > 0) {
+        <div class="space-y-8">
+          @for (order of orders; track order.id; let i = $index) {
+            <div class="group relative bg-white rounded-2xl shadow-xl border border-gray-100 
+                       hover:shadow-2xl hover:-translate-y-1 transition-all duration-300
+                       overflow-hidden">
+              
+              <!-- Cabecera del pedido -->
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-5 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 
+                              flex items-center justify-center flex-shrink-0">
+                      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 class="text-xl font-bold text-gray-900">
+                        Pedido #{{ order.id?.slice(-8).toUpperCase() || i + 1 }}
+                      </h2>
+                      <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-1">
+                        <div class="flex items-center gap-2">
+                          <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                          </svg>
+                          <span class="text-gray-700 font-medium">
+                            {{ formatFecha(order.fecha) }}
+                          </span>
+                        </div>
+                        
+                        <!-- Estado del pedido -->
+                        <div class="flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full animate-pulse" 
+                                [ngClass]="getEstadoPuntoClase(order.estado)"></span>
+                          <span class="text-sm font-medium text-gray-700">
+                            {{ getEstadoTexto(order.estado) }}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                        <span>{{ getDiaSemana(order.fecha) }}</span>
+                        <span>•</span>
+                        <span>{{ getTiempoTranscurrido(order.fecha) }}</span>
+                        <span>•</span>
+                        <span>{{ getHora(order.fecha) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Badges de información -->
+                  <div class="flex flex-wrap gap-2">
+                    <!-- Badge de estado -->
+                    <span class="px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm text-white"
+                          [ngClass]="getEstadoClase(order.estado)">
+                      {{ getEstadoTexto(order.estado) }}
+                    </span>
+                    
+                    <!-- Badge de cantidad de productos -->
+                    <span class="px-4 py-1.5 bg-white border border-gray-300 text-gray-700 
+                               font-medium rounded-full text-sm">
+                      {{ order.cantidadProductos || 0 }} unidad{{ order.cantidadProductos !== 1 ? 'es' : '' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Barra de progreso del estado -->
+<div class="px-6 py-3 bg-gray-50 border-b border-gray-200">
+  <div class="flex items-center justify-between text-sm text-gray-600">
+    
+    <!-- Etapa 1: Pago confirmado (siempre completada) -->
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-full flex items-center justify-center bg-green-500 text-white">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <span>Pago confirmado</span>
     </div>
-  </ng-container>
-
-  <ng-template #sinOrdenes>
-    <div class="text-center text-gray-500 mt-12">
-      <p class="text-xl">No se encontraron pedidos 🛒</p>
+    
+    <!-- Línea 1 -->
+    <div class="h-0.5 flex-1 mx-4 bg-gray-200">
+      @if (order.estado?.toLowerCase() === 'procesando' || order.estado?.toLowerCase() === 'enviado' || order.estado?.toLowerCase() === 'entregado') {
+        <div class="h-full bg-green-500 w-full"></div>
+      } 
+      @else {
+        <div class="h-full bg-gray-300 w-0"></div>
+      }
     </div>
-  </ng-template>
-  }
-
+    
+    <!-- Etapa 2: Procesando -->
+    <div class="flex items-center gap-2">
+      @if (order.estado?.toLowerCase() === 'procesando' || order.estado?.toLowerCase() === 'enviado' || order.estado?.toLowerCase() === 'entregado') {
+        <div class="w-6 h-6 rounded-full flex items-center justify-center bg-green-500 text-white">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      } 
+      @else {
+        <div class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300">
+          <span class="text-xs">2</span>
+        </div>
+      }
+      <span>Procesando</span>
+    </div>
+    
+    <!-- Línea 2 -->
+    <div class="h-0.5 flex-1 mx-4 bg-gray-200">
+      @if (order.estado?.toLowerCase() === 'enviado' || order.estado?.toLowerCase() === 'entregado') {
+        <div class="h-full bg-green-500 w-full"></div>
+      } 
+      @else {
+        <div class="h-full bg-gray-300 w-0"></div>
+      }
+    </div>
+    
+    <!-- Etapa 3: Enviado -->
+    <div class="flex items-center gap-2">
+      @if (order.estado?.toLowerCase() === 'enviado' || order.estado?.toLowerCase() === 'entregado') {
+        <div class="w-6 h-6 rounded-full flex items-center justify-center bg-green-500 text-white">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      } 
+      @else {
+        <div class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300">
+          <span class="text-xs">3</span>
+        </div>
+      }
+      <span>Enviado</span>
+    </div>
+    
+  </div>
+</div>
+              
+              <!-- Lista de productos -->
+              <div class="divide-y divide-gray-100">
+                @for (producto of order.productos; track producto.id; let last = $last) {
+                  <div class="p-6 hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                      <!-- Imagen del producto -->
+                      <div class="relative flex-shrink-0">
+                        <div class="w-32 h-32 rounded-xl overflow-hidden border-2 border-gray-100 
+                                  shadow-md group-hover:border-blue-200 transition-colors">
+                          <img 
+                            [src]="producto.imagen || 'assets/default-product.png'" 
+                            [alt]="producto.nombre"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            (error)="producto.imagen = 'assets/default-product.png'"
+                          />
+                        </div>
+                        <div class="absolute -top-2 -left-2">
+                          <span class="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded-full shadow">
+                            {{ producto.cantidad }}x
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <!-- Detalles del producto -->
+                      <div class="flex-1">
+                        <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                          <div class="flex-1">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">
+                              {{ producto.nombre }}
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                              <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">
+                                  <span class="font-medium">Precio unitario:</span> 
+                                  <span class="font-bold text-gray-900 ml-1">
+                                    ${{ producto.precio | number:'1.2-2' }}
+                                  </span>
+                                </span>
+                              </div>
+                              
+                              <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-600">
+                                  <span class="font-medium">Subtotal:</span> 
+                                  <span class="font-bold text-green-600 ml-1">
+                                    ${{ (producto.precio * producto.cantidad) | number:'1.2-2' }}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <!-- Información adicional del producto -->
+                            @if (producto.descripcion) {
+                              <p class="text-gray-600 text-sm line-clamp-2 mb-3">
+                                {{ producto.descripcion }}
+                              </p>
+                            }
+                            
+                            <!-- Categorías y marcas -->
+                            @if (producto.categoria || producto.marca || producto.subcategoria) {
+                              <div class="mt-3 flex flex-wrap gap-2">
+                                @if (producto.categoria) {
+                                  <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+                                    {{ producto.categoria }}
+                                  </span>
+                                }
+                                @if (producto.subcategoria) {
+                                  <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                                    {{ producto.subcategoria }}
+                                  </span>
+                                }
+                                @if (producto.marca) {
+                                  <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-medium rounded-full">
+                                    {{ producto.marca }}
+                                  </span>
+                                }
+                                @if (producto.set) {
+                                  <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">
+                                    {{ producto.set }}
+                                  </span>
+                                }
+                              </div>
+                            }
+                          </div>
+                          
+                          <!-- Información del producto -->
+                          <div class="lg:text-right">
+                            <div class="text-sm text-gray-500 mb-1">ID Producto</div>
+                            <div class="font-mono text-xs text-gray-700 bg-gray-50 px-2 py-1 rounded">
+                              {{ producto.id }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+              
+              <!-- Pie del pedido -->
+              <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- Total del pedido -->
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-indigo-100 
+                              flex items-center justify-center">
+                      <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a1 1 0 011-1h1a1 1 0 110 2H7a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2h-1z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-600">Total del pedido</p>
+                      <p class="text-2xl font-bold text-gray-900">
+                        ${{ order.total | number:'1.2-2' }}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <!-- Información de envío -->
+                  @if (order.direccionEnvio) {
+                    <div class="flex items-start gap-3">
+                      <svg class="w-5 h-5 text-gray-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                      </svg>
+                      <div class="text-sm text-gray-600">
+                        <p class="font-medium mb-1">Enviado a:</p>
+                        <p class="text-gray-700">
+                          {{ order.direccionEnvio.ciudad }}, {{ order.direccionEnvio.estado }}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                          {{ order.direccionEnvio.callePrincipal }} {{ order.direccionEnvio.numero }}
+                        </p>
+                      </div>
+                    </div>
+                  }
+                  
+                  <!-- Información adicional del pedido -->
+                  <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-gray-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                    <div class="text-sm text-gray-600">
+                      <p class="font-medium mb-1">Información del pedido</p>
+                      <p class="text-gray-700">
+                        {{ order.cantidadProductos || 0 }} unidades
+                      </p>
+                      <p class="text-xs text-gray-500 mt-1">
+                        {{ order.cantidadItems || 0 }} items diferentes
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Tracking y pago -->
+                <div class="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  @if (order.trackingNumber) {
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span class="text-sm text-gray-600">
+                        <span class="font-medium">Tracking:</span> {{ order.trackingNumber }}
+                      </span>
+                    </div>
+                  } 
+                  @else if (order.estado?.toLowerCase() === 'enviado') {
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span class="text-sm text-blue-600 font-medium">
+                        Tu pedido ha sido enviado
+                      </span>
+                    </div>
+                  } 
+                  @else if (order.estado?.toLowerCase() === 'procesando') {
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span class="text-sm text-yellow-600 font-medium">
+                        Procesando tu pedido
+                      </span>
+                    </div>
+                  }
+                  
+                  @if (order.paymentStatus) {
+                    <div class="flex items-center gap-2">
+                      @if (order.paymentStatus?.toLowerCase() === 'paid') {
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm text-green-600 font-medium">
+                          Pago: {{ getPaymentStatusTexto(order.paymentStatus) }}
+                        </span>
+                      } 
+                      @else if (order.paymentStatus?.toLowerCase() === 'pending') {
+                        <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm text-yellow-600 font-medium">
+                          Pago: {{ getPaymentStatusTexto(order.paymentStatus) }}
+                        </span>
+                      } 
+                      @else {
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm text-gray-600">
+                          Pago: {{ getPaymentStatusTexto(order.paymentStatus) }}
+                        </span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        
+        <!-- Resumen estadístico -->
+        <div class="mt-12 bg-gradient-to-r from-gray-50 to-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-900">Resumen de tus compras</h3>
+            <div class="flex items-center gap-2 text-gray-600">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-sm">Actualizado en tiempo real</span>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Pedidos totales</p>
+                  <p class="text-2xl font-bold text-gray-900">{{ orders.length }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Enviados</p>
+                  <p class="text-2xl font-bold text-gray-900">{{ getPedidosEnviados() }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-yellow-100 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Procesando</p>
+                  <p class="text-2xl font-bold text-gray-900">{{ getPedidosProcesando() }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">Total gastado</p>
+                  <p class="text-2xl font-bold text-green-600">${{ calcularTotalGastado() | number:'1.2-2' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Información adicional -->
+          <div class="mt-8 pt-8 border-t border-gray-200">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="text-sm text-gray-600">
+                <p class="font-medium">📦 {{ getTotalProductos() }} productos comprados en total</p>
+                <p class="mt-1">🕒 Último pedido: {{ getUltimaFecha() | date:'dd/MM/yyyy' }}</p>
+                <p class="mt-1">💰 Promedio por pedido: ${{ getPromedioPedido() | number:'1.2-2' }}</p>
+              </div>
+              <button 
+                routerLink="/catalogo"
+                class="px-6 py-3 border border-gray-300 text-gray-700 font-medium 
+                       rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                Seguir comprando
+              </button>
+            </div>
+          </div>
+        </div>
+      } 
+      @else {
+        <!-- Estado sin pedidos -->
+        <div class="max-w-2xl mx-auto text-center py-20">
+          <div class="mb-10 p-8 bg-gradient-to-br from-gray-100 to-gray-50 rounded-3xl inline-flex">
+            <svg class="w-32 h-32 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+          
+          <h3 class="text-3xl font-bold text-gray-900 mb-6">Aún no tienes pedidos</h3>
+          <p class="text-gray-600 text-lg mb-10 max-w-md mx-auto leading-relaxed">
+            ¡Comienza a explorar nuestro catálogo y descubre productos increíbles para tu primera compra!
+          </p>
+          
+          <button 
+            routerLink="/catalogo"
+            class="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 
+                   text-white font-semibold rounded-xl shadow-lg hover:shadow-xl 
+                   transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-3 mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            Explorar productos
+          </button>
+          
+          <div class="mt-12 pt-10 border-t border-gray-200">
+            <h4 class="text-lg font-semibold text-gray-900 mb-6">¿Cómo realizar tu primer pedido?</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                  <span class="text-blue-600 font-bold">1</span>
+                </div>
+                <p class="text-sm text-gray-700">Explora productos y agrégalos al carrito</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                  <span class="text-green-600 font-bold">2</span>
+                </div>
+                <p class="text-sm text-gray-700">Revisa tu carrito y procede al pago</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+                  <span class="text-purple-600 font-bold">3</span>
+                </div>
+                <p class="text-sm text-gray-700">¡Listo! Tu pedido estará en camino</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
 </div>

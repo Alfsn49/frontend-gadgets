@@ -1,27 +1,133 @@
-<section class="bg-white dark:bg-gray-900 py-16">
-  <div class="container mx-auto px-6 sm:px-12 lg:px-20">
-    <div class="flex flex-col-reverse sm:flex-row items-center">
+<section class="relative bg-gradient-to-br from-white via-gray-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 md:py-28 overflow-hidden">
+  <!-- Elementos decorativos -->
+  <div class="absolute top-10 right-10 w-72 h-72 bg-indigo-100 dark:bg-indigo-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-pulse"></div>
+  <div class="absolute bottom-10 left-10 w-64 h-64 bg-purple-100 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-20"></div>
+  
+  <!-- Contenido principal -->
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
       
-      <!-- Imagen -->
-      <div class="sm:w-1/2 mt-10 sm:mt-0">
-        <div class="text-center sm:text-left">
-          <img src="assets/Logo_gadget's_final.png" alt="About Gadget's TCG Store" class="w-full max-w-md mx-auto sm:mx-0 rounded-lg shadow-lg">
+      <!-- Imagen - Mejorada -->
+      <div class="lg:w-1/2 w-full">
+        <div class="relative">
+          <!-- Marco decorativo -->
+          <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+          
+          <!-- Contenedor de imagen -->
+          <div class="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition duration-500 group">
+            <img 
+              src="assets/Logo_gadget's_final.png" 
+              alt="Gadget's TCG Store - Tu destino para juegos de cartas coleccionables" 
+              class="w-full h-auto object-contain bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-8 md:p-12"
+              loading="lazy"
+            >
+            
+            <!-- Efecto hover overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          </div>
+          
+          <!-- Badge de confianza -->
+          <div class="absolute -bottom-4 -right-4 bg-gradient-to-r from-amber-400 to-orange-500 text-gray-900 font-bold px-5 py-2 rounded-full shadow-lg transform rotate-3">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-sm">Desde 2023</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Texto -->
-      <div class="sm:w-1/2 sm:pl-12">
-        <span class="text-indigo-600 uppercase tracking-wide font-semibold text-sm">Sobre nosotros</span>
-        <h2 class="text-3xl sm:text-4xl font-bold mt-2 text-gray-900 dark:text-white">
-          Conoce <span class="text-indigo-600">Gadget's</span>
-        </h2>
-        <p class="mt-6 text-gray-600 dark:text-gray-300 leading-relaxed">
-          En <strong>Gadget's</strong> nos apasionan los juegos de cartas coleccionables (TCG). Ofrecemos productos originales de <em>Yu-Gi-Oh!</em>, <em>Pokémon</em>, <em>Magic: The Gathering</em> y más.
-          Nos enfocamos en brindar a la comunidad TCG acceso a cartas, sobres, accesorios y coleccionables con envíos rápidos y atención personalizada.
+      <!-- Texto - Mejorado -->
+      <div class="lg:w-1/2 w-full">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+          </svg>
+          NUESTRA HISTORIA
+        </div>
+
+        <!-- Título principal -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+          <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Gadget's TCG
+          </span>
+          <br>
+          <span class="text-2xl md:text-3xl text-gray-600 dark:text-gray-300 mt-2 block">
+            Más que una tienda, una comunidad
+          </span>
+        </h1>
+
+        <!-- Descripción principal -->
+        <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+          En el corazón de la escena <span class="font-bold text-indigo-600 dark:text-indigo-400">TCG Latinoamérica</span>, nace <strong class="text-gray-900 dark:text-white">Gadget's</strong> - tu destino definitivo para vivir la auténtica experiencia de los juegos de cartas coleccionables. No solo vendemos cartas, <span class="italic">cultivamos duelistas</span>.
         </p>
-        <p class="mt-4 text-gray-600 dark:text-gray-400">
-          Ya seas un duelista competitivo o un coleccionista casual, en <strong>Gadget's</strong> encontrarás lo que necesitas para potenciar tu mazo o tu colección.
-        </p>
+
+        <!-- Puntos destacados -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+          <div class="flex items-start gap-3 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl backdrop-blur-sm">
+            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white">Productos 100% Originales</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Distribuidores autorizados de las principales marcas TCG</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl backdrop-blur-sm">
+            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-900 dark:text-white">Comunidad Activa</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Torneos, eventos y conexión con duelistas apasionados</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Texto detallado -->
+        <div class="space-y-4 mb-8">
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Desde <strong class="text-gray-900 dark:text-white">Yu-Gi-Oh!</strong> y su estrategia infinita, hasta el universo expandible de <strong class="text-gray-900 dark:text-white">Magic: The Gathering</strong> y la nostalgia de <strong class="text-gray-900 dark:text-white">Pokémon</strong>, en Gadget's reunimos los mundos TCG más apasionantes bajo un mismo techo.
+          </p>
+          
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+            Nuestra misión va más allá de la venta: <span class="italic text-indigo-600 dark:text-indigo-400">creamos experiencias</span>. Cada sobre que abres, cada carta que añades a tu mazo, cada torneo en el que compites, es parte de una historia que construimos juntos.
+          </p>
+        </div>
+
+        <!-- CTA y estadísticas -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div class="flex items-center gap-8">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">100%</div>
+              <div class="text-xs text-gray-500">Productos Originales</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">24/7</div>
+              <div class="text-xs text-gray-500">Soporte TCG</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-cyan-600 dark:text-cyan-400">1000+</div>
+              <div class="text-xs text-gray-500">Duelistas Activos</div>
+            </div>
+          </div>
+          
+          <a href="/products" 
+             class="group relative inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl shadow-lg overflow-hidden">
+            <span class="relative z-10">Explorar Catálogo</span>
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>

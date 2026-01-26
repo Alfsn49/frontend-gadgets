@@ -10,6 +10,8 @@ export class CatalogService extends HttpService{
     return this.http.get(this.api+'product-category/get-categories')
   }
 
+  
+
   createCategory(data:any){
     return this.http.post(this.api+'product-category/create-category',data)
   }

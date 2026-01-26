@@ -21,6 +21,7 @@ export class DashboardAdminComponent {
 
   isAssignDropdownOpen = false;
   isUserDropdownOpen = false;
+  lastUpdate:any;
 
   dataDashboard:any =[];
 

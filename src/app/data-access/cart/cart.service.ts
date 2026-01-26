@@ -34,11 +34,16 @@ loadCartFromLocalStorage(): any {
 }
 
 // Método auxiliar para el getCart (mejor tipado)
-getCart(): Observable<{cart: any, products: any[]}> {
-  return this.http.get<{cart: any, products: any[]}>(`${this.api}cart/get-cart`).pipe(
-    tap(response => console.log('Respuesta del backend:', response))
-  );
-}
+  getCart() {
+    return this.http.get<any>(this.api+'cart/get-cart').pipe(
+      tap(response => {
+        // Si el backend devuelve un carrito completado, limpiar localStorage
+        if (response?.completed) {
+          this.clearCartFromLocalStorage();
+        }
+      })
+    );
+  }
 
   updateCartItem(data: any): Observable<any> {
     const userdata = localStorage.getItem('User');

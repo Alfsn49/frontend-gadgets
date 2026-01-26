@@ -1,187 +1,542 @@
-<!-- Barra de progreso multistep -->
-<div class="flex items-center justify-between mb-8 max-w-xl mx-auto px-4">
-  <!-- Paso 1 -->
-  <div class="flex flex-col items-center flex-1 cursor-pointer">
-    <div class="w-8 h-8 flex items-center justify-center rounded-full border-2 transition-colors" [ngClass]="{
-        'bg-green-600 border-green-600 text-white': completePersonalData,
-        'border-primary-600 text-primary-600': !completePersonalData
-      }">
-      <ng-container *ngIf="completePersonalData; else stepOneNumber">
-        <!-- Check icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-      </ng-container>
-      <ng-template #stepOneNumber>1</ng-template>
-    </div>
-    <span class="mt-2 text-sm font-semibold" [ngClass]="{
-        'text-green-600': completePersonalData,
-        'text-primary-600': !completePersonalData
-      }">
-      Datos personales
-    </span>
-  </div>
-
-  <!-- Línea -->
-  <div class="h-0.5 flex-1 mx-2" [ngClass]="{
-      'bg-green-600': completePersonalData,
-      'bg-gray-300 dark:bg-gray-700': !completePersonalData
-    }"></div>
-
-  <!-- Paso 2 -->
-  <div class="flex flex-col items-center flex-1 cursor-pointer" [class.opacity-50]="!completePersonalData">
-    <div class="w-8 h-8 flex items-center justify-center rounded-full border-2 transition-colors" [ngClass]="{
-        'bg-green-600 border-green-600 text-white': anyAddress && completePersonalData,
-        'border-primary-600 text-primary-600': !anyAddress || !completePersonalData
-      }">
-      <ng-container *ngIf="anyAddress && completePersonalData; else stepTwoNumber">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
-      </ng-container>
-      <ng-template #stepTwoNumber>2</ng-template>
-    </div>
-    <span class="mt-2 text-sm font-semibold" [ngClass]="{
-        'text-green-600': anyAddress && completePersonalData,
-        'text-primary-600': !anyAddress || !completePersonalData
-      }">
-      Dirección
-    </span>
-  </div>
-
-  <!-- Línea -->
-  <div class="h-0.5 flex-1 mx-2" [ngClass]="{
-      'bg-green-600': anyAddress && completePersonalData,
-      'bg-gray-300 dark:bg-gray-700': !anyAddress || !completePersonalData
-    }"></div>
-
-  <!-- Paso 3 -->
-  <div class="flex flex-col items-center flex-1 cursor-pointer"
-    [class.opacity-50]="!anyAddress || !completePersonalData">
-    <div class="w-8 h-8 flex items-center justify-center rounded-full border-2 transition-colors" [ngClass]="{
-        'bg-blue-600 border-blue-600 text-white': anyAddress && completePersonalData,
-        'border-gray-400 text-gray-400': !anyAddress || !completePersonalData
-      }">
-      3
-    </div>
-    <span class="mt-2 text-sm font-semibold" [ngClass]="{
-        'text-blue-600': anyAddress && completePersonalData,
-        'text-gray-400': !anyAddress || !completePersonalData
-      }">
-      Confirmar compra
-    </span>
-  </div>
-</div>
-
-<!-- PASO 1 -->
-<div class="mt-4 p-4 border rounded-lg max-w-xl mx-auto" [ngClass]="{
-    'border-green-500 bg-green-50 dark:bg-gray-800 dark:border-green-600 text-green-800 dark:text-green-400': completePersonalData,
-    'border-yellow-400 bg-yellow-50 dark:bg-gray-800 text-yellow-800 dark:text-yellow-300': !completePersonalData
-  }">
-  <h3 class="font-semibold text-lg mb-1">Paso 1: Datos personales</h3>
-  <ng-container *ngIf="!completePersonalData ; else datosCompletos">
-    <p>Debes completar tu <strong>cédula</strong>, <strong>teléfono</strong> y <strong>fecha de nacimiento</strong> para
-      continuar.</p>
-    <a [routerLink]="['/profile']"
-      class="inline-block mt-2 text-blue-700 underline hover:text-blue-900 dark:text-blue-400">Ir al perfil</a>
-    <button (click)="mostrarModal()"
-      class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Llenar
-      los datos</button>
-  </ng-container>
-  <ng-template #datosCompletos>
-    <p class="text-sm">Tus datos personales están completos ✅</p>
-  </ng-template>
-</div>
-
-<!-- PASO 2 (solo si paso 1 completo) -->
-<div *ngIf="completePersonalData" class="mt-4 p-4 border rounded-lg max-w-xl mx-auto" [ngClass]="{
-    'border-green-500 bg-green-50 dark:bg-gray-800 dark:border-green-600 text-green-800 dark:text-green-400': anyAddress,
-    'border-red-400 bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-300': !anyAddress
-  }">
-  <h3 class="font-semibold text-lg mb-1">Paso 2: Dirección</h3>
-  <ng-container *ngIf="!anyAddress; else direccionLista">
-    <p>Necesitas tener al menos una dirección registrada para continuar.</p>
-    <button (click)="mostrarModaldireccion()"
-      class="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Llenar
-      los datos</button>
-  </ng-container>
-  <ng-template #direccionLista>
-    <p class="text-sm">Tienes direcciones disponibles ✅</p>
-  </ng-template>
-</div>
-
-<!-- PASO 3 (solo si paso 1 y 2 completos) -->
-<section *ngIf="completePersonalData && anyAddress"
-  class="bg-white dark:bg-gray-900 py-10 md:py-16 mt-6 border border-blue-400 rounded-lg px-4 max-w-7xl mx-auto">
-  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Paso 3: Confirmar tu compra</h2>
-
-  <div class="grid lg:grid-cols-3 gap-8">
-    <!-- Productos -->
-    <div class="lg:col-span-2 space-y-6">
-      @for(cartItem of this.data$.items; track cartItem.product_id) {
-      <app-cart-item class="block" [productCartItem]="cartItem" (onIncrease)="onIncrease($event)"
-        (onDecrease)="onDecrease($event)" (onRemove)="onRemoveItem($event)" />
-      }
-    </div>
-
-    <!-- Resumen -->
-    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow">
-      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Resumen de orden</h3>
-
-      <div class="space-y-4">
-        <dl class="flex justify-between">
-          <dt class="text-gray-500 dark:text-gray-400">Subtotal</dt>
-          <dd class="text-gray-900 dark:text-white font-medium">${{ data$.total }}</dd>
-        </dl>
-        <dl class="flex justify-between border-t border-gray-200 dark:border-gray-700 pt-2">
-          <dt class="text-lg font-bold text-gray-900 dark:text-white">Total</dt>
-          <dd class="text-lg font-bold text-gray-900 dark:text-white">${{ data$.total }}</dd>
-        </dl>
-      </div>
-
-      <button
-        class="mt-6 w-full px-5 py-3 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:hover:bg-primary-700 dark:focus:ring-primary-800 transition"
-        (click)="checkout()">
+<!-- Contenedor principal -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Título principal -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-3">
         Finalizar compra
-      </button>
-
-      <div class="mt-4 text-center">
-        <span class="text-sm text-gray-500 dark:text-gray-400">o</span>
-        <a [routerLink]="['/dashboard/products']"
-          class="ml-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">
-          Seguir comprando
-        </a>
-      </div>
+      </h1>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        Completa los siguientes pasos para confirmar tu pedido
+      </p>
     </div>
-  </div>
-  <!-- Lista de direcciones debajo de los productos -->
-  <div class="mt-10">
-    <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Mis Direcciones</h2>
-    <div class="space-y-4">
-      @for(direccion of addressData; track direccion.id) {
-      <div class="bg-white shadow-md rounded-lg p-4">
-        <div class="flex justify-between items-center">
-          <div>
-            <span class="text-sm text-gray-500">Calle Principal</span>
-            <p class="text-lg font-semibold">{{ direccion.callePrincipal }}</p>
-            <span class="text-sm text-gray-500">Calle Secundaria</span>
-            <p class="text-lg font-semibold">{{ direccion.calleSecundaria }}</p>
-            <span class="text-sm text-gray-500">Ciudad</span>
-            <p class="text-lg font-semibold">{{ direccion.ciudad}}</p>
+
+    <!-- Barra de progreso moderna -->
+    <div class="max-w-3xl mx-auto mb-12">
+      <div class="flex items-center justify-between">
+        <!-- Paso 1 -->
+        <div class="flex flex-col items-center relative z-10">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all duration-300"
+               [ngClass]="{
+                 'bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-200': completePersonalData,
+                 'bg-white border-4 border-gray-300': !completePersonalData
+               }">
+            @if(completePersonalData) {
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            } @else {
+              <span class="text-gray-700 font-bold text-lg">1</span>
+            }
           </div>
-          <button [class.bg-blue-500]="direccion.activo" [class.bg-gray-500]="!direccion.activo"
-            class="text-white px-4 py-2 rounded-full transition" (click)="selectAddress(direccion.id)"
-            [disabled]="direccion.activo">
-            {{ direccion.activo ? 'Activo' : 'Seleccionar' }}
-          </button>
+          <span class="text-sm font-semibold"
+                [ngClass]="{
+                  'text-green-600': completePersonalData,
+                  'text-gray-500': !completePersonalData
+                }">
+            Datos personales
+          </span>
+        </div>
+
+        <!-- Línea entre pasos -->
+        <div class="flex-1 h-1.5 mx-4 relative">
+          <div class="absolute inset-0 bg-gray-200 rounded-full"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-500"
+               [style.width]="(completePersonalData ? '100%' : '0%')"></div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="flex flex-col items-center relative z-10">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all duration-300"
+               [ngClass]="{
+                 'bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-200': anyAddress && completePersonalData,
+                 'bg-white border-4': !anyAddress || !completePersonalData,
+                 'border-green-500': completePersonalData && !anyAddress,
+                 'border-gray-300': !completePersonalData
+               }">
+            @if(anyAddress && completePersonalData) {
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            } @else {
+              <span class="font-bold text-lg"
+                    [ngClass]="{
+                      'text-green-600': completePersonalData,
+                      'text-gray-500': !completePersonalData
+                    }">2</span>
+            }
+          </div>
+          <span class="text-sm font-semibold"
+                [ngClass]="{
+                  'text-green-600': anyAddress && completePersonalData,
+                  'text-gray-500': !anyAddress || !completePersonalData
+                }">
+            Dirección
+          </span>
+        </div>
+
+        <!-- Línea entre pasos -->
+        <div class="flex-1 h-1.5 mx-4 relative">
+          <div class="absolute inset-0 bg-gray-200 rounded-full"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-500"
+               [style.width]="(anyAddress && completePersonalData ? '100%' : '0%')"></div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="flex flex-col items-center relative z-10">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all duration-300"
+               [ngClass]="{
+                 'bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-200': anyAddress && completePersonalData,
+                 'bg-white border-4': !anyAddress || !completePersonalData,
+                 'border-gray-300': !anyAddress || !completePersonalData
+               }">
+            <span class="font-bold text-lg"
+                  [ngClass]="{
+                    'text-white': anyAddress && completePersonalData,
+                    'text-gray-500': !anyAddress || !completePersonalData
+                  }">3</span>
+          </div>
+          <span class="text-sm font-semibold"
+                [ngClass]="{
+                  'text-blue-600': anyAddress && completePersonalData,
+                  'text-gray-500': !anyAddress || !completePersonalData
+                }">
+            Confirmar compra
+          </span>
         </div>
       </div>
-      }
+    </div>
+
+    <!-- Paso 1: Datos personales -->
+    <div class="max-w-3xl mx-auto mb-6">
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between"
+             [ngClass]="{
+               'bg-gradient-to-r from-green-50 to-emerald-50': completePersonalData,
+               'bg-gradient-to-r from-yellow-50 to-amber-50': !completePersonalData
+             }">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                 [ngClass]="{
+                   'bg-green-100 text-green-600': completePersonalData,
+                   'bg-yellow-100 text-yellow-600': !completePersonalData
+                 }">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">Paso 1: Verificar datos personales</h3>
+              <p class="text-sm text-gray-600">Necesitamos tus datos para procesar el pedido</p>
+            </div>
+          </div>
+          @if(completePersonalData) {
+            <span class="px-4 py-1.5 bg-green-100 text-green-800 font-semibold rounded-full text-sm">
+              ✓ Completado
+            </span>
+          }
+        </div>
+        
+        <div class="p-6">
+          @if(!completePersonalData) {
+            <div class="text-center py-8">
+              <div class="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold text-gray-900 mb-3">Datos incompletos</h4>
+              <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                Para continuar con tu compra, necesitamos completar tu información personal.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button (click)="mostrarModal()"
+                        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold 
+                               rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 
+                               flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                  Completar datos
+                </button>
+                <a [routerLink]="['/profile']"
+                   class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg 
+                          hover:bg-gray-50 transition-all duration-200 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                  Ir al perfil
+                </a>
+              </div>
+            </div>
+          } @else {
+            <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+              <div class="flex items-center gap-3">
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-gray-700 font-medium">Tus datos personales están completos y verificados</span>
+              </div>
+              <span class="text-sm text-gray-500">Puedes continuar al siguiente paso</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 2: Dirección (solo si paso 1 completo) -->
+    @if(completePersonalData) {
+      <div class="max-w-3xl mx-auto mb-6">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between"
+               [ngClass]="{
+                 'bg-gradient-to-r from-green-50 to-emerald-50': anyAddress,
+                 'bg-gradient-to-r from-red-50 to-pink-50': !anyAddress
+               }">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                   [ngClass]="{
+                     'bg-green-100 text-green-600': anyAddress,
+                     'bg-red-100 text-red-600': !anyAddress
+                   }">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Paso 2: Seleccionar dirección de envío</h3>
+                <p class="text-sm text-gray-600">¿A dónde quieres que enviemos tu pedido?</p>
+              </div>
+            </div>
+            @if(anyAddress) {
+              <span class="px-4 py-1.5 bg-green-100 text-green-800 font-semibold rounded-full text-sm">
+                ✓ Completado
+              </span>
+            }
+          </div>
+          
+          <div class="p-6">
+            @if(!anyAddress) {
+              <div class="text-center py-8">
+                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
+                  <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <h4 class="text-xl font-bold text-gray-900 mb-3">Sin direcciones registradas</h4>
+                <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                  Necesitas registrar al menos una dirección para que podamos enviarte tu pedido.
+                </p>
+                <button (click)="mostrarModaldireccion()"
+                        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold 
+                               rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 
+                               flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                  Agregar dirección
+                </button>
+              </div>
+            } @else {
+              <!-- Dirección actual seleccionada -->
+              @if(addressData && addressData.length > 0) {
+                <div class="mb-8">
+                  <h4 class="text-lg font-semibold text-gray-900 mb-4">Dirección seleccionada</h4>
+                  @for(direccion of addressData; track direccion.id) {
+                    @if(direccion.activo) {
+                      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5">
+                        <div class="flex items-start justify-between">
+                          <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-4">
+                              <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                </svg>
+                              </div>
+                              <div>
+                                <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
+                                  Principal
+                                </span>
+                              </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <p class="text-sm text-gray-500">Dirección</p>
+                                <p class="font-medium text-gray-900">
+                                  {{ direccion.callePrincipal }} {{ direccion.numero }}
+                                </p>
+                              </div>
+                              <div>
+                                <p class="text-sm text-gray-500">Ciudad</p>
+                                <p class="font-medium text-gray-900">{{ direccion.ciudad }}</p>
+                              </div>
+                              <div>
+                                <p class="text-sm text-gray-500">Provincia</p>
+                                <p class="font-medium text-gray-900">{{ direccion.estado }}</p>
+                              </div>
+                              <div>
+                                <p class="text-sm text-gray-500">Código postal</p>
+                                <p class="font-medium text-gray-900">{{ direccion.codigoPostal }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  }
+                </div>
+              }
+              
+              <!-- Lista de direcciones disponibles -->
+              @if(addressData && addressData.length > 1) {
+                <div>
+                  <h4 class="text-lg font-semibold text-gray-900 mb-4">Otras direcciones disponibles</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @for(direccion of addressData; track direccion.id) {
+                      @if(!direccion.activo) {
+                        <div class="border border-gray-200 rounded-xl p-5 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                              <div class="mb-3">
+                                <p class="font-medium text-gray-900">
+                                  {{ direccion.callePrincipal }} {{ direccion.numero }}
+                                </p>
+                                <p class="text-sm text-gray-600">{{ direccion.ciudad }}, {{ direccion.estado }}</p>
+                              </div>
+                              <button (click)="selectAddress(direccion.id)"
+                                      class="w-full px-4 py-2.5 bg-gradient-to-r from-blue-50 to-blue-100 
+                                             text-blue-700 font-medium rounded-lg hover:from-blue-100 hover:to-blue-200 
+                                             transition-all duration-200 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Seleccionar esta dirección
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Paso 3: Confirmar compra (solo si paso 1 y 2 completos) -->
+    @if(completePersonalData && anyAddress) {
+      <div class="mt-12">
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-8">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900">Paso 3: Confirmar tu compra</h2>
+              <p class="text-gray-600">Revisa los productos y completa tu pedido</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Productos del carrito -->
+          <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div class="px-6 py-5 border-b border-gray-100">
+                <h3 class="text-xl font-bold text-gray-900">Tu carrito</h3>
+                <p class="text-sm text-gray-600">{{ data$?.items?.length || 0 }} producto{{ data$?.items?.length !== 1 ? 's' : '' }}</p>
+              </div>
+              
+              <div class="divide-y divide-gray-100">
+                @if(data$?.items && data$?.items.length > 0) {
+                  @for(cartItem of data$.items; track cartItem.product_id) {
+                    <div class="p-6 hover:bg-gray-50 transition-colors duration-200">
+                      <app-cart-item class="block" 
+                                     [productCartItem]="cartItem" 
+                                     (onIncrease)="onIncrease($event)"
+                                     (onDecrease)="onDecrease($event)" 
+                                     (onRemove)="onRemoveItem($event)" />
+                    </div>
+                  }
+                } @else {
+                  <div class="p-10 text-center">
+                    <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                      </svg>
+                    </div>
+                    <p class="text-gray-600">Tu carrito está vacío</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+         <!-- En la sección del resumen de orden -->
+<div class="lg:col-span-1">
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 sticky top-6">
+    <div class="p-6 border-b border-gray-100">
+      <h3 class="text-xl font-bold text-gray-900 mb-6">Resumen del pedido</h3>
+      
+      <div class="space-y-4">
+        <!-- Subtotal -->
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="text-gray-600">Subtotal</span>
+            <p class="text-xs text-gray-500">Precio sin impuestos</p>
+          </div>
+          <span class="text-lg font-semibold text-gray-900">${{ subtotal | number:'1.2-2' }}</span>
+        </div>
+        
+        <!-- IVA -->
+        <div class="flex justify-between items-center py-3 border-t border-gray-100">
+          <div>
+            <span class="text-gray-600">IVA ({{ ivaPercentage }}%)</span>
+            <p class="text-xs text-gray-500">Impuesto al Valor Agregado</p>
+          </div>
+          <span class="text-lg font-semibold text-blue-600">${{ iva | number:'1.2-2' }}</span>
+        </div>
+        
+        <!-- Envío -->
+        <div class="flex justify-between items-center py-3 border-t border-gray-100">
+          <div>
+            <span class="text-gray-600">Envío</span>
+            <p class="text-xs text-gray-500">Entrega a domicilio</p>
+          </div>
+          <span class="text-lg font-semibold text-green-600">Gratis</span>
+        </div>
+        
+        <!-- Total -->
+        <div class="flex justify-between items-center py-4 border-t border-gray-100 border-b">
+          <div>
+            <span class="text-lg font-bold text-gray-900">Total a pagar</span>
+            <p class="text-xs text-gray-500">Incluye IVA del {{ ivaPercentage }}%</p>
+          </div>
+          <div class="text-right">
+            <div class="text-2xl font-bold text-gray-900">${{ total | number:'1.2-2' }}</div>
+            <div class="text-sm text-gray-500">Precio final</div>
+          </div>
+        </div>
+        
+        <!-- Información sobre IVA -->
+        <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+          <div class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <div>
+              <p class="text-sm font-medium text-blue-800">El IVA del {{ ivaPercentage }}% está incluido en todos los precios.</p>
+              <p class="text-xs text-blue-600 mt-1">Este impuesto se aplica según la normativa fiscal vigente.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-6">
+      <button (click)="checkout()"
+              class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 
+                     text-white font-bold rounded-xl shadow-lg hover:shadow-xl 
+                     transition-all duration-300 hover:-translate-y-0.5
+                     flex items-center justify-center gap-3 text-lg"
+              [disabled]="!data$?.items || data$?.items.length === 0">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+        </svg>
+        Proceder al pago de ${{ total | number:'1.2-2' }}
+      </button>
+      
+      <!-- Información adicional sobre precios -->
+      <div class="mt-6 text-center text-sm text-gray-500">
+        <p>Precios en USD • IVA incluido</p>
+        <p class="mt-1 text-xs">El pago se procesará a través de Stripe</p>
+      </div>
     </div>
   </div>
-</section>
+</div>
+        </div>
+
+        <!-- Información de seguridad -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Pago seguro</p>
+                <p class="text-sm text-gray-600">Protegido con encriptación SSL</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Entrega rápida</p>
+                <p class="text-sm text-gray-600">Envío en 24-48 horas</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">Soporte 24/7</p>
+                <p class="text-sm text-gray-600">Estamos aquí para ayudarte</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Estado vacío del carrito -->
+    @if(completePersonalData && anyAddress && (!data$?.items || data$?.items.length === 0)) {
+      <div class="text-center py-20">
+        <div class="max-w-md mx-auto">
+          <div class="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-8">
+            <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h3>
+          <p class="text-gray-600 mb-8">
+            Agrega algunos productos increíbles antes de proceder al pago.
+          </p>
+          <a [routerLink]="['/dashboard/products']"
+             class="inline-flex items-center px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 
+                    text-white font-semibold rounded-xl shadow-lg hover:shadow-xl 
+                    transition-all duration-300 hover:-translate-y-0.5">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            Explorar productos
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
 
 @if(modalCreateDataClient){
 <section class="modal fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center p-4">

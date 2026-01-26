@@ -1,92 +1,482 @@
-<div class="min-h-screen bg-gray-50 text-gray-800 p-6">
-  <h1 class="text-2xl font-bold mb-6">📊 Panel de Reportes</h1>
+<!-- Agrega esto al inicio de tu HTML, justo después del opening div -->
+<div *ngIf="isLoading()" class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
+  <div class="text-center">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <p class="mt-4 text-gray-600 font-medium">Cargando datos del dashboard...</p>
+  </div>
+</div>
+
+<div *ngIf="error()" class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+  <div class="flex items-center">
+    <svg class="w-5 h-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+    </svg>
+    <p class="text-red-700 font-medium">{{ error() }}</p>
+    <button class="ml-auto text-sm bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg" (click)="loadDashboardData()">
+      Reintentar
+    </button>
+  </div>
+</div>
+
+<!-- reports.component.html -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
+  <!-- =======================
+       HEADER CON TÍTULO Y FILTROS - ACTUALIZADO
+  ======================= -->
+  <header class="mb-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800">📊 Panel de Reportes</h1>
+        <p class="text-gray-600 mt-1">Dashboard administrativo con métricas en tiempo real</p>
+      </div>
+      
+      <!-- CONTROLES DE AÑO Y ACTUALIZACIÓN - NUEVO -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Selector de año mejorado -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-600 whitespace-nowrap">Año:</span>
+          <select 
+            class="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px]"
+            [value]="selectedYear()"
+            (change)="onYearSelectChange($any($event.target).value)"
+          >
+            <option *ngFor="let year of years()" [value]="year" [selected]="year === selectedYear()">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Botón de actualizar -->
+        <button 
+          class="flex items-center gap-2 bg-white border border-gray-300 hover:border-blue-500 hover:bg-blue-50 text-gray-700 hover:text-blue-700 px-4 py-2 rounded-lg transition-all duration-200"
+          (click)="refreshData()"
+          [disabled]="isLoading()"
+          [class.opacity-50]="isLoading()"
+        >
+          <svg 
+            class="w-4 h-4" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+            [class.animate-spin]="isLoading()"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span class="text-sm font-medium">{{ isLoading() ? 'Actualizando...' : 'Actualizar' }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tarjetas de resumen con iconos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- Ingresos Totales -->
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm opacity-90">Ingresos Totales</p>
+            <p class="mt-2 text-3xl font-bold">${{ (salesSummary()?.totalRevenue || 0) | number:'1.0-2' }}</p>
+            <p class="text-sm mt-1 opacity-90 flex items-center">
+              <span class="inline-flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
+                </svg>
+                +12.5% vs mes anterior
+              </span>
+            </p>
+          </div>
+          <div class="bg-white/20 p-3 rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Órdenes Totales -->
+      <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm opacity-90">Órdenes Totales</p>
+            <p class="mt-2 text-3xl font-bold">{{ salesSummary()?.totalOrders || 0 }}</p>
+            <p class="text-sm mt-1 opacity-90">{{ salesSummary()?.avgOrderValue | currency:'USD':'symbol':'1.0-2' }} valor promedio</p>
+          </div>
+          <div class="bg-white/20 p-3 rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nuevos Clientes -->
+      <div class="bg-gradient-to-r from-purple-500 to-violet-600 rounded-2xl p-5 text-white shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm opacity-90">Nuevos Clientes</p>
+            <p class="mt-2 text-3xl font-bold">{{ newClients()?.count || 0 }}</p>
+            <p class="text-sm mt-1 opacity-90">{{ newClients()?.percentageChange || 0 }}% crecimiento</p>
+          </div>
+          <div class="bg-white/20 p-3 rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos Vendidos -->
+      <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-5 text-white shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm opacity-90">Productos Vendidos</p>
+            <p class="mt-2 text-3xl font-bold">{{ salesSummary()?.totalProductsSold || 0 }}</p>
+            <p class="text-sm mt-1 opacity-90">{{ salesSummary()?.uniqueProducts || 0 }} productos únicos</p>
+          </div>
+          <div class="bg-white/20 p-3 rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- =======================
-       RESUMEN GENERAL
+       GRÁFICOS Y MÉTRICAS PRINCIPALES
   ======================= -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
-      <h3 class="text-xs text-gray-500">Ingresos Totales</h3>
-      <p class="mt-2 text-2xl font-bold">
-        ${{ salesSummary?.totalRevenue || 0 }}
-      </p>
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Ventas por Mes (Gráfico de barras) -->
+    <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">📈 Ventas Mensuales</h2>
+          <p class="text-sm text-gray-500 mt-1">Año {{ selectedYear() }}</p>
+        </div>
+        
+        <!-- Selector de año (opcional, puedes quitar este si quieres solo el del header) -->
+        <select 
+          class="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [value]="selectedYear()"
+          (change)="onYearSelectChange($any($event.target).value)"
+        >
+          <option *ngFor="let year of years()" [value]="year" [selected]="year === selectedYear()">
+            {{ year }}
+          </option>
+        </select>
+      </div>
 
-    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
-      <h3 class="text-xs text-gray-500">Órdenes Totales</h3>
-      <p class="mt-2 text-2xl font-bold">{{ salesSummary?.totalOrders || 0 }}</p>
-    </div>
+      <!-- Gráfico de barras - Versión funcional -->
+      <div class="h-72 flex flex-col">
+        <!-- Contenedor principal del gráfico -->
+        <div class="flex-1 relative">
+          <!-- Línea horizontal de referencia -->
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gray-200 z-0"></div>
+          
+          <!-- Barras del gráfico -->
+          <div class="h-full flex items-end justify-between px-1 z-10 relative">
+            <div 
+              *ngFor="let item of salesByMonth(); let i = index" 
+              class="flex flex-col items-center flex-1 mx-0.5 relative group"
+            >
+              <!-- Barra principal -->
+              <div 
+                class="w-10 rounded-t-lg transition-all duration-300 cursor-pointer relative"
+                [class]="item.total > 0 ? 
+                  'bg-gradient-to-t from-blue-500 to-blue-300 hover:from-blue-600 hover:to-blue-400' : 
+                  'bg-gradient-to-t from-gray-200 to-gray-100 hover:from-gray-300 hover:to-gray-200'"
+                [style.height.px]="getBarHeightInPixels(item.total)"
+                (mouseenter)="onBarHover(item, i)"
+                (mouseleave)="onBarLeave()"
+              >
+                <!-- Valor sobre la barra (solo si > 0) -->
+                <div 
+                  *ngIf="item.total > 0" 
+                  class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-gray-700 whitespace-nowrap bg-white px-1 rounded shadow-sm"
+                >
+                  {{ formatSalesValue(item.total) }}
+                </div>
+                
+                <!-- Indicador de mes actual -->
+                <div 
+                  *ngIf="isCurrentMonth(item.month)" 
+                  class="absolute -top-10 left-1/2 transform -translate-x-1/2"
+                >
+                  <div class="text-xs bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full border border-blue-200">
+                    Actual
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Nombre del mes -->
+              <div class="mt-2 text-xs text-gray-500 font-medium">
+                {{ item.monthShort }}
+              </div>
+              
+              <!-- Tooltip en hover -->
+              <div 
+                class="absolute -top-20 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20 pointer-events-none"
+                [class.hidden]="!showTooltip || currentTooltipIndex !== i"
+              >
+                <div class="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap shadow-lg">
+                  <div class="font-semibold mb-1">{{ getMonthFullName(item.month) }}</div>
+                  <div class="flex items-center">
+                    <div class="w-2 h-2 rounded-full mr-2" 
+                         [class.bg-blue-400]="item.total > 0"
+                         [class.bg-gray-400]="item.total === 0"></div>
+                    <span>{{ getBarTooltip(item) }}</span>
+                  </div>
+                </div>
+                <!-- Flecha del tooltip -->
+                <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 rotate-45 w-2 h-2 bg-gray-900"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Eje X con meses destacados -->
+        <div class="h-8 flex items-center justify-between px-1 mt-2">
+          <div class="text-xs text-gray-400">Ene</div>
+          <div class="text-xs text-gray-400">Mar</div>
+          <div class="text-xs text-gray-400">May</div>
+          <div class="text-xs text-gray-400">Jul</div>
+          <div class="text-xs text-gray-400">Sep</div>
+          <div class="text-xs text-gray-400">Nov</div>
+        </div>
+      </div>
 
-    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
-      <h3 class="text-xs text-gray-500">Nuevos Clientes</h3>
-      <p class="mt-2 text-2xl font-bold">{{ newClients?.count || 0 }}</p>
+      <!-- Estadísticas -->
+      <div class="mt-8 pt-6 border-t border-gray-100">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <div class="text-sm text-gray-500 mb-1">Total Anual</div>
+            <div class="text-xl font-bold text-gray-800">
+              {{ getTotalAnnualSales() | currency:'USD':'symbol':'1.0-2' }}
+            </div>
+          </div>
+          
+          <div class="text-center">
+            <div class="text-sm text-gray-500 mb-1">Promedio Mensual</div>
+            <div class="text-xl font-bold text-gray-800">
+              {{ getMonthlyAverage() | currency:'USD':'symbol':'1.0-2' }}
+            </div>
+          </div>
+          
+          <div class="text-center">
+            <div class="text-sm text-gray-500 mb-1">Mejor Mes</div>
+            <div class="text-xl font-bold text-gray-800">
+              {{ getBestMonth()?.monthShort || 'N/A' }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ getBestMonth()?.total | currency:'USD':'symbol':'1.0-2' }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Leyenda -->
+        <div class="flex justify-center items-center mt-4 space-x-4 text-xs">
+          <div class="flex items-center">
+            <div class="w-3 h-3 rounded-sm bg-gradient-to-t from-blue-500 to-blue-300 mr-1.5"></div>
+            <span class="text-gray-600">Con ventas</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 rounded-sm bg-gradient-to-t from-gray-200 to-gray-100 mr-1.5"></div>
+            <span class="text-gray-600">Sin ventas</span>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="bg-white rounded-2xl p-5 shadow border border-gray-100">
-      <h3 class="text-xs text-gray-500">Productos Vendidos</h3>
-      <p class="mt-2 text-2xl font-bold">
-        {{ salesSummary?.totalProductsSold || 0 }}
-      </p>
+    
+    <!-- Órdenes por Estado (Gráfico de dona) -->
+    <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">📊 Distribución por Estado</h2>
+        <button 
+          class="text-sm text-gray-600 hover:text-blue-600 font-medium flex items-center gap-1"
+          (click)="refreshData()"
+          [disabled]="isLoading()"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Actualizar
+        </button>
+      </div>
+      <div class="flex flex-col lg:flex-row items-center">
+        <!-- Gráfico circular -->
+        <div class="relative w-48 h-48 mb-6 lg:mb-0 lg:mr-6">
+          <svg class="w-full h-full" viewBox="0 0 100 100">
+            <!-- Generar sectores -->
+            <circle 
+              *ngFor="let order of ordersByStatus(); let i = index"
+              [attr.cx]="50"
+              [attr.cy]="50"
+              r="40"
+              [attr.fill]="'transparent'"
+              [attr.stroke]="getStatusColor(order.estado)"
+              [attr.stroke-width]="20"
+              [attr.stroke-dasharray]="getDashArray(order, i)"
+              [attr.stroke-dashoffset]="getDashOffset(i)"
+              transform="rotate(-90 50 50)"
+            />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <div class="text-2xl font-bold">{{ getTotalOrders() }}</div>
+            <div class="text-sm text-gray-600">total órdenes</div>
+          </div>
+        </div>
+        
+        <!-- Leyenda -->
+        <div class="flex-1">
+          <div *ngFor="let order of ordersByStatus()" class="flex items-center mb-3">
+            <div class="w-3 h-3 rounded-full mr-3" [style.background]="getStatusColor(order.estado)"></div>
+            <div class="flex-1">
+              <div class="flex justify-between">
+                <span class="font-medium">{{ order.estado | titlecase }}</span>
+                <span class="text-gray-700">{{ order.total }} ({{ getPercentage(order) }}%)</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                <div class="h-1.5 rounded-full" [style.background]="getStatusColor(order.estado)" [style.width]="getPercentage(order) + '%'"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
 
   <!-- =======================
-       VENTAS POR MES
+       TABLAS DE DATOS DETALLADOS
   ======================= -->
-  <section class="bg-white rounded-2xl p-5 shadow mb-8">
-    <h2 class="text-lg font-semibold mb-3">📅 Ventas por Mes</h2>
-    <ul class="text-sm text-gray-700">
-      <li *ngFor="let item of salesByMonth">
-        {{ item.month }}: ${{ item.total }}
-      </li>
-    </ul>
-  </section>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Top Productos Vendidos -->
+    <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">🏆 Productos Más Vendidos</h2>
+        <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">Ver todos →</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b">
+              <th class="text-left py-3 text-sm font-medium text-gray-600">Producto</th>
+              <th class="text-left py-3 text-sm font-medium text-gray-600">Unidades</th>
+              <th class="text-left py-3 text-sm font-medium text-gray-600">Ingresos</th>
+              <th class="text-left py-3 text-sm font-medium text-gray-600">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of topProducts(); let i = index" class="border-b hover:bg-gray-50">
+              <td class="py-3">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
+                    <span class="font-bold text-gray-700">{{ i + 1 }}</span>
+                  </div>
+                  <div>
+                    <div class="font-medium">{{ p.name }}</div>
+                    <div class="text-xs text-gray-500">Cantidad: {{ p.total_sold }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3 font-medium">{{ p.total_sold }}</td>
+              <td class="py-3 font-medium text-green-600">${{ (p.total_sold * 10) | number:'1.0-2' }}</td>
+              <td class="py-3">
+                <div class="flex items-center">
+                  <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div class="h-2 rounded-full bg-blue-500" [style.width]="getProductPercentage(p) + '%'"></div>
+                  </div>
+                  <span class="text-sm">{{ getProductPercentage(p) }}%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <!-- =======================
-       TOP PRODUCTOS
-  ======================= -->
-  <section class="bg-white rounded-2xl p-5 shadow mb-8">
-    <h2 class="text-lg font-semibold mb-3">🏆 Top Productos Vendidos</h2>
-    <ul class="text-sm text-gray-700">
-      <li *ngFor="let p of topProducts">
-        {{ p.name }} — {{ p.units_sold }} unidades
-      </li>
-    </ul>
-  </section>
+    <!-- Productos con Bajo Stock -->
+    <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">⚠️ Productos con Bajo Stock</h2>
+        <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+          {{ lowStock()?.length || 0 }} productos
+        </span>
+      </div>
+      <div class="space-y-4">
+        <div *ngFor="let p of lowStock()" class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+          <div>
+            <div class="font-medium">{{ p.name }}</div>
+            <div class="text-sm text-gray-600">ID: {{ p.id }}</div>
+          </div>
+          <div class="text-right">
+            <div class="text-lg font-bold text-red-600">{{ p.stock }}</div>
+            <div class="text-xs text-gray-500">stock actual</div>
+          </div>
+        </div>
+        
+        <div *ngIf="!lowStock() || lowStock().length === 0" class="text-center py-8 text-gray-500">
+          <svg class="w-12 h-12 mx-auto text-green-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p>Todos los productos tienen stock suficiente</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- =======================
        INGRESOS POR CATEGORÍA
   ======================= -->
-  <section class="bg-white rounded-2xl p-5 shadow mb-8">
-    <h2 class="text-lg font-semibold mb-3">📦 Ingresos por Categoría</h2>
-    <ul class="text-sm text-gray-700">
-      <li *ngFor="let c of revenueByCategory">
-        {{ c.category }}: ${{ c.total }}
-      </li>
-    </ul>
-  </section>
+  <div class="mt-6">
+    <div class="bg-white rounded-2xl p-5 shadow-lg border border-gray-100">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">📦 Ingresos por Categoría</h2>
+        <span class="text-sm text-gray-600">Año {{ selectedYear() }}</span>
+      </div>
+      <div class="space-y-4">
+        <div *ngFor="let c of revenueByCategory()" class="flex items-center">
+          <div class="w-32 text-sm font-medium">{{ c.category }}</div>
+          <div class="flex-1 mx-4">
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                class="h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-500"
+                [style.width]="getCategoryPercentage(c) + '%'"
+              ></div>
+            </div>
+          </div>
+          <div class="w-32 text-right">
+            <span class="font-bold">${{ c.total | number:'1.0-2' }}</span>
+            <span class="text-sm text-gray-600 ml-2">({{ getCategoryPercentage(c) }}%)</span>
+          </div>
+        </div>
+        
+        <div *ngIf="!revenueByCategory() || revenueByCategory().length === 0" class="text-center py-8 text-gray-500">
+          <p>No hay datos de categorías disponibles</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- =======================
-       ÓRDENES POR ESTADO
+       PIE DE PÁGINA ACTUALIZADO
   ======================= -->
-  <section class="bg-white rounded-2xl p-5 shadow mb-8">
-    <h2 class="text-lg font-semibold mb-3">📋 Órdenes por Estado</h2>
-    <ul class="text-sm text-gray-700">
-      <li *ngFor="let o of ordersByStatus">
-        {{ o.estado }}: {{ o.total }}
-      </li>
-    </ul>
-  </section>
-
-  <!-- =======================
-       PRODUCTOS CON BAJO STOCK
-  ======================= -->
-  <section class="bg-white rounded-2xl p-5 shadow mb-8">
-    <h2 class="text-lg font-semibold mb-3">⚠️ Productos con Bajo Stock</h2>
-    <ul class="text-sm text-gray-700">
-      <li *ngFor="let p of lowStock">
-        {{ p.name }} — Stock: {{ p.stock }}
-      </li>
-    </ul>
-  </section>
+  <footer class="mt-8 text-center text-sm text-gray-500">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-2">
+      <p>Última actualización: {{ lastUpdate | date:'medium' }}</p>
+      <span class="hidden sm:block">•</span>
+      <p>Datos del año: <span class="font-semibold">{{ selectedYear() }}</span></p>
+      <span class="hidden sm:block">•</span>
+      <button 
+        class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+        (click)="refreshData()"
+        [disabled]="isLoading()"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        {{ isLoading() ? 'Actualizando...' : 'Actualizar ahora' }}
+      </button>
+    </div>
+    <p class="mt-1">Dashboard generado automáticamente • Todos los valores en USD</p>
+  </footer>
 </div>

@@ -25,6 +25,9 @@ export const routes: Routes = [
           import('./components/dashboard-client/auth/login/login.component').then(
             (m) => m.LoginComponent
           ),
+          canActivate:[
+            authGuard
+          ]
       },
       {
         path: 'auth/signup',
@@ -32,6 +35,14 @@ export const routes: Routes = [
           import('./components/dashboard-client/auth/signup/signup.component').then(
             (m) => m.SignupComponent
           ),
+      },
+      {
+        path:"categorias",
+        loadComponent: () =>
+          import('./components/dashboard-client/categoria/categoria.component').then(
+            (m)=> m.CategoriaComponent
+          )
+        
       },
       {
         path: 'products',

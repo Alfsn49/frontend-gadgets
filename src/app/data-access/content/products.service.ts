@@ -54,6 +54,9 @@ getProducts(page: number, limit: number, filters: any = {}): Observable<any> {
   getCategories(): Observable<any>{
     return this.http.get(this.api + 'product-category/get-categories');
   }
+  getCategoriesForDisplay(){
+    return this.http.get(this.api+'product-category/for-display')
+  }
 
   getSubCategories(id:number): Observable<any>{
     console.log(id)

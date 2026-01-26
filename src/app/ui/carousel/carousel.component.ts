@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { initFlowbite } from 'flowbite';
 
@@ -10,33 +10,52 @@ import { initFlowbite } from 'flowbite';
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css'
 })
-export class CarouselComponent  {
-  // Definimos un arreglo para gestionar el estado de las imágenes activas
+export class CarouselComponent implements OnInit, OnDestroy {
   images = [
-    // 'https://cdn.donmai.us/sample/4d/10/__sakurai_momoka_idolmaster_and_2_more__sample-4d104d2f3f14f644efda79c9df21a580.jpg',
-    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1/carousel/r5r4ock1onlqj6i5dnim',
-    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1736194154/carousel/i4zoc9ilogf3a3cgtl40.jpg',
-    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_800,h_450,c_fill,f_auto,q_auto/v1736196590/carousel/fwkamb1eg7ld3iq6rzrm.jpg'
+    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_1920,h_600,c_fill,f_auto,q_auto/v1/carousel/r5r4ock1onlqj6i5dnim',
+    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_1920,h_600,c_fill,f_auto,q_auto/v1736194154/carousel/i4zoc9ilogf3a3cgtl40.jpg',
+    'https://res.cloudinary.com/dwhexzxkv/image/upload/w_1920,h_600,c_fill,f_auto,q_auto/v1736196590/carousel/fwkamb1eg7ld3iq6rzrm.jpg'
   ];
 
-  // Estado para el índice activo
   currentIndex: number = 0;
+  private intervalId: any;
 
-  constructor() { }
+  ngOnInit() {
+    // Auto-play cada 5 segundos
+    this.startAutoPlay();
+  }
 
-  
+  ngOnDestroy() {
+    this.stopAutoPlay();
+  }
 
-  // Método para cambiar a la imagen siguiente
+  startAutoPlay() {
+    this.intervalId = setInterval(() => {
+      this.nextImage();
+    }, 5000);
+  }
+
+  stopAutoPlay() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
   nextImage() {
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
   }
 
-  // Método para cambiar a la imagen anterior
   prevImage() {
     this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
   }
 
-  // Método para verificar si la imagen es la activa
+  goToImage(index: number) {
+    this.currentIndex = index;
+    // Reiniciar auto-play al hacer clic manual
+    this.stopAutoPlay();
+    this.startAutoPlay();
+  }
+
   isActive(index: number): boolean {
     return index === this.currentIndex;
   }

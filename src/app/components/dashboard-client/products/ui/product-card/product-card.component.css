@@ -1,0 +1,68 @@
+/* Agregar a tu archivo CSS */
+:host {
+  display: block;
+}
+
+/* Animación sutil para el hover de la tarjeta */
+li {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+  transform: translateY(-4px);
+}
+
+/* Estilos para el texto truncado mejorados */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animación para el botón de agregar */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+/* En tu archivo CSS del componente */
+:host {
+  display: block;
+}
+
+/* Clase para tarjetas de productos */
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Asegurar que todas las tarjetas tengan la misma altura en grid */
+li {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ajustes para la imagen */
+.object-contain {
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Para nombres muy largos */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

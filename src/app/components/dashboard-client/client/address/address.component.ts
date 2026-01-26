@@ -355,5 +355,19 @@ loadCitiesEdit(): void {
     )
   }
 
-  
+  setAsDefault(data:any){
+    console.log(data)
+    this.userService.preferedAddress(data).subscribe({
+      next:(data:any)=>{
+          console.log(data)
+          this.toastr.success('Dirección seleccionada','Exitoso',{
+            timeOut: 3000,
+          })
+          this.getAddress()
+        },
+        error:(error:any)=>{
+          console.log(error)
+        }
+    })
+  }
 }
