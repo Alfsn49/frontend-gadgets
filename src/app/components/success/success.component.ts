@@ -1,4 +1,3 @@
-// success.component.ts
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,6 +20,9 @@ export class SuccessComponent implements OnInit, OnDestroy {
   store = inject(Store);
   sessionId: string | null = null;
   countdown = 5;
+  circumference = 2 * Math.PI * 32;
+  cardCode: string;
+  randomNumber: number;
   private countdownInterval: any;
 
   constructor(
@@ -32,6 +34,10 @@ export class SuccessComponent implements OnInit, OnDestroy {
     this.cartService.clearCartFromLocalStorage();
     this.store.dispatch(cartCompleted());
     this.store.dispatch(refreshCart());
+    
+    // Generar código de carta único
+    this.randomNumber = Math.floor(Math.random() * 10000);
+    this.cardCode = this.generateCardCode();
   }
 
   ngOnInit(): void {
@@ -44,8 +50,6 @@ export class SuccessComponent implements OnInit, OnDestroy {
 
     // Iniciar contador
     this.startCountdown();
-
-
   }
 
   ngOnDestroy(): void {
@@ -65,10 +69,24 @@ export class SuccessComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
+  generateCardCode(): string {
+    const prefixes = ['DRG', 'SPL', 'WRR', 'PHX', 'TRS', 'LGN'];
+    const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const year = new Date().getFullYear();
+    return `${randomPrefix}-${year}-${Math.floor(Math.random() * 9999)}`;
+  }
 
+  goToHome() {
+    this.router.navigate(['/']).then(() => {
+      this.store.dispatch(loadCart());
+    });
+  }
+
+  goToOrders() {
+    this.router.navigate(['/orders']);
+  }
 
   handleFailedPayment() {
-    // Cambiar contador a 10 segundos para dar tiempo al usuario
     clearInterval(this.countdownInterval);
     this.countdown = 10;
     this.startCountdown();
@@ -86,40 +104,5 @@ export class SuccessComponent implements OnInit, OnDestroy {
       default:
         return this.loading ? 'Verificando...' : 'Estado Desconocido';
     }
-  }
-
-  getStatusMessage(): string {
-    switch (this.paymentStatus) {
-      case 'paid':
-      case 'complete':
-        return '¡Felicidades! Tu pedido ha sido procesado exitosamente. Te hemos enviado un correo con los detalles.';
-      case 'processing':
-        return 'Tu pago está siendo procesado. Esto puede tomar unos minutos. Te notificaremos cuando esté completo.';
-      case 'error':
-        return 'Hubo un problema procesando tu pago. Por favor, intenta nuevamente o contacta con soporte.';
-      default:
-        return 'Estamos verificando el estado de tu transacción...';
-    }
-  }
-
-  goToHome() {
-    this.router.navigate(['/']).then(() => {
-      // Forzar recarga del carrito
-      this.store.dispatch(loadCart());
-    });
-  }
-
-  goToOrders() {
-    this.router.navigate(['/orders']);
-  }
-
-  stopCountdown() {
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
-    }
-  }
-
-  continueCountdown() {
-    this.startCountdown();
   }
 }

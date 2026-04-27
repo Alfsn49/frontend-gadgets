@@ -439,25 +439,41 @@
       </div>
     </div>
     
-    <div class="p-6">
-      <button (click)="checkout()"
-              class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 
-                     text-white font-bold rounded-xl shadow-lg hover:shadow-xl 
-                     transition-all duration-300 hover:-translate-y-0.5
-                     flex items-center justify-center gap-3 text-lg"
-              [disabled]="!data$?.items || data$?.items.length === 0">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-        </svg>
-        Proceder al pago de ${{ total | number:'1.2-2' }}
-      </button>
-      
-      <!-- Información adicional sobre precios -->
-      <div class="mt-6 text-center text-sm text-gray-500">
-        <p>Precios en USD • IVA incluido</p>
-        <p class="mt-1 text-xs">El pago se procesará a través de Stripe</p>
-      </div>
-    </div>
+  <div class="p-6">
+  <button (click)="checkout()"
+          class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 
+                 text-white font-bold rounded-xl shadow-lg hover:shadow-xl 
+                 transition-all duration-300 hover:-translate-y-0.5
+                 flex items-center justify-center gap-3 text-lg
+                 relative overflow-hidden"
+          [disabled]="isSubmitting || !data$?.items || data$?.items.length === 0">
+    
+    <!-- Contenido del botón con estados -->
+    @if(isSubmitting && !isSuccess()) {
+      <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>Procesando pago...</span>
+    } @else if(isSuccess()) {
+      <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+      </svg>
+      <span>¡Redirigiendo al pago!</span>
+    } @else {
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
+      <span>Proceder al pago de ${{ total | number:'1.2-2' }}</span>
+    }
+  </button>
+  
+  <!-- Información adicional sobre precios -->
+  <div class="mt-6 text-center text-sm text-gray-500">
+    <p>Precios en USD • IVA incluido</p>
+    <p class="mt-1 text-xs">El pago se procesará a través de Stripe</p>
+  </div>
+</div>
   </div>
 </div>
         </div>

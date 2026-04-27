@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CartItemComponent } from "./ui/cart-item/cart-item.component";
 import { CartStateService } from '../../../data-access/cart/cart-state.service';
 import { ProductItemCart } from '../../../Dto/Product.dto';
@@ -35,6 +35,7 @@ export class CartComponent {
   addressForm!:FormGroup;
   cartService = inject(CartService);
   isSubmitting = false;
+  isSuccess = signal<boolean>(false);
   // Agrega estas propiedades
 subtotal: number = 0;
 iva: number = 0;
@@ -208,48 +209,66 @@ hasAnyAddress(): boolean {
   return this.addressLoaded && this.addressData.length > 0;
 }
 
-  checkout(){
-    console.log('checkout')
-    console.log(this.data$)
-   
-    const direccionesActivas = this.addressData.filter((address:any) => address.activo === true);
-  
-    const direccionSeleccionada = direccionesActivas[0]; 
-    console.log('Dirección seleccionada:', direccionSeleccionada);
-    const dataCheckout = {
-      
-      userId:this.data$.user_id,
-      direccionId: direccionSeleccionada.id, // ID de la dirección seleccionada   
-      cartId:this.data$.id,
-      products:this.data$.items.map((items:any)=>{
-      return{
-        amount: items.unit_price * 100, // Multiplica por 100 si usas centavos para Stripe
-    currency: "usd",
-    productId: items.product_id,
-    name: items.name,
-    image: items.image,
-    quantity: items.quantity
-      }
-    })}
-    
-    console.log('Datos de checkout:', dataCheckout);
-    
-    console.log(dataCheckout)
-    this.cartService.checkout(dataCheckout).subscribe(
-      {
-        next:(data:any)=>{
-          console.log(data)
-          window.location.href = data.url;
-        },
-        error:(error:any)=>{
-          this.toastrService.error(error.error.message, 'Error', {
-            timeOut: 3000,
-          });
-          console.log(error)
-        }
-      }
-    )
+
+
+  checkout() {
+  // Evitar múltiples clics
+  if (this.isSubmitting) {
+    return;
   }
+  
+  console.log('checkout');
+  console.log(this.data$);
+  
+  // Iniciar animación de carga
+  this.isSubmitting = true;
+  
+  const direccionesActivas = this.addressData.filter((address: any) => address.activo === true);
+  const direccionSeleccionada = direccionesActivas[0];
+  
+  console.log('Dirección seleccionada:', direccionSeleccionada);
+  
+  const dataCheckout = {
+    userId: this.data$.user_id,
+    direccionId: direccionSeleccionada.id,
+    cartId: this.data$.id,
+    products: this.data$.items.map((items: any) => ({
+      amount: items.unit_price * 100,
+      currency: "usd",
+      productId: items.product_id,
+      name: items.name,
+      image: items.image,
+      quantity: items.quantity
+    }))
+  };
+  
+  console.log('Datos de checkout:', dataCheckout);
+  console.log(dataCheckout);
+  
+  this.cartService.checkout(dataCheckout).subscribe({
+    next: (data: any) => {
+      console.log(data);
+      // Mostrar animación de éxito
+      this.isSuccess.set(true);
+      this.toastrService.success('Redirigiendo al pago...', 'Éxito', {
+        timeOut: 1500,
+      });
+      
+      // Redirigir después de la animación
+      setTimeout(() => {
+        window.location.href = data.url;
+      }, 800);
+    },
+    error: (error: any) => {
+      // Detener animación en caso de error
+      this.isSubmitting = false;
+      this.toastrService.error(error.error.message, 'Error', {
+        timeOut: 3000,
+      });
+      console.log(error);
+    }
+  });
+}
 
   mostrarModal(){
     const userdata = localStorage.getItem('User');

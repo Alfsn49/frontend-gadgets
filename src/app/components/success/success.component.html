@@ -1,134 +1,201 @@
-<!-- success.component.html -->
-<div class="min-h-screen bg-gradient-to-br from-emerald-50 to-green-50 flex items-center justify-center p-4 animate-fade-in">
-  <div class="max-w-2xl w-full">
-    <!-- Card principal -->
-    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-      <!-- Header con gradiente -->
-      <div class="bg-gradient-to-r from-emerald-500 to-green-600 p-8 text-white text-center relative overflow-hidden">
-        <!-- Elementos decorativos -->
-        <div class="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-16 -translate-y-16"></div>
-        <div class="absolute bottom-0 right-0 w-40 h-40 bg-white/10 rounded-full translate-x-20 translate-y-20"></div>
-        
-        <!-- Icono animado -->
-        <div class="relative z-10">
-          <div class="w-24 h-24 mx-auto mb-6 relative">
-            <!-- Anillo exterior -->
-            <div class="absolute inset-0 border-4 border-white/30 rounded-full animate-ping-slow"></div>
-            <!-- Checkmark animado -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <svg class="w-16 h-16" viewBox="0 0 24 24" fill="none">
-                <path 
-                  d="M20 6L9 17L4 12" 
-                  stroke="currentColor" 
-                  stroke-width="3" 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round"
-                  class="text-white animate-draw-check"
-                  style="stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawCheck 0.8s ease forwards 0.5s"/>
-              </svg>
-            </div>
-          </div>
-          
-          <h1 class="text-4xl font-bold mb-2">¡Compra Exitosa!</h1>
-          <p class="text-emerald-100 text-lg opacity-90">Tu pago ha sido procesado correctamente</p>
+<div class="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center p-4 relative overflow-hidden">
+  
+  <!-- Cartas flotantes de fondo -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <!-- Carta 1 - Dragón Legendario -->
+    <div class="absolute top-10 left-10 animate-float-slow opacity-30">
+      <div class="relative w-28 h-40 rounded-xl shadow-2xl transform rotate-[-10deg] card-hover">
+        <img src="https://static.wikia.nocookie.net/digimoncardgame/images/8/86/ST20-11.png" alt="Dragon Card" 
+             class="w-full h-full object-cover rounded-xl border-2 border-yellow-400"
+             onerror="this.src='https://via.placeholder.com/112x160/fbbf24/1f2937?text=✨+DRAGON+✨'">
+        <div class="absolute -top-2 -right-2 bg-yellow-400 text-purple-900 text-xs font-bold px-2 py-0.5 rounded-full shadow-lg">
+          ★5
         </div>
       </div>
-
-      <!-- Contenido -->
-      <div class="p-8 md:p-10">
-        <!-- Estado del pago -->
-        <div class="mb-8">
-          <div class="flex items-center justify-center gap-3 mb-4">
-            <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-medium">
-              Pago Confirmado ✓
-            </div>
-          </div>
-
-          <!-- Mensaje según estado -->
-          <div class="text-center mb-6">
-            <p class="text-gray-600 text-lg">
-              ¡Felicidades! Tu pedido ha sido procesado exitosamente. 
-              Te hemos enviado un correo con los detalles.
-            </p>
-          </div>
+    </div>
+    
+    <!-- Carta 2 - Hechizo Mágico -->
+    <div class="absolute bottom-10 right-10 animate-float-delayed opacity-30">
+      <div class="relative w-28 h-40 rounded-xl shadow-2xl transform rotate-[10deg] card-hover">
+        <img src="https://cardcluster.com/storage/cards/MZMU/MZMU-DE011-SCR-5d3afa2b22.webp" alt="Spell Card" 
+             class="w-full h-full object-cover rounded-xl border-2 border-blue-400"
+             onerror="this.src='https://via.placeholder.com/112x160/3b82f6/1f2937?text=✨+SPELL+✨'">
+        <div class="absolute -top-2 -right-2 bg-blue-400 text-purple-900 text-xs font-bold px-2 py-0.5 rounded-full shadow-lg">
+          ★4
         </div>
+      </div>
+    </div>
+    
+    <!-- Carta 3 - Guerrero Épico -->
+    <div class="absolute top-1/3 right-20 animate-float-fast opacity-20">
+      <div class="relative w-24 h-36 rounded-xl shadow-2xl transform rotate-[15deg] card-hover">
+        <img src="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/one-piece/OP01/OP01-070_EN.webp" alt="Warrior Card" 
+             class="w-full h-full object-cover rounded-xl border-2 border-red-400"
+             onerror="this.src='https://via.placeholder.com/96x144/ef4444/1f2937?text=✨+WARRIOR+✨'">
+      </div>
+    </div>
+    
+    <!-- Carta 4 - Tesoro Legendario -->
+    <div class="absolute bottom-20 left-1/4 animate-float-slow opacity-25">
+      <div class="relative w-24 h-36 rounded-xl shadow-2xl transform rotate-[-15deg] card-hover">
+        <img src="https://en.ws-tcg.com/wordpress/wp-content/images/cardimages/SS/WE41_E30SHP.png" alt="Treasure Card" 
+             class="w-full h-full object-cover rounded-xl border-2 border-green-400"
+             onerror="this.src='https://via.placeholder.com/96x144/10b981/1f2937?text=✨+TREASURE+✨'">
+      </div>
+    </div>
+    
+    <!-- Carta 5 - Fénix Renacido -->
+    <div class="absolute top-1/2 left-5 animate-float-fast opacity-20">
+      <div class="relative w-20 h-28 rounded-xl shadow-2xl transform rotate-[-5deg] card-hover">
+        <img src="https://gatherer-static.wizards.com/Cards/medium/7DF950AC03BCB9D7FD21AB5988935BF2CBB4D6202E4CE96CEA0892EB7CFBF7E2.webp" alt="Phoenix Card" 
+             class="w-full h-full object-cover rounded-xl border-2 border-orange-400"
+             onerror="this.src='https://via.placeholder.com/80x112/f97316/1f2937?text=✨+PHOENIX+✨'">
+      </div>
+    </div>
+  </div>
 
-        <!-- Información importante -->
-        <div class="bg-gray-50 rounded-2xl p-6 mb-8">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  <!-- Carta principal de éxito -->
+  <div class="relative transform transition-all duration-500 animate-card-enter perspective-1000 z-10">
+    
+    <!-- Efecto de brillo de carta legendaria -->
+    <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-purple-500 to-blue-500 rounded-2xl blur-xl opacity-30 animate-glow"></div>
+    
+    <!-- La carta principal -->
+    <div class="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl p-8 text-center max-w-md mx-4 border-2 border-yellow-500 card-shine">
+      
+      <!-- Rareza holográfica - esquinas decorativas -->
+      <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-yellow-400 rounded-tl-2xl"></div>
+      <div class="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-yellow-400 rounded-tr-2xl"></div>
+      <div class="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-yellow-400 rounded-bl-2xl"></div>
+      <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-yellow-400 rounded-br-2xl"></div>
+      
+      <!-- Tipo de carta -->
+      <div class="mb-4">
+        <span class="inline-block px-4 py-1 bg-gradient-to-r from-emerald-600 to-green-800 text-white text-xs font-bold rounded-full shadow-lg">
+          🌟 CARTA LEGENDARIA 🌟
+        </span>
+      </div>
+      
+      <!-- Icono de éxito (como carta de victoria) -->
+      <div class="flex justify-center mb-6 animate-card-victory">
+        <div class="relative">
+          <div class="absolute inset-0 bg-emerald-500 rounded-full blur-2xl opacity-50 animate-pulse-rotate"></div>
+          <div class="absolute inset-0 bg-yellow-400 rounded-full blur-xl opacity-30 animate-ping-slow"></div>
+          <div class="relative bg-gradient-to-br from-emerald-600 to-green-800 rounded-full p-5 shadow-2xl border-2 border-yellow-400">
+            <svg class="w-20 h-20 text-yellow-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            ¿Qué sigue?
-          </h3>
-          <ul class="space-y-3">
-            <li class="flex items-start gap-3">
-              <div class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span class="text-sm font-bold">1</span>
-              </div>
-              <span class="text-gray-700">Recibirás un correo de confirmación con los detalles de tu pedido</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span class="text-sm font-bold">2</span>
-              </div>
-              <span class="text-gray-700">Puedes seguir el estado de tu pedido desde tu perfil</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <div class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span class="text-sm font-bold">3</span>
-              </div>
-              <span class="text-gray-700">El envío se procesará en las próximas 24-48 horas</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Contador de redirección -->
-        <div class="mb-8">
-          <div class="flex items-center justify-center gap-4">
-            <div class="text-center">
-              <div class="text-2xl font-bold text-emerald-600 mb-1">{{ countdown }}</div>
-              <div class="text-sm text-gray-500">segundos</div>
-            </div>
-            <div class="text-gray-400">para redirección automática</div>
-          </div>
-          
-          <!-- Barra de progreso -->
-          <div class="mt-4 w-full bg-gray-200 rounded-full h-2">
-            <div class="bg-gradient-to-r from-emerald-500 to-green-600 h-2 rounded-full transition-all duration-1000 ease-linear"
-                 [style.width]="((5 - countdown) / 5) * 100 + '%'"></div>
           </div>
         </div>
-
-        <!-- Botones de acción -->
-        <div class="flex flex-col sm:flex-row gap-4">
-          <button (click)="goToHome()"
-                  class="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-            Ir al Inicio
-          </button>
-          
-          <button (click)="goToOrders()"
-                  class="flex-1 bg-white border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-            </svg>
-            Ver Mis Pedidos
-          </button>
+      </div>
+      
+      <!-- Nombre de la carta (título) -->
+      <h2 class="text-3xl font-bold bg-gradient-to-r from-yellow-400 via-emerald-400 to-yellow-400 bg-clip-text text-transparent mb-2 font-medieval">
+        ¡VICTORIA ÉPICA!
+      </h2>
+      
+      <!-- Subtítulo (tipo de efecto) -->
+      <p class="text-yellow-400 text-sm mb-4 font-semibold">
+        ✨ Carta de compra exitosa - Efecto instantáneo ✨
+      </p>
+      
+      <!-- Caja de descripción (como texto de carta) -->
+      <div class="bg-gray-700 bg-opacity-50 rounded-lg p-4 mb-6 border border-yellow-500">
+        <p class="text-gray-200 text-sm leading-relaxed">
+          ¡Has obtenido la carta legendaria! Tu pedido ha sido procesado exitosamente. 
+          Recibirás tu recompensa en las próximas 24-48 horas hábiles.
+          <br><br>
+          <span class="text-xs text-yellow-400">"La suerte del principiante te ha bendecido"</span>
+        </p>
+      </div>
+      
+      <!-- Stats de la carta (información del pedido) -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="bg-gray-700 rounded-lg p-2 border border-yellow-500">
+          <p class="text-yellow-400 text-xs">⚔️ PODER DE COMPRA</p>
+          <p class="text-white font-bold text-lg">100% EXITOSO</p>
         </div>
-
-        <!-- Footer -->
-        <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p class="text-gray-500 text-sm">
-            ¿Necesitas ayuda? 
-            <a href="/contact" class="text-emerald-600 hover:text-emerald-700 font-medium">Contáctanos</a>
-          </p>
-          <p class="text-gray-400 text-xs mt-2" *ngIf="sessionId">
-            Número de referencia: {{ sessionId }}
-          </p>
+        <div class="bg-gray-700 rounded-lg p-2 border border-emerald-500">
+          <p class="text-emerald-400 text-xs">💎 RECOMPENSAS</p>
+          <p class="text-white font-bold text-lg">PUNTOS +100</p>
         </div>
+      </div>
+      
+      <!-- Información de referencia (como número de carta) -->
+      <div class="bg-gray-700 bg-opacity-30 rounded-lg p-3 mb-6">
+        <p class="text-gray-300 text-xs font-mono">
+          ID de transacción: {{ sessionId?.slice(0, 20) }}...
+        </p>
+      </div>
+      
+      <!-- Contador de resurrección (timer circular) -->
+      <div class="relative inline-flex items-center justify-center mb-6">
+        <svg class="w-20 h-20 transform -rotate-90">
+          <circle cx="40" cy="40" r="32" stroke="#374151" stroke-width="4" fill="none" />
+          <circle cx="40" cy="40" r="32" stroke="#fbbf24" stroke-width="4" fill="none"
+                  [attr.stroke-dasharray]="circumference"
+                  [attr.stroke-dashoffset]="circumference - (circumference * (countdown / 5))"
+                  stroke-linecap="round"
+                  class="transition-all duration-1000 ease-linear" />
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center flex-col">
+          <span class="text-2xl font-bold text-yellow-400">{{ countdown }}</span>
+          <span class="text-[10px] text-gray-400">turnos</span>
+        </div>
+      </div>
+      
+      <!-- Texto de redirección -->
+      <p class="text-gray-300 text-sm mb-6">
+        La magia te teletransportará de vuelta a la 
+        <span class="text-yellow-400 font-bold">tienda principal</span> en {{ countdown }} turnos...
+      </p>
+      
+      <!-- Botones de acción (como cartas de hechizo) -->
+      <div class="space-y-3">
+        <!-- Botón principal (carta de teletransportación) -->
+        <button (click)="goToHome()"
+                class="w-full px-6 py-3 bg-gradient-to-r from-yellow-600 to-yellow-700 
+                       text-gray-900 font-bold rounded-xl shadow-lg hover:shadow-2xl 
+                       transform hover:-translate-y-1 transition-all duration-300
+                       flex items-center justify-center gap-2 border-2 border-yellow-400
+                       relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+          <span class="text-xl">🏠</span>
+          <span>REGRESAR A LA TIENDA</span>
+          <span class="text-xl">✨</span>
+        </button>
+        
+        <!-- Botón secundario (carta de visión) -->
+        <button (click)="goToOrders()"
+                class="w-full px-6 py-3 bg-gray-700 text-yellow-400 font-bold rounded-xl 
+                       hover:bg-gray-600 transition-all duration-300 flex items-center justify-center gap-2
+                       border border-yellow-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          VER MIS CARTAS (PEDIDOS)
+        </button>
+      </div>
+      
+      <!-- Nivel de rareza y calificación -->
+      <div class="mt-6 flex items-center justify-center gap-2">
+        <div class="flex">
+          <span class="text-yellow-400 text-lg">★★★★★</span>
+        </div>
+        <span class="text-gray-500 text-xs ml-2">Rareza legendaria - 10,000 XP</span>
+      </div>
+      
+      <!-- Número de carta -->
+      <p class="text-xs text-gray-600 mt-4 font-mono">
+        {{ cardCode }} • Edición campeón • TCG-SUCCESS-{{ randomNumber }}
+      </p>
+      
+      <!-- Mensaje de ayuda (como pie de carta) -->
+      <div class="mt-4 pt-3 border-t border-gray-700">
+        <p class="text-gray-500 text-xs">
+          ¿Problemas con tu carta? 
+          <a href="/contact" class="text-yellow-500 hover:text-yellow-400">Contacta al gremio de soporte</a>
+        </p>
       </div>
     </div>
   </div>

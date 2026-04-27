@@ -7,6 +7,6 @@ import { environment } from '../../../environments/environment';
 })
 export class  HttpService {
   http = inject(HttpClient);
-  api= environment.api;
+  api= import.meta.env.NG_APP_BACKEND_URL;
   
 }
