@@ -86,17 +86,31 @@ export class OrdersComponent {
     openModalCreate(){
 
     }
-    openModalEdit(order: any){
-      this.modalEditar = true;
-      // Convertir 'enviado' => true, 'procesando' => false
-    const estadoBooleano = order.estado?.toLowerCase() === 'enviado';
-    console.log('Estado booleano:', estadoBooleano);
-      this.editarForm.patchValue({
-        estado: estadoBooleano
-      });
-      this.idOrder = order.id
-      console.log(order);
-    }
+
+    estadoOriginal:any;
+    // En tu componente
+openModalEdit(order: any){
+  this.modalEditar = true;
+  this.estadoOriginal = order.estado;
+  
+  const estadoBooleano = order.estado?.toLowerCase() === 'enviado';
+  this.editarForm.patchValue({
+    estado: estadoBooleano
+  });
+  
+  // Si ya está enviado, deshabilitar todo el formulario
+  if (this.isEstadoEnviado) {
+    this.editarForm.disable();
+  } else {
+    this.editarForm.enable();
+  }
+  
+  this.idOrder = order.id;
+}
+
+get isEstadoEnviado(): boolean {
+  return this.estadoOriginal?.toLowerCase() === 'enviado';
+}
 
     onSubmitEdit() {
       console.log(this.editarForm.value);
